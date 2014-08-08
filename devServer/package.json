@@ -1,0 +1,25 @@
+{
+  "name": "model-devserver",
+  "version": "0.0.0",
+  "description": "A development server for use inside the model-contrib project.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:curran/model-contrib.git"
+  },
+  "author": "curran",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/curran/model-contrib/issues"
+  },
+  "homepage": "https://github.com/curran/model-contrib",
+  "dependencies": {
+    "express": "^4.8.2",
+    "marked": "^0.3.2",
+    "underscore": "^1.6.0"
+  }
+}

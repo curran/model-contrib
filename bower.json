@@ -1,0 +1,43 @@
+{
+  "name": "model-contrib",
+  "version": "0.0.0",
+  "homepage": "http://curran.github.io/model-contrib/",
+  "authors": [
+    "curran <curran.kelleher@gmail.com>"
+  ],
+  "description": "Reusable visualization components and examples built on model.js",
+  "main": "index.html",
+  "moduleType": [
+    "amd"
+  ],
+  "keywords": [
+    "model",
+    "visualization",
+    "d3",
+    "charts",
+    "mvc",
+    "reactive",
+    "graphics",
+    "HTML5",
+    "JavaScript"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "model": "~0.1.0",
+    "d3": "~3.4.11",
+    "requirejs": "~2.1.14",
+    "marked": "~0.3.2",
+    "angular": "~1.2.21",
+    "bootstrap": "~3.2.0",
+    "codemirror": "~4.4.0",
+    "angular-route": "~1.2.21",
+    "lodash": "~2.4.1"
+  }
+}
