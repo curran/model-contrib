@@ -1,5 +1,5 @@
 // An example use of the barChart module.
-require(["d3", "barChart"], function (d3, BarChart) {
+require(["d3", "modelContrib/barChart"], function (d3, BarChart) {
   var container = document.getElementById("container"),
       barChart = BarChart(container),
       tsvPath = "../../data/letterByFrequency.tsv";
