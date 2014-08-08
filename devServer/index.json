@@ -3,7 +3,6 @@
     "name": "barChart",
     "files": [
       "index.html",
-      "barChart.js",
       "main.js",
       "styles.css"
     ]

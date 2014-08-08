@@ -1,0 +1,20 @@
+<!-- Split the page vertically into two parts using Bootstrap. -->
+<!-- See http://getbootstrap.com/css/#grid -->
+<div class="row">
+  <!-- The navigation part with the outline of slides -->
+  <div class="centered">
+    <h1 class="page-title"><a href="{{runUrl}}" target="_blank" >{{example.name}}</a></h1>
+  </div>
+</div>
+<div class="row">
+  <iframe ng-src="{{runUrl}}" frameBorder="0" class="exampleFrame"></iframe>
+</div>
+<div class="row" ng-bind-html="readme"></div>
+<div class="row" ng-repeat="file in example.files">
+  <div class="file-name">
+    <a ng-href=https://github.com/curran/model-contrib/blob/gh-pages/examples/{{example.name}}/{{file}}>
+      {{file}}
+    </a>
+  </div>
+  <textarea file="file" example="example"></textarea>
+</div>
