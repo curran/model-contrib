@@ -3,11 +3,12 @@
 var _ = require('underscore'),
     marked = require('marked'),
     fs = require('fs'),
-    outputFile = './index.json',
-    entryDir = '../examples/',
+    outputFile = 'index.json',
+    examplesPath = 'examples/',
+    modulesPath = 'modules/',
 
-    // These files are not excluded from the example code viewer.
-    irrelevantFiles = ['message.txt', 'README.md'];
+    // These files are excluded from the example code viewer.
+    irrelevantFiles = ['README.md'];
 
 // Generate the data describing the examples.
 var index = generateIndex(), 
@@ -29,21 +30,26 @@ function write(outputFile, output){
 }
 
 function generateIndex(){
-  var files = fs.readdirSync(entryDir);
-  return files.map(function (name) {
-    var entry = {
-      name: name,
-      files: listFilesForExample(name),
-    };
-    console.log(entry);
-    return entry;
-  });
-
+  var examples = fs.readdirSync(examplesPath),
+      modules = fs.readdirSync(modulesPath);
+  return {
+    examples: examples.map(function (name) {
+      return {
+        name: name,
+        files: listFilesForExample(name),
+      };
+    }),
+    modules: modules.map(function (name) {
+      return {
+        name: name.replace(".js", "")
+      }
+    })
+  };
 }
 
 // Computes the list of files for each example.
 function listFilesForExample(name){
-  var path = entryDir + name,
+  var path = examplesPath + name,
       allFiles = fs.readdirSync(path),
       files = _.difference(allFiles, irrelevantFiles);
   return _.sortBy(files, filePrecedence);

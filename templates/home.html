@@ -1,5 +1,5 @@
 <!--
-This file contains the Angular template that renders a listing of examples
+This file contains the Angular template that renders the home page.
 
 Curran Kelleher
 August 2014
@@ -14,5 +14,11 @@ August 2014
     <li ng-repeat="example in examples">
       <a href="#/{{example.name}}">{{example.name}}</a>
     </li>
+  </ul>
+  <h2>Modules</h2>
   <ul>
+    <li ng-repeat="module in modules">
+      <a href="docs/{{module.name}}.html">{{module.name}}</a>
+    </li>
+  </ul>
 </div>

@@ -26,7 +26,7 @@ app.config(function($routeProvider) {
     });
 });
 
-app.factory('examples', function($http){
+app.factory('index', function($http){
 
   function getData(callback){
     $http({
@@ -37,24 +37,29 @@ app.factory('examples', function($http){
   }
 
   return {
-    list: getData,
-    find: function(name, callback){
+    getIndex: function(callback){
       getData(function(data) {
-        callback(_.findWhere(data, { name: name }));
+        callback(data);
+      });
+    },
+    findExample: function(name, callback){
+      getData(function(data) {
+        callback(_.findWhere(data.examples, { name: name }));
       });
     }
   };
 });
 
-app.controller('ExampleListCtrl', function ($scope, examples){
-  examples.list(function(examples) {
-    $scope.examples = examples;
+app.controller('ExampleListCtrl', function ($scope, index){
+  index.getIndex(function(index) {
+    $scope.examples = index.examples;
+    $scope.modules = index.modules;
   });
 });
 
 app.controller('ExampleDetailCtrl',
-    function ($scope, $routeParams, $http, $sce, examples){
-  examples.find($routeParams.exampleName, function(example) {
+    function ($scope, $routeParams, $http, $sce, index){
+  index.findExample($routeParams.exampleName, function(example) {
     $scope.example = example;
     $scope.runUrl = examplesPath + example.name;
     $http.get($scope.runUrl + '/README.md').success(function(data) {

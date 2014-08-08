@@ -1,10 +1,17 @@
-[
-  {
-    "name": "barChart",
-    "files": [
-      "index.html",
-      "main.js",
-      "styles.css"
-    ]
-  }
-]
+{
+  "examples": [
+    {
+      "name": "barChart",
+      "files": [
+        "index.html",
+        "main.js",
+        "styles.css"
+      ]
+    }
+  ],
+  "modules": [
+    {
+      "name": "barChart"
+    }
+  ]
+}

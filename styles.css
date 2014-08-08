@@ -9,7 +9,7 @@ body {
   font-family: Sans-Serif;
 }
 
-p {
+p, li {
   font-size: 1.5em;
 }
 
