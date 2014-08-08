@@ -1,15 +1,26 @@
-<!-- Split the page vertically into two parts using Bootstrap. -->
-<!-- See http://getbootstrap.com/css/#grid -->
+<!--
+This file contains the Angular template that renders a single example.
+
+Curran Kelleher
+August 2014
+-->
+
+<!-- The page title -->
 <div class="row">
-  <!-- The navigation part with the outline of slides -->
   <div class="centered">
     <h1 class="page-title"><a href="{{runUrl}}" target="_blank" >{{example.name}}</a></h1>
   </div>
 </div>
+
+<!-- The running example -->
 <div class="row">
   <iframe ng-src="{{runUrl}}" frameBorder="0" class="exampleFrame"></iframe>
 </div>
+
+<!-- The rendered README.md file -->
 <div class="row" ng-bind-html="readme"></div>
+
+<!-- The source code entries for the example -->
 <div class="row" ng-repeat="file in example.files">
   <div class="file-name">
     <a ng-href=https://github.com/curran/model-contrib/blob/gh-pages/examples/{{example.name}}/{{file}}>
