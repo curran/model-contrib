@@ -1,4 +1,25 @@
-
+// A reusable bar chart module.
+//
+//  * Draws from the [D3 bar chart example](http://bl.ocks.org/mbostock/3885304).
+//  * Development steps shown in this [Model.js YouTube Video](http://youtu.be/TpZqVAtQs94?t=12m27s)
+//  * See also the [Example sequence](http://curran.github.io/screencasts/reactiveDataVis/examples/viewer/index.html#/1) from the video
+//  * Also demonstrated in the [model-contrib barChart example](../#/barChart)
+//
+// Usage:
+//
+// ```
+// var barChart = BarChart(document.getElementById("container"));
+// barChart.set({
+//   xAttribute: "id",
+//   yAttribute: "quantity",
+//   yAxisLabel: "Amount",
+//   yAxisTickFormat: "%"
+// });
+// barChart.data = [
+//   {id: "A", quantity: 2},
+//   {id: "A", quantity: 2}
+// ];
+// ```
 define(["d3", "model"], function (d3, Model) {
   return function BarChart (container) {
     var defaults = {
@@ -13,7 +34,7 @@ define(["d3", "model"], function (d3, Model) {
         },
         model = Model(),
         xAxis = d3.svg.axis().orient("bottom"),
-        yAxis = d3.svg.axis().orient("left")
+        yAxis = d3.svg.axis().orient("left"),
         svg = d3.select(container).append('svg')
 
           // Use absolute positioning on the SVG element 
@@ -34,7 +55,7 @@ define(["d3", "model"], function (d3, Model) {
     // Encapsulate D3 Conventional Margins.
     // See also http://bl.ocks.org/mbostock/3019563
     model.when(["box", "margin"], function (box, margin) {
-      model.width = box.width - margin.left - margin.right,
+      model.width = box.width - margin.left - margin.right;
       model.height = box.height - margin.top - margin.bottom;
     });
     model.when("margin", function (margin) {
@@ -67,7 +88,8 @@ define(["d3", "model"], function (d3, Model) {
 
     model.when(["data", "xAttribute", "width"], function (data, xAttribute, width) {
       model.xScale = d3.scale.ordinal()
-        .rangeRoundBands([0, width], .1)
+        // TODO make 0.1 into a model property
+        .rangeRoundBands([0, width], 0.1)
         .domain(data.map(function(d) { return d[xAttribute]; }));
     });
 
@@ -78,12 +100,12 @@ define(["d3", "model"], function (d3, Model) {
     });
 
     model.when(["xScale"], function (xScale) {
-      xAxis.scale(xScale)
+      xAxis.scale(xScale);
       xAxisG.call(xAxis);
     });
 
     model.when(["yScale"], function (yScale) {
-      yAxis.scale(yScale)
+      yAxis.scale(yScale);
       yAxisG.call(yAxis);
     });
 

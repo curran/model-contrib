@@ -21,5 +21,11 @@
     "express": "^4.8.2",
     "marked": "^0.3.2",
     "underscore": "^1.6.0"
+  },
+  "devDependencies": {
+    "gulp": "^3.8.7",
+    "gulp-docco": "0.0.4",
+    "gulp-jshint": "^1.8.4",
+    "jshint-stylish": "^0.4.0"
   }
 }
