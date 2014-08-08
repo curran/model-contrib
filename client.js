@@ -6,8 +6,8 @@ var app = angular.module('exampleViewerApp', ['ngRoute']),
     // and contains the data that drives this page.
     //
     // Structure is [ { name: String, files: [ String fileName ] } ]
-    indexUrl = '../devServer/index.json',
-    examplesPath = '../examples/';
+    indexUrl = 'index.json',
+    examplesPath = 'examples/';
 
 app.config(function($routeProvider) {
   $routeProvider.

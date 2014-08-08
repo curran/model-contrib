@@ -12,8 +12,7 @@ var port = 8000,
     express = require('express'),
     app = express();
 
-// Serve the parent directory, to simulate gh-pages locally.
-app.use('/', express.static(__dirname + '/../'));
+app.use('/', express.static(__dirname));
 
 // Start the server.
 app.listen(port);
