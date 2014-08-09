@@ -4,29 +4,30 @@ This file contains the Angular template that renders the home page.
 Curran Kelleher
 August 2014
 -->
-
-<div class="row">
-  <div class="centered">
-    <h1 class="title">model-contrib</h1>
-    <p>The place for open source contributions built with <a href="https://github.com/curran/model">ModelJS</a></p>
-  </div>
-  <div class="col-md-3">
-    <h2>Modules</h2>
-    <ul>
-      <li ng-repeat="module in modules">
-        <a href="docs/{{module.name}}.html">{{module.name}}</a>
-      </li>
-    </ul>
-  </div>
-  <div class="col-md-9">
-    <h2>Examples</h2>
-    <div class="example" ng-repeat="example in examples">
-      <a href="#/{{example.name}}">
-        <p>
-          {{example.name}}
-        </p>
-        <img ng-src="thumbnails/{{example.name}}.png"/>
-      </a>
+<div class="container">
+  <div class="row">
+    <div class="centered">
+      <h1 class="title">model-contrib</h1>
+      <p>The place for open source contributions built with <a href="https://github.com/curran/model">ModelJS</a></p>
+    </div>
+    <div class="col-md-3">
+      <h2>Modules</h2>
+      <ul>
+        <li ng-repeat="module in modules">
+          <a href="#/modules/{{module.name}}">{{module.name}}</a>
+        </li>
+      </ul>
+    </div>
+    <div class="col-md-9">
+      <h2>Examples</h2>
+      <div class="example" ng-repeat="example in examples">
+        <a href="#/examples/{{example.name}}">
+          <p>
+            {{example.name}}
+          </p>
+          <img ng-src="thumbnails/{{example.name}}.png"/>
+        </a>
+      </div>
     </div>
   </div>
 </div>

@@ -17,9 +17,13 @@ app.config(function($routeProvider) {
       templateUrl: 'templates/home.html',
       controller: 'ExampleListCtrl'
     }).
-    when('/:exampleName', {
+    when('/examples/:exampleName', {
       templateUrl: 'templates/example.html',
       controller: 'ExampleDetailCtrl'
+    }).
+    when('/modules/:moduleName', {
+      templateUrl: 'templates/module.html',
+      controller: 'ModuleDetailCtrl'
     }).
     otherwise({
       redirectTo: '/'
@@ -68,6 +72,11 @@ app.controller('ExampleDetailCtrl',
       $scope.readme = $sce.trustAsHtml(marked(data));
     });
   });
+});
+
+app.controller('ModuleDetailCtrl', function ($scope, $routeParams){
+  $scope.docsUrl = 'docs/' + $routeParams.moduleName + '.html';
+  $scope.moduleName = $routeParams.moduleName;
 });
 
 /**

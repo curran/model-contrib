@@ -55,6 +55,11 @@ p, li {
   margin-bottom: 10px;
 }
 
+.docsFrame {
+  width: 100%;
+  height: 100%;
+}
+
 /* Style the example entries on the home page. */
 .example {
 
