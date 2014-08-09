@@ -18,6 +18,10 @@ p, li {
   text-align: center;
 }
 
+.title {
+  font-size: 7em;
+}
+
 /* Make the title large and move it down a little so it is more vertically centered. */
 .page-title {
   font-size: 4em;
