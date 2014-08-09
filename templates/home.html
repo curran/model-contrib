@@ -10,7 +10,7 @@ August 2014
     <h1 class="title">model-contrib</h1>
     <p>The place for open source contributions built with <a href="https://github.com/curran/model">ModelJS</a></p>
   </div>
-  <div class="col-md-4">
+  <div class="col-md-3">
     <h2>Modules</h2>
     <ul>
       <li ng-repeat="module in modules">
@@ -18,13 +18,15 @@ August 2014
       </li>
     </ul>
   </div>
-  <div class="col-md-8">
+  <div class="col-md-9">
     <h2>Examples</h2>
     <div class="example" ng-repeat="example in examples">
-      <p>
-        <a href="#/{{example.name}}">{{example.name}}</a> <br>
-      </p>
-      <img ng-src="thumbnails/{{example.name}}.png"/>
+      <a href="#/{{example.name}}">
+        <p>
+          {{example.name}}
+        </p>
+        <img ng-src="thumbnails/{{example.name}}.png"/>
+      </a>
     </div>
   </div>
 </div>

@@ -55,14 +55,25 @@ p, li {
   margin-bottom: 10px;
 }
 
+/* Style the example entries on the home page. */
+.example {
+
+  /* Add space below each example so the examples
+   * appear to be more visually grouped with their titles. */
+  margin-bottom: 10px;
+
+  /* Make the examples flow from left to right,
+   * rather than top to bottom. */
+  float: left;
+  padding-right: 10px;
+}
+
+/* Make example titles appear close to their corresponding image. */
 .example p {
   margin-bottom: 0px;
 }
 
-.example img {
-  border: 1px lightgray solid; 
-}
-
+/* Put a light border around the example image. */
 .example img {
   border: 1px lightgray solid; 
 }
