@@ -9,6 +9,14 @@
       ]
     },
     {
+      "name": "linkedViews",
+      "files": [
+        "index.html",
+        "main.js",
+        "styles.css"
+      ]
+    },
+    {
       "name": "scatterPlot",
       "files": [
         "index.html",

@@ -126,12 +126,25 @@ define(["d3", "model"], function (d3, Model) {
     });
     return model;
 
+    // Called whenever the user manipulates the D3 brush.
     function brushed() {
-      var e = brush.extent(), selectedData;
+      var e = brush.extent(),
+          selectedData;
+
+      // If the data has been rendered,
       if(dots) {
-        dots.each(function(d) { d.selected = false; });
+
+        // Mark each dot as not selected.
+        dots.each(function(d) {
+          d.selected = false;
+        });
+
+        // Mark selected dots and compute selected data.
         selectedData = search(e[0][0], e[0][1], e[1][0], e[1][1]);
-        dots.classed("selected", function(d) { return d.selected; });
+
+        dots.classed("selected", function (d) {
+          return d.selected;
+        });
       }
       model.selectedData = brush.empty() ? model.data : selectedData;
     }
