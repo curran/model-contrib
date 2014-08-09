@@ -1,0 +1,28 @@
+/* Make the visualization container fill the page. */
+#container {
+  position: fixed;
+  left: 20px;
+  right: 20px;
+  top: 20px;
+  bottom: 20px;
+  background-color: lightgray;
+}
+/* Style the visualization.
+ * This CSS is copied verbatim from the
+ * D3 scatter plot example found at
+ * http://bl.ocks.org/mbostock/3887118 */
+
+body {
+  font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.dot {
+  stroke: #000;
+}

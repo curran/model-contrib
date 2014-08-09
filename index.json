@@ -7,11 +7,22 @@
         "main.js",
         "styles.css"
       ]
+    },
+    {
+      "name": "scatterPlot",
+      "files": [
+        "index.html",
+        "main.js",
+        "styles.css"
+      ]
     }
   ],
   "modules": [
     {
       "name": "barChart"
+    },
+    {
+      "name": "scatterPlot"
     }
   ]
 }

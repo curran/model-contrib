@@ -62,6 +62,8 @@ app.controller('ExampleDetailCtrl',
   index.findExample($routeParams.exampleName, function(example) {
     $scope.example = example;
     $scope.runUrl = examplesPath + example.name;
+
+    // Render the README.md file as HTML.
     $http.get($scope.runUrl + '/README.md').success(function(data) {
       $scope.readme = $sce.trustAsHtml(marked(data));
     });

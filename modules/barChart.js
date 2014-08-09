@@ -20,6 +20,8 @@
 //   {id: "A", quantity: 2}
 // ];
 // ```
+//
+// By Curran Kelleher August 2014
 define(["d3", "model"], function (d3, Model) {
   return function BarChart (container) {
     var defaults = {
@@ -32,7 +34,6 @@ define(["d3", "model"], function (d3, Model) {
           yAxisNumTicks: 10,
           yAxisTickFormat: ""
         },
-        model = Model(),
         xAxis = d3.svg.axis().orient("bottom"),
         yAxis = d3.svg.axis().orient("left"),
         svg = d3.select(container).append('svg')
@@ -49,7 +50,8 @@ define(["d3", "model"], function (d3, Model) {
           .attr("transform", "rotate(-90)")
           .attr("y", 6)
           .attr("dy", ".71em")
-          .style("text-anchor", "end");
+          .style("text-anchor", "end"),
+        model = Model();
     model.set(defaults);
 
     // Encapsulate D3 Conventional Margins.
@@ -76,16 +78,18 @@ define(["d3", "model"], function (d3, Model) {
 
       // Set the CSS `left` and `top` properties
       // to move the SVG element to `(box.x, box.y)`
-      // relative to the container div to apply the offset.
+      // relative to the container to apply the offset.
       svg
         .style('left', box.x + 'px')
         .style('top', box.y + 'px');
     });
 
+    // Update the X axis transform when height changes.
     model.when("height", function (height) {
       xAxisG.attr("transform", "translate(0," + height + ")");
     });
 
+    // Update the X scale based on data, X attribute and width.
     model.when(["data", "xAttribute", "width"], function (data, xAttribute, width) {
       model.xScale = d3.scale.ordinal()
         // TODO make 0.1 into a model property
@@ -93,26 +97,32 @@ define(["d3", "model"], function (d3, Model) {
         .domain(data.map(function(d) { return d[xAttribute]; }));
     });
 
+    // Update the Y scale based on data, Y attribute and height.
     model.when(["data", "yAttribute", "height"], function (data, yAttribute, height) {
       model.yScale = d3.scale.linear()
         .range([height, 0])
         .domain([0, d3.max(data, function(d) { return d[yAttribute]; })]);
     });
 
+    // Update the X axis based on the X scale.
     model.when(["xScale"], function (xScale) {
       xAxis.scale(xScale);
       xAxisG.call(xAxis);
     });
 
+    // Update the Y axis based on the Y scale.
     model.when(["yScale"], function (yScale) {
       yAxis.scale(yScale);
       yAxisG.call(yAxis);
     });
 
+    // Update Y axis label.
     model.when("yAxisLabel", yAxisText.text, yAxisText);
 
+    // Draw the bars.
     model.when(["data", "xAttribute", "yAttribute", "xScale", "yScale", "height"],
         function (data, xAttribute, yAttribute, xScale, yScale, height) {
+
       var bars = g.selectAll(".bar").data(data);
 
       bars.enter().append("rect").attr("class", "bar");
