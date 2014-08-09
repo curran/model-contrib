@@ -36,7 +36,7 @@ function generateIndex(){
     examples: examples.map(function (name) {
       return {
         name: name,
-        files: listFilesForExample(name),
+        files: listFilesForExample(name)
       };
     }),
     modules: modules.map(function (name) {
