@@ -23,9 +23,12 @@
     "underscore": "^1.6.0"
   },
   "devDependencies": {
+    "gm": "^1.16.0",
     "gulp": "^3.8.7",
     "gulp-docco": "0.0.4",
     "gulp-jshint": "^1.8.4",
-    "jshint-stylish": "^0.4.0"
+    "jshint-stylish": "^0.4.0",
+    "path": "^0.4.9",
+    "phantomjs": "^1.9.7-15"
   }
 }
