@@ -51,6 +51,18 @@ p, li {
   margin-bottom: 10px;
 }
 
+.example p {
+  margin-bottom: 0px;
+}
+
+.example img {
+  border: 1px lightgray solid; 
+}
+
+.example img {
+  border: 1px lightgray solid; 
+}
+
 /* Style the names of source code files. */
 .file-name {
   font-size: 1.5em;
