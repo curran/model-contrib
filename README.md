@@ -9,7 +9,9 @@ Check out the [project home page](http://curran.github.io/model-contrib/) for a 
 
 Pull requests welcome! Add modules under `modules` and examples under `examples`. Please put your name and the date (or month) of authorship at the bottom of your example `README.md` file for examples, and at the end of the documentation comments before the code begins for modules.
 
-To create a new example, make a copy of the [starter example](http://curran.github.io/model-contrib/#/examples/starter) directory under `examples`. Feel free to add more top-level Bower dependencies.
+To create a new example, make a copy of the [starter example](http://curran.github.io/model-contrib/#/examples/starter) directory under `examples`. Feel free to add more top-level Bower dependencies as needed.
+
+For discussion, please reply to the [ModelJS thread on the D3 Mailing List](https://groups.google.com/forum/#!topic/d3-js/TB8Qz-gDDNQ), or email me directly at curran.kelleher@gmail.com . I would like to make this a collaborative effort to pool Open Source community resources for reusable visualizations, please let me know if there are any difficulties in contributing.
 
 ## Workflow
 

@@ -33,12 +33,20 @@ function generateIndex(){
   var examples = fs.readdirSync(examplesPath),
       modules = fs.readdirSync(modulesPath);
   return {
-    examples: examples.map(function (name) {
-      return {
-        name: name,
-        files: listFilesForExample(name)
-      };
-    }),
+    examples: examples
+
+    // Include only directories. Draws from
+    // http://stackoverflow.com/questions/18112204/get-all-directories-within-directory-nodejs
+      .filter(function (name) {
+        var stat = fs.statSync(examplesPath + name)
+        return stat.isDirectory()
+      })
+      .map(function (name) {
+        return {
+          name: name,
+          files: listFilesForExample(name)
+        };
+      }),
     modules: modules.map(function (name) {
       return {
         name: name.replace(".js", "")
