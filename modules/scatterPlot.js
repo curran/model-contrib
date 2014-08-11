@@ -6,7 +6,7 @@
 //  * See also [D3 Quadtree documentation](https://github.com/mbostock/d3/wiki/Quadtree-Geom)
 //
 // By Curran Kelleher August 2014
-define(["d3", "model"], function (d3, Model) {
+define(["d3", "model", "modelContrib/reactivis"], function (d3, Model, Reactivis) {
   return function ScatterPlot(container){
     var defaults = {
           margin: {
@@ -53,7 +53,10 @@ define(["d3", "model"], function (d3, Model) {
         dots,
         quadtree,
         model = Model();
+
     model.set(defaults);
+
+    Reactivis.margin(model);
 
     model.when("xAxisLabel", xAxisLabel.text, xAxisLabel);
     model.when("yAxisLabel", yAxisLabel.text, yAxisLabel);
@@ -72,11 +75,6 @@ define(["d3", "model"], function (d3, Model) {
       svg
         .style("left", box.x + "px")
         .style("top", box.y + "px");
-    });
-
-    model.when(["box", "margin"], function (box, margin) {
-      model.width = box.width - margin.left - margin.right;
-      model.height = box.height - margin.top - margin.bottom;
     });
 
     model.when("width", function (width) {

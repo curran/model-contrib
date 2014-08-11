@@ -38,7 +38,7 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>define([<span class="hljs-string">"d3"</span>, <span class="hljs-string">"model"</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(d3, Model)</span> </span>{
+            <div class="content"><div class='highlight'><pre>define([<span class="hljs-string">"d3"</span>, <span class="hljs-string">"model"</span>, <span class="hljs-string">"modelContrib/reactivis"</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(d3, Model, Reactivis)</span> </span>{
   <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ScatterPlot</span><span class="hljs-params">(container)</span></span>{
     <span class="hljs-keyword">var</span> defaults = {
           margin: {
@@ -109,7 +109,10 @@ on top of a dot.</p>
         dots,
         quadtree,
         model = Model();
+
     model.set(defaults);
+
+    Reactivis.margin(model);
 
     model.when(<span class="hljs-string">"xAxisLabel"</span>, xAxisLabel.text, xAxisLabel);
     model.when(<span class="hljs-string">"yAxisLabel"</span>, yAxisLabel.text, yAxisLabel);
@@ -140,11 +143,6 @@ relative to the container div.</p>
             <div class="content"><div class='highlight'><pre>      svg
         .style(<span class="hljs-string">"left"</span>, box.x + <span class="hljs-string">"px"</span>)
         .style(<span class="hljs-string">"top"</span>, box.y + <span class="hljs-string">"px"</span>);
-    });
-
-    model.when([<span class="hljs-string">"box"</span>, <span class="hljs-string">"margin"</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(box, margin)</span> </span>{
-      model.width = box.width - margin.left - margin.right;
-      model.height = box.height - margin.top - margin.bottom;
     });
 
     model.when(<span class="hljs-string">"width"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(width)</span> </span>{

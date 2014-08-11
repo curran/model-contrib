@@ -22,7 +22,7 @@
 // ```
 //
 // By Curran Kelleher August 2014
-define(["d3", "model"], function (d3, Model) {
+define(["d3", "model", "modelContrib/reactivis"], function (d3, Model, Reactivis) {
   return function BarChart (container) {
     var defaults = {
           margin: {
@@ -52,14 +52,11 @@ define(["d3", "model"], function (d3, Model) {
           .attr("dy", ".71em")
           .style("text-anchor", "end"),
         model = Model();
+
     model.set(defaults);
 
-    // Encapsulate D3 Conventional Margins.
-    // See also http://bl.ocks.org/mbostock/3019563
-    model.when(["box", "margin"], function (box, margin) {
-      model.width = box.width - margin.left - margin.right;
-      model.height = box.height - margin.top - margin.bottom;
-    });
+    Reactivis.margin(model);
+
     model.when("margin", function (margin) {
       g.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
     });
