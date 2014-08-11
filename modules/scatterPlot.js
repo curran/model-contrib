@@ -19,10 +19,10 @@ define(["d3", "model", "modelContrib/reactivis"], function (d3, Model, Reactivis
           yAxisTickFormat: ""
           /* TODO implement xAxisTickFormat*/
         },
-        x = d3.scale.linear(),
-        y = d3.scale.linear(),
-        xAxis = d3.svg.axis().scale(x).orient("bottom"),
-        yAxis = d3.svg.axis().scale(y).orient("left"),
+        xScale = d3.scale.linear(),
+        yScale = d3.scale.linear(),
+        xAxis = d3.svg.axis().scale(xScale).orient("bottom"),
+        yAxis = d3.svg.axis().scale(yScale).orient("left"),
 
         // Use absolute positioning so that CSS can be used
         // to position the div according to the model.
@@ -58,12 +58,12 @@ define(["d3", "model", "modelContrib/reactivis"], function (d3, Model, Reactivis
 
     Reactivis.margin(model);
 
-    model.when("xAxisLabel", xAxisLabel.text, xAxisLabel);
-    model.when("yAxisLabel", yAxisLabel.text, yAxisLabel);
-
     model.when("margin", function (margin) {
       g.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
     });
+
+    model.when("xAxisLabel", xAxisLabel.text, xAxisLabel);
+    model.when("yAxisLabel", yAxisLabel.text, yAxisLabel);
 
     model.when("box", function (box) {
       svg.attr("width", box.width)
@@ -95,20 +95,20 @@ define(["d3", "model", "modelContrib/reactivis"], function (d3, Model, Reactivis
 
     model.when(["width", "height", "data", "xAttribute", "yAttribute"], function (width, height, data, xAttribute, yAttribute) {
 
-      // Updated the scales
-      x.domain(d3.extent(data, function(d) { return d[xAttribute]; })).nice();
-      y.domain(d3.extent(data, function(d) { return d[yAttribute]; })).nice();
+      // Update the scales
+      xScale.domain(d3.extent(data, function(d) { return d[xAttribute]; })).nice();
+      yScale.domain(d3.extent(data, function(d) { return d[yAttribute]; })).nice();
 
-      x.range([0, width]);
-      y.range([height, 0]);
+      xScale.range([0, width]);
+      yScale.range([height, 0]);
 
-      // update the quadtree
+      // Update the quadtree
       quadtree = d3.geom.quadtree()
-        .x(function(d) { return x(d[xAttribute]); })
-        .y(function(d) { return y(d[yAttribute]); })
+        .x(function(d) { return xScale(d[xAttribute]); })
+        .y(function(d) { return yScale(d[yAttribute]); })
         (data);
 
-      // update the axes
+      // Update the axes
       xAxisG.call(xAxis);
       yAxisG.call(yAxis);
 
@@ -118,8 +118,8 @@ define(["d3", "model", "modelContrib/reactivis"], function (d3, Model, Reactivis
         .attr("class", "dot")
         .attr("r", 3.5);
       dots
-        .attr("cx", function(d) { return x(d[xAttribute]); })
-        .attr("cy", function(d) { return y(d[yAttribute]); });
+        .attr("cx", function(d) { return xScale(d[xAttribute]); })
+        .attr("cy", function(d) { return yScale(d[yAttribute]); });
       dots.exit().remove();
     });
     return model;

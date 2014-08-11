@@ -57,6 +57,8 @@ define(["d3", "model", "modelContrib/reactivis"], function (d3, Model, Reactivis
 
     Reactivis.margin(model);
 
+    Reactivis.yLinearScale(model);
+
     model.when("margin", function (margin) {
       g.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
     });
@@ -92,13 +94,6 @@ define(["d3", "model", "modelContrib/reactivis"], function (d3, Model, Reactivis
         // TODO make 0.1 into a model property
         .rangeRoundBands([0, width], 0.1)
         .domain(data.map(function(d) { return d[xAttribute]; }));
-    });
-
-    // Update the Y scale based on data, Y attribute and height.
-    model.when(["data", "yAttribute", "height"], function (data, yAttribute, height) {
-      model.yScale = d3.scale.linear()
-        .range([height, 0])
-        .domain([0, d3.max(data, function(d) { return d[yAttribute]; })]);
     });
 
     // Update the X axis based on the X scale.

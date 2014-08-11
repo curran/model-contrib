@@ -13,6 +13,16 @@ define(['d3', 'model'], function(d3, Model){
       model.height = box.height - margin.top - margin.bottom;
     });
   };
+  
+  // Creates a Y linear scale.
+  // Updates the Y scale based on data, Y attribute and height.
+  Reactivis.yLinearScale = function (model) {
+    model.when(["data", "yAttribute", "height"], function (data, yAttribute, height) {
+      model.yScale = d3.scale.linear()
+        .range([height, 0])
+        .domain([0, d3.max(data, function(d) { return d[yAttribute]; })]);
+    });
+  };
 
   return Reactivis;
 });
