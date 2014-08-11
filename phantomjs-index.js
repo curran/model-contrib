@@ -4,10 +4,25 @@ var page = require('webpage').create(),
     system = require('system'),
     example = system.args[1];
     examplesPath = 'examples/',
-    imagesDir = 'thumbnails/';
+    imagesDir = 'thumbnails/',
+
+    // The number of milliseconds to wait before
+    // taking a screen capture of the page.
+    waitTime = 500;
 
 // The dimensions in pixels of the page to render.
 page.viewportSize = { width: 960, height: 540 };
+
+// The maximum height is specified here.
+// Without this line, the rendered pages will go down vertically
+// further than the viewport height.
+// See http://phantomjs.org/api/webpage/property/clip-rect.html
+page.clipRect = {
+  top: 0,
+  left: 0,
+  width: page.viewportSize.width,
+  height: page.viewportSize.height
+};
 
 // Pass console output to command line client for debugging.
 page.onConsoleMessage = function(msg) {
@@ -30,7 +45,7 @@ page.open('http://localhost:8000/' + examplesPath + example + '/index.html', fun
     page.render(imagePath(example));
 
     phantom.exit();
-  }, 1000);
+  }, waitTime);
 });
 
 function imagePath(example){

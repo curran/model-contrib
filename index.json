@@ -29,6 +29,13 @@
       "files": [
         "index.html"
       ]
+    },
+    {
+      "name": "table",
+      "files": [
+        "index.html",
+        "main.js"
+      ]
     }
   ],
   "modules": [
@@ -37,6 +44,9 @@
     },
     {
       "name": "scatterPlot"
+    },
+    {
+      "name": "table"
     }
   ]
 }

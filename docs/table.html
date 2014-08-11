@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>table.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>table.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <p>A reactive HTML table.</p>
+<ul>
+<li>Draws from <a href="http://bost.ocks.org/mike/nest/">http://bost.ocks.org/mike/nest/</a></li>
+<li>See also the <a href="http://curran.github.io/model-contrib/#/examples/table">table example</a> for usage.</li>
+</ul>
+<p>Model properties used as input include:</p>
+<ul>
+<li><code>data</code> an array of data elements</li>
+<li><code>columns</code> an array of column descriptor objects, each having<ul>
+<li><code>property</code> the data element property to access, and</li>
+<li><code>title</code> the string to display in the table as the column header.</li>
+</ul>
+</li>
+</ul>
+<p>By Curran Kelleher August 2014</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>define([<span class="hljs-string">'d3'</span>, <span class="hljs-string">'model'</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(d3, Model)</span> </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Table</span><span class="hljs-params">(container)</span> </span>{
+    <span class="hljs-keyword">var</span> model = Model(),
+        table = d3.select(container)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>Make the container scrollable</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>          .style(<span class="hljs-string">'overflow-y'</span>, <span class="hljs-string">'auto'</span>)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>Append the HTML table</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>          .append(<span class="hljs-string">'table'</span>)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>Use Bootstrap ‘table’ class</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>          .attr(<span class="hljs-string">'class'</span>, <span class="hljs-string">'table'</span>),</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>Append table header and table body</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        thead = table.append(<span class="hljs-string">'thead'</span>).append(<span class="hljs-string">'tr'</span>),
+        tbody = table.append(<span class="hljs-string">'tbody'</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>When the data changes, update the table</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    model.when([<span class="hljs-string">'data'</span>, <span class="hljs-string">'columns'</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(data, columns)</span> </span>{
+      <span class="hljs-keyword">var</span> titles, tr, td;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>Populate the table header</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      titles = thead.selectAll(<span class="hljs-string">'th'</span>).data(columns);
+      titles.enter().append(<span class="hljs-string">'th'</span>);
+      titles.text(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(d)</span> </span>{ <span class="hljs-keyword">return</span> d.title; });
+      titles.exit().remove();</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>Populate the table rows</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      tr = tbody.selectAll(<span class="hljs-string">'tr'</span>).data(data);
+      tr.enter().append(<span class="hljs-string">'tr'</span>);
+      tr.exit().remove();</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>Set the values for each table cell</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      td = tr.selectAll(<span class="hljs-string">'td'</span>).data(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(row)</span> </span>{
+        <span class="hljs-keyword">return</span> columns.map(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(column)</span> </span>{
+          <span class="hljs-keyword">return</span> row[column.property];
+        });
+      });
+      td.enter().append(<span class="hljs-string">'td'</span>);
+      td.exit().remove();
+      td.text( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(d)</span> </span>{ <span class="hljs-keyword">return</span> d; });
+    });
+
+    <span class="hljs-keyword">return</span> model;
+  };
+});</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>
