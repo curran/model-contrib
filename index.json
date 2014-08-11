@@ -23,6 +23,12 @@
         "main.js",
         "styles.css"
       ]
+    },
+    {
+      "name": "starter",
+      "files": [
+        "index.html"
+      ]
     }
   ],
   "modules": [

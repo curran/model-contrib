@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Starter Example</title>
+    <script src="../../bower_components/requirejs/require.js"></script>
+    <script src="../requireJSConfig.js"></script>
+    <script>
+    require(["d3", "model"], function (d3, Model) {
+      var container = d3.select("#container").style("font-size", "10em"),
+          model = Model();
+
+      model.when("message", function (message) {
+        container.text(message);
+      });
+
+      model.message = "Hello World!";
+    });
+    </script>
+  </head>
+  <body>
+    <div id="container"></div>
+  </body>
+</html>
