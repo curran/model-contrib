@@ -60,6 +60,13 @@ define(["d3", "model", "modelContrib/reactivis"], function (d3, Model, Reactivis
       xAxisG.call(xAxis);
     });
 
+    // Use a Y linear scale with zero as the minimum for bar height.
+    model.when(["data", "yAttribute"], function (data, yAttribute) {
+      model.yDomain = d3.extent(data, function (d) {
+        return d[yAttribute];
+      });
+    });
+
     // Update the Y axis based on the Y scale.
     model.when(["yScale"], function (yScale) {
       yAxis.scale(yScale);
@@ -110,8 +117,9 @@ define(["d3", "model", "modelContrib/reactivis"], function (d3, Model, Reactivis
         function (data, xAttribute, yAttribute, xScale, yScale) {
 
       // Update the scales
+      // TODO generalize this by introducing a way to define the min value
+      // used as either the data min or a fixed value.
       xScale.domain(d3.extent(data, function(d) { return d[xAttribute]; })).nice();
-      yScale.domain(d3.extent(data, function(d) { return d[yAttribute]; })).nice();
 
       // Update the quadtree
       quadtree = d3.geom.quadtree()
