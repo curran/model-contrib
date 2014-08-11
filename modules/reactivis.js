@@ -24,5 +24,26 @@ define(['d3', 'model'], function(d3, Model){
     });
   };
 
+  // Creates an X linear scale.
+  // Updates the X scale based on data, X attribute and width.
+  Reactivis.xLinearScale = function (model) {
+    model.when(["data", "xAttribute", "width"], function (data, xAttribute, width) {
+      model.xScale = d3.scale.linear()
+        .range([0, width])
+        .domain([0, d3.max(data, function(d) { return d[xAttribute]; })]);
+    });
+  };
+
+  // Creates an X ordinal scale.
+  // Updates the X scale based on data, X attribute and width.
+  Reactivis.xOrdinalScale = function (model) {
+    model.when(["data", "xAttribute", "width"], function (data, xAttribute, width) {
+      model.xScale = d3.scale.ordinal()
+        // TODO make 0.1 into a model property
+        .rangeRoundBands([0, width], 0.1)
+        .domain(data.map(function(d) { return d[xAttribute]; }));
+    });
+  };
+
   return Reactivis;
 });

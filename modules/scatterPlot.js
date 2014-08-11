@@ -19,15 +19,13 @@ define(["d3", "model", "modelContrib/reactivis"], function (d3, Model, Reactivis
           yAxisTickFormat: ""
           /* TODO implement xAxisTickFormat*/
         },
-        xScale = d3.scale.linear(),
-        yScale = d3.scale.linear(),
-        xAxis = d3.svg.axis().scale(xScale).orient("bottom"),
-        yAxis = d3.svg.axis().scale(yScale).orient("left"),
 
         // Use absolute positioning so that CSS can be used
         // to position the div according to the model.
         svg = d3.select(container).append("svg").style("position", "absolute"),
         g = svg.append("g"),
+        xAxis = d3.svg.axis().orient("bottom"),
+        yAxis = d3.svg.axis().orient("left"),
         xAxisG = g.append("g").attr("class", "x axis"),
         yAxisG = g.append("g").attr("class", "y axis"),
         xAxisLabel = xAxisG.append("text")
@@ -56,7 +54,21 @@ define(["d3", "model", "modelContrib/reactivis"], function (d3, Model, Reactivis
 
     model.set(defaults);
 
+    // Update the X axis based on the X scale.
+    model.when(["xScale"], function (xScale) {
+      xAxis.scale(xScale);
+      xAxisG.call(xAxis);
+    });
+
+    // Update the Y axis based on the Y scale.
+    model.when(["yScale"], function (yScale) {
+      yAxis.scale(yScale);
+      yAxisG.call(yAxis);
+    });
+
     Reactivis.margin(model);
+    Reactivis.xLinearScale(model);
+    Reactivis.yLinearScale(model);
 
     model.when("margin", function (margin) {
       g.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
@@ -93,24 +105,19 @@ define(["d3", "model", "modelContrib/reactivis"], function (d3, Model, Reactivis
         .call(brush.event);
     });
 
-    model.when(["width", "height", "data", "xAttribute", "yAttribute"], function (width, height, data, xAttribute, yAttribute) {
+    // Draw the dots.
+    model.when(["data", "xAttribute", "yAttribute", "xScale", "yScale"],
+        function (data, xAttribute, yAttribute, xScale, yScale) {
 
       // Update the scales
       xScale.domain(d3.extent(data, function(d) { return d[xAttribute]; })).nice();
       yScale.domain(d3.extent(data, function(d) { return d[yAttribute]; })).nice();
-
-      xScale.range([0, width]);
-      yScale.range([height, 0]);
 
       // Update the quadtree
       quadtree = d3.geom.quadtree()
         .x(function(d) { return xScale(d[xAttribute]); })
         .y(function(d) { return yScale(d[yAttribute]); })
         (data);
-
-      // Update the axes
-      xAxisG.call(xAxis);
-      yAxisG.call(yAxis);
 
       // Plot the data as dots
       dots = dotsG.selectAll(".dot").data(data);
