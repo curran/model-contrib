@@ -60,17 +60,21 @@ define(["d3", "model", "modelContrib/reactivis"], function (d3, Model, Reactivis
       xAxisG.call(xAxis);
     });
 
-    // Use a Y linear scale with the data min as the minimum value.
-    Reactivis.yDomain(model);
-
     // Update the Y axis based on the Y scale.
     model.when(["yScale"], function (yScale) {
       yAxis.scale(yScale);
       yAxisG.call(yAxis);
     });
 
+    // Use the conventional margins.
     Reactivis.margin(model);
+
+    // Use an X linear scale with the data min as the minimum value.
+    Reactivis.xDomain(model);
     Reactivis.xLinearScale(model);
+
+    // Use a Y linear scale with the data min as the minimum value.
+    Reactivis.yDomain(model);
     Reactivis.yLinearScale(model);
 
     model.when("margin", function (margin) {

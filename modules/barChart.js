@@ -57,11 +57,12 @@ define(["d3", "model", "modelContrib/reactivis"], function (d3, Model, Reactivis
 
     Reactivis.margin(model);
 
+    // Use an ordinal X scale for defining bars.
+    Reactivis.xOrdinalScale(model);
+
     // Use a Y linear scale with zero as the minimum for bar height.
     Reactivis.yDomain(model, { zeroMin: true });
     Reactivis.yLinearScale(model);
-
-
 
     model.when("margin", function (margin) {
       g.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
@@ -92,13 +93,8 @@ define(["d3", "model", "modelContrib/reactivis"], function (d3, Model, Reactivis
       xAxisG.attr("transform", "translate(0," + height + ")");
     });
 
-    // Update the X scale based on data, X attribute and width.
-    model.when(["data", "xAttribute", "width"], function (data, xAttribute, width) {
-      model.xScale = d3.scale.ordinal()
-        // TODO make 0.1 into a model property
-        .rangeRoundBands([0, width], 0.1)
-        .domain(data.map(function(d) { return d[xAttribute]; }));
-    });
+    // Use an ordinal X scale.
+    Reactivis.xOrdinalScale(model);
 
     // Update the X axis based on the X scale.
     model.when(["xScale"], function (xScale) {

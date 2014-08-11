@@ -12,7 +12,10 @@
 //  * `width` and `height`, the dimensions of the inner visualization rectangle, computed from `box` and `margin`.
 //  * `xAttribute` the attribute found in data elements that maps to the X axis.
 //  * `yAttribute` the attribute found in data elements that maps to the Y axis.
-//
+//  * `xDomain` the linear domain of the X scale, an array consisting of two numeric values, the min and max of the X linear scale
+//  * `yDomain` the linear domain of the Y scale, an array consisting of two numeric values, the min and may of the Y linear scale
+//  * `xScale` the d3 scale for the X axis.
+//  * `yScale` the d3 scale for the Y axis.
 //
 // By Curran Kelleher August 2014
 define(['d3', 'model'], function(d3, Model){
@@ -27,28 +30,29 @@ define(['d3', 'model'], function(d3, Model){
     });
   };
 
+  function domain(data, options, get) {
+    var zeroMin = options ? options.zeroMin : false;
+    return zeroMin ? [ 0, d3.max(data, get) ] : d3.extent(data, get);
+  }
+
+  Reactivis.xDomain = function (model, options) {
+    model.when(["data", "xAttribute"], function (data, xAttribute) {
+      var getX = function (d) { return d[xAttribute]; };
+      model.xDomain = domain(data, options, getX);
+    });
+  }
+
   // Computes the Y scale domain from the data.
   //
   // The optional `options` argument may contain `{ zeroMin: true }`
   // to specify that zero should be the minimum of the scale domain.
   // 
   // With no options specified, the default scale domain is the extent of 
-  // the data corresponding data field.
+  // the data values corresponding data field.
   Reactivis.yDomain = function (model, options) {
-    var zeroMin = options ? options.zeroMin : false;
     model.when(["data", "yAttribute"], function (data, yAttribute) {
-      if(zeroMin){
-        model.yDomain = [
-          0,
-          d3.max(data, function (d) {
-            return d[yAttribute];
-          })
-        ];
-      } else {
-        model.yDomain = d3.extent(data, function (d) {
-          return d[yAttribute];
-        });
-      }
+      var getY = function (d) { return d[yAttribute]; };
+      model.yDomain = domain(data, options, getY);
     });
   }
   
@@ -64,21 +68,22 @@ define(['d3', 'model'], function(d3, Model){
   // Creates an X linear scale.
   // Updates the X scale based on data, X attribute and width.
   Reactivis.xLinearScale = function (model) {
-    model.when(["data", "xAttribute", "width"], function (data, xAttribute, width) {
-      model.xScale = d3.scale.linear()
-        .range([0, width])
-        .domain([0, d3.max(data, function(d) { return d[xAttribute]; })]);
+    var scale = d3.scale.linear();
+    model.when(["data", "xDomain", "width"], function (data, xDomain, width) {
+      model.xScale = scale.domain(xDomain).range([0, width])
     });
   };
 
   // Creates an X ordinal scale.
   // Updates the X scale based on data, X attribute and width.
   Reactivis.xOrdinalScale = function (model) {
+    var scale = d3.scale.ordinal();
     model.when(["data", "xAttribute", "width"], function (data, xAttribute, width) {
-      model.xScale = d3.scale.ordinal()
+      var getX = function (d) { return d[xAttribute]; };
+      model.xScale = scale
         // TODO make 0.1 into a model property
         .rangeRoundBands([0, width], 0.1)
-        .domain(data.map(function(d) { return d[xAttribute]; }));
+        .domain(data.map(getX));
     });
   };
 
