@@ -44,6 +44,5 @@
   },
   "_source": "git://github.com/curran/model.git",
   "_target": "~0.1.0",
-  "_originalSource": "model",
-  "_direct": true
+  "_originalSource": "model"
 }

@@ -13,6 +13,7 @@
 //  * `xAttribute` the attribute found in data elements that maps to the X axis.
 //  * `yAttribute` the attribute found in data elements that maps to the Y axis.
 //
+//
 // By Curran Kelleher August 2014
 define(['d3', 'model'], function(d3, Model){
   var Reactivis = {};
@@ -25,14 +26,38 @@ define(['d3', 'model'], function(d3, Model){
       model.height = box.height - margin.top - margin.bottom;
     });
   };
+
+  // Computes the Y scale domain from the data.
+  //
+  // The optional `options` argument may contain `{ zeroMin: true }`
+  // to specify that zero should be the minimum of the scale domain.
+  // 
+  // With no options specified, the default scale domain is the extent of 
+  // the data corresponding data field.
+  Reactivis.yDomain = function (model, options) {
+    var zeroMin = options ? options.zeroMin : false;
+    model.when(["data", "yAttribute"], function (data, yAttribute) {
+      if(zeroMin){
+        model.yDomain = [
+          0,
+          d3.max(data, function (d) {
+            return d[yAttribute];
+          })
+        ];
+      } else {
+        model.yDomain = d3.extent(data, function (d) {
+          return d[yAttribute];
+        });
+      }
+    });
+  }
   
   // Creates a Y linear scale.
   // Updates the Y scale based on data, Y attribute and height.
-  Reactivis.yLinearScale = function (model) {
+  Reactivis.yLinearScale = function (model, options) {
+    var scale = d3.scale.linear();
     model.when(["data", "yDomain", "height"], function (data, yDomain, height) {
-      model.yScale = d3.scale.linear()
-        .range([height, 0])
-        .domain(yDomain);
+      model.yScale = scale.domain(yDomain).range([height, 0]);
     });
   };
 

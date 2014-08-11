@@ -60,12 +60,8 @@ define(["d3", "model", "modelContrib/reactivis"], function (d3, Model, Reactivis
       xAxisG.call(xAxis);
     });
 
-    // Use a Y linear scale with zero as the minimum for bar height.
-    model.when(["data", "yAttribute"], function (data, yAttribute) {
-      model.yDomain = d3.extent(data, function (d) {
-        return d[yAttribute];
-      });
-    });
+    // Use a Y linear scale with the data min as the minimum value.
+    Reactivis.yDomain(model);
 
     // Update the Y axis based on the Y scale.
     model.when(["yScale"], function (yScale) {

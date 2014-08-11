@@ -58,16 +58,10 @@ define(["d3", "model", "modelContrib/reactivis"], function (d3, Model, Reactivis
     Reactivis.margin(model);
 
     // Use a Y linear scale with zero as the minimum for bar height.
-    model.when(["data", "yAttribute"], function (data, yAttribute) {
-      model.yDomain = [
-        0,
-        d3.max(data, function (d) {
-          return d[yAttribute];
-        })
-      ];
-    });
-
+    Reactivis.yDomain(model, { zeroMin: true });
     Reactivis.yLinearScale(model);
+
+
 
     model.when("margin", function (margin) {
       g.attr("transform", "translate(" + margin.left + "," + margin.top + ")");

@@ -25,6 +25,14 @@
       ]
     },
     {
+      "name": "sflobby",
+      "files": [
+        "index.html",
+        "main.js",
+        "force.css"
+      ]
+    },
+    {
       "name": "starter",
       "files": [
         "index.html"
