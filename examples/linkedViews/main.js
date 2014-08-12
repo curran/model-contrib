@@ -14,6 +14,14 @@ require(["d3", "modelContrib/barChart", "modelContrib/scatterPlot"], function (d
     yAxisLabel: "Sepal Length (cm)"
   });
 
+  // Configure the bar chart to use the structure output from
+  // the D3 nest operator in response to scatter plot selections.
+  barChart.set({
+    xAttribute: "key",
+    yAttribute: "values",
+    yAxisLabel: "number of irises"
+  });
+
   // Compute the aggregated iris data in response to brushing
   // in the scatter plot, and pass it into the bar chart.
   scatterPlot.when("selectedData", function (selectedData) {
@@ -33,30 +41,15 @@ require(["d3", "modelContrib/barChart", "modelContrib/scatterPlot"], function (d
       .entries(selectedData);
   });
 
-  // Configure the bar chart to use the structure output from
-  // the D3 nest operator in response to scatter plot selections.
-  barChart.set({
-    xAttribute: "key",
-    yAttribute: "values",
-    yAxisLabel: "number of irises"
-  });
-
-
   // Fetch the data and feed it into the scatterPlot.
-  d3.tsv(tsvPath, type, function(error, data) {
-    scatterPlot.data = data;
-    scatterPlot.selectedData = data;
-  });
-
-  // Runs for each row of the input data
-  // See https://github.com/mbostock/d3/wiki/CSV#csv
-  function type(d) {
-
-    // Parse strings to Numbers for numeric attributes.
+  d3.tsv(tsvPath, function type(d) {
     d.sepalLength = +d.sepalLength;
     d.sepalWidth = +d.sepalWidth;
     return d;
-  }
+  } , function(error, data) {
+    scatterPlot.data = data;
+    scatterPlot.selectedData = data;
+  });
 
   // Set the visualization boxes.
   function computeBoxes(){

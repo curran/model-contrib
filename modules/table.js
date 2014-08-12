@@ -14,13 +14,16 @@
 define(['d3', 'model'], function (d3, Model) {
   return function Table(container) {
     var model = Model(),
-        table = d3.select(container)
+        div = d3.select(container)
 
-          // Make the container scrollable
-          .style('overflow-y', 'auto')
+          // Append the container div
+          .append('div')
 
-          // Append the HTML table
-          .append('table')
+          // Make the container div scrollable
+          .style('overflow-y', 'auto'),
+
+        // Append the HTML table to the container div
+        table = div.append('table')
 
           // Use Bootstrap 'table' class
           .attr('class', 'table'),
