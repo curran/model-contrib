@@ -68,8 +68,22 @@ Computes <code>width</code> and <code>height</code> from <code>box</code> and <c
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  Reactivis.margin = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(model)</span> </span>{
-    model.when([<span class="hljs-string">"box"</span>, <span class="hljs-string">"margin"</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(box, margin)</span> </span>{
+            <div class="content"><div class='highlight'><pre>  Reactivis.margin = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(model)</span> </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>Compute the inner box from the outer box and margin.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    model.when([<span class="hljs-string">"box"</span>, <span class="hljs-string">"margin"</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(box, margin)</span> </span>{
       model.width = box.width - margin.left - margin.right;
       model.height = box.height - margin.top - margin.bottom;
     });
@@ -90,11 +104,24 @@ Computes <code>width</code> and <code>height</code> from <code>box</code> and <c
         </li>
         
         
-        <li id="section-3">
+        <li id="section-4">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-3">&#182;</a>
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <h1 id="domains-and-scales">Domains and Scales</h1>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
               <p>Computes the Y scale domain from the data.</p>
 <p>The optional <code>options</code> argument may contain <code>{ zeroMin: true }</code>
@@ -114,11 +141,11 @@ the data values corresponding data field.</p>
         </li>
         
         
-        <li id="section-4">
+        <li id="section-6">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-4">&#182;</a>
+                <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
               <p>Creates a Y linear scale.
 Updates the Y scale based on data, Y attribute and height.</p>
@@ -135,11 +162,11 @@ Updates the Y scale based on data, Y attribute and height.</p>
         </li>
         
         
-        <li id="section-5">
+        <li id="section-7">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-5">&#182;</a>
+                <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
               <p>Creates an X linear scale.
 Updates the X scale based on data, X attribute and width.</p>
@@ -156,11 +183,11 @@ Updates the X scale based on data, X attribute and width.</p>
         </li>
         
         
-        <li id="section-6">
+        <li id="section-8">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-6">&#182;</a>
+                <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
               <p>Creates an X ordinal scale.
 Updates the X scale based on data, X attribute and width.</p>
@@ -176,11 +203,11 @@ Updates the X scale based on data, X attribute and width.</p>
         </li>
         
         
-        <li id="section-7">
+        <li id="section-9">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-7">&#182;</a>
+                <a class="pilcrow" href="#section-9">&#182;</a>
               </div>
               <p>TODO make 0.1 into a model property</p>
 
@@ -188,6 +215,256 @@ Updates the X scale based on data, X attribute and width.</p>
             
             <div class="content"><div class='highlight'><pre>        .rangeRoundBands([<span class="hljs-number">0</span>, width], <span class="hljs-number">0.1</span>)
         .domain(data.map(getX));
+    });
+  };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <h1 id="visualization-dom">Visualization DOM</h1>
+<p>Reactivis provides reusable DOM related components that
+store D3 selections of DOM elements on the model.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  
+  Reactivis.svg = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(model)</span> </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>Create <code>svg</code> from <code>container</code>.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    model.when(<span class="hljs-string">"container"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(container)</span> </span>{
+      model.svg = d3.select(container).append(<span class="hljs-string">'svg'</span>)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>Use absolute positioning on the SVG element 
+so that CSS can be used to position the div later
+according to the model <code>box.x</code> and <code>box.y</code> properties.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        .style(<span class="hljs-string">'position'</span>, <span class="hljs-string">'absolute'</span>);
+    });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>Update the svg with based on <code>box</code>, an object with
+(x, y, width, height) representing the outer visualization box.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    model.when([<span class="hljs-string">"svg"</span>, <span class="hljs-string">"box"</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(svg, box)</span> </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p>Resize the svg element that contains the visualization.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      svg.attr(<span class="hljs-string">"width"</span>, box.width).attr(<span class="hljs-string">"height"</span>, box.height);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <p>Set the CSS <code>left</code> and <code>top</code> properties
+to move the SVG element to <code>(box.x, box.y)</code>
+relative to the container to apply the offset.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      svg
+        .style(<span class="hljs-string">'left'</span>, box.x + <span class="hljs-string">'px'</span>)
+        .style(<span class="hljs-string">'top'</span>, box.y + <span class="hljs-string">'px'</span>);
+    });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <p>Create <code>g</code> from <code>svg</code>.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    model.when(<span class="hljs-string">"svg"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(svg)</span> </span>{
+      model.g = svg.append(<span class="hljs-string">"g"</span>);
+    });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <p>Transform the visualization SVG container <code>g</code> based on the margin.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    model.when([<span class="hljs-string">"g"</span>, <span class="hljs-string">"margin"</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(g, margin)</span> </span>{
+      g.attr(<span class="hljs-string">"transform"</span>, <span class="hljs-string">"translate("</span> + margin.left + <span class="hljs-string">","</span> + margin.top + <span class="hljs-string">")"</span>);
+    });
+  };
+
+  Reactivis.xAxis = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(model)</span> </span>{
+    <span class="hljs-keyword">var</span> xAxis = d3.svg.axis().orient(<span class="hljs-string">"bottom"</span>);
+
+    model.when(<span class="hljs-string">"g"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(g)</span> </span>{
+      model.xAxisG = g.append(<span class="hljs-string">"g"</span>).attr(<span class="hljs-string">"class"</span>, <span class="hljs-string">"x axis"</span>);
+    });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <p>Update the X axis transform when height changes.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    model.when([<span class="hljs-string">"xAxisG"</span>, <span class="hljs-string">"height"</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(xAxisG, height)</span> </span>{
+      xAxisG.attr(<span class="hljs-string">"transform"</span>, <span class="hljs-string">"translate(0,"</span> + height + <span class="hljs-string">")"</span>);
+    });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              <p>Update the X axis based on the X scale.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    model.when([<span class="hljs-string">"xAxisG"</span>, <span class="hljs-string">"xScale"</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(xAxisG, xScale)</span> </span>{
+      xAxis.scale(xScale);
+      xAxisG.call(xAxis);
+    });
+  };
+
+  Reactivis.yAxis = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(model)</span> </span>{
+    <span class="hljs-keyword">var</span> yAxis = d3.svg.axis().orient(<span class="hljs-string">"left"</span>);
+
+    model.when(<span class="hljs-string">"g"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(g)</span> </span>{
+      model.yAxisG = g.append(<span class="hljs-string">"g"</span>).attr(<span class="hljs-string">"class"</span>, <span class="hljs-string">"y axis"</span>);
+    });
+
+    model.when(<span class="hljs-string">"yAxisG"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(yAxisG)</span> </span>{
+      model.yAxisText = yAxisG.append(<span class="hljs-string">"text"</span>)
+        .attr(<span class="hljs-string">"transform"</span>, <span class="hljs-string">"rotate(-90)"</span>)
+        .attr(<span class="hljs-string">"y"</span>, <span class="hljs-number">6</span>)
+        .attr(<span class="hljs-string">"dy"</span>, <span class="hljs-string">".71em"</span>)
+        .style(<span class="hljs-string">"text-anchor"</span>, <span class="hljs-string">"end"</span>);
+    });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
+              <p>Adjust Y axis tick mark parameters.
+See <a href="https://github.com/mbostock/d3/wiki/Quantitative-Scales#linear_tickFormat">https://github.com/mbostock/d3/wiki/Quantitative-Scales#linear_tickFormat</a></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    model.when([<span class="hljs-string">'yAxisNumTicks'</span>, <span class="hljs-string">'yAxisTickFormat'</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(count, format)</span> </span>{
+      yAxis.ticks(count, format);
+    });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
+              <p>Update the Y axis based on the Y scale.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    model.when([<span class="hljs-string">"yAxisG"</span>, <span class="hljs-string">"yScale"</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(yAxisG, yScale)</span> </span>{
+      yAxis.scale(yScale);
+      yAxisG.call(yAxis);
+    });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-22">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-22">&#182;</a>
+              </div>
+              <p>Update Y axis label.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    model.when([<span class="hljs-string">"yAxisText"</span>, <span class="hljs-string">"yAxisLabel"</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(yAxisText, yAxisLabel)</span> </span>{
+      yAxisText.text(yAxisLabel);
     });
   };
 

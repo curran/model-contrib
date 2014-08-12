@@ -60,11 +60,12 @@ barChart.data = [
             left: <span class="hljs-number">40</span>
           },
           yAxisNumTicks: <span class="hljs-number">10</span>,
-          yAxisTickFormat: <span class="hljs-string">""</span>
+          yAxisTickFormat: <span class="hljs-string">""</span>,
+          container: container
         },
-        xAxis = d3.svg.axis().orient(<span class="hljs-string">"bottom"</span>),
-        yAxis = d3.svg.axis().orient(<span class="hljs-string">"left"</span>),
-        svg = d3.select(container).append(<span class="hljs-string">'svg'</span>)</pre></div></div>
+        model = Model();
+
+    model.set(defaults);</pre></div></div>
             
         </li>
         
@@ -75,27 +76,11 @@ barChart.data = [
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-              <p>Use absolute positioning on the SVG element 
-so that CSS can be used to position the div later
-according to the model <code>box.x</code> and <code>box.y</code> properties.</p>
+              <p>Use conventional margins.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>          .style(<span class="hljs-string">'position'</span>, <span class="hljs-string">'absolute'</span>),
-
-        g = svg.append(<span class="hljs-string">"g"</span>),
-        xAxisG = g.append(<span class="hljs-string">"g"</span>).attr(<span class="hljs-string">"class"</span>, <span class="hljs-string">"x axis"</span>),
-        yAxisG = g.append(<span class="hljs-string">"g"</span>).attr(<span class="hljs-string">"class"</span>, <span class="hljs-string">"y axis"</span>),
-        yAxisText = yAxisG.append(<span class="hljs-string">"text"</span>)
-          .attr(<span class="hljs-string">"transform"</span>, <span class="hljs-string">"rotate(-90)"</span>)
-          .attr(<span class="hljs-string">"y"</span>, <span class="hljs-number">6</span>)
-          .attr(<span class="hljs-string">"dy"</span>, <span class="hljs-string">".71em"</span>)
-          .style(<span class="hljs-string">"text-anchor"</span>, <span class="hljs-string">"end"</span>),
-        model = Model();
-
-    model.set(defaults);
-
-    Reactivis.margin(model);</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    Reactivis.margin(model);</pre></div></div>
             
         </li>
         
@@ -121,16 +106,11 @@ according to the model <code>box.x</code> and <code>box.y</code> properties.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
-              <p>Use a Y linear scale with zero as the minimum for bar height.</p>
+              <p>Display an X axis with bar names.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    Reactivis.yDomain(model, { zeroMin: <span class="hljs-literal">true</span> });
-    Reactivis.yLinearScale(model);
-
-    model.when(<span class="hljs-string">"margin"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(margin)</span> </span>{
-      g.attr(<span class="hljs-string">"transform"</span>, <span class="hljs-string">"translate("</span> + margin.left + <span class="hljs-string">","</span> + margin.top + <span class="hljs-string">")"</span>);
-    });</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    Reactivis.xAxis(model);</pre></div></div>
             
         </li>
         
@@ -141,14 +121,12 @@ according to the model <code>box.x</code> and <code>box.y</code> properties.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
-              <p>Adjust Y axis tick mark parameters.
-See <a href="https://github.com/mbostock/d3/wiki/Quantitative-Scales#linear_tickFormat">https://github.com/mbostock/d3/wiki/Quantitative-Scales#linear_tickFormat</a></p>
+              <p>Use a Y linear scale with zero as the minimum for bar height.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    model.when([<span class="hljs-string">'yAxisNumTicks'</span>, <span class="hljs-string">'yAxisTickFormat'</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(count, format)</span> </span>{
-      yAxis.ticks(count, format);
-    });</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    Reactivis.yLinearScale(model);
+    Reactivis.yDomain(model, { zeroMin: <span class="hljs-literal">true</span> });</pre></div></div>
             
         </li>
         
@@ -159,11 +137,11 @@ See <a href="https://github.com/mbostock/d3/wiki/Quantitative-Scales#linear_tick
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
-              <p>Respond to changes in size and offset.</p>
+              <p>Display a Y axis with linear tick marks.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    model.when(<span class="hljs-string">"box"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(box)</span> </span>{</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    Reactivis.yAxis(model);</pre></div></div>
             
         </li>
         
@@ -174,11 +152,11 @@ See <a href="https://github.com/mbostock/d3/wiki/Quantitative-Scales#linear_tick
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
-              <p>Resize the svg element that contains the visualization.</p>
+              <p>Build up the visualization DOM from the container.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      svg.attr(<span class="hljs-string">"width"</span>, box.width).attr(<span class="hljs-string">"height"</span>, box.height);</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    Reactivis.svg(model);</pre></div></div>
             
         </li>
         
@@ -189,115 +167,12 @@ See <a href="https://github.com/mbostock/d3/wiki/Quantitative-Scales#linear_tick
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
-              <p>Set the CSS <code>left</code> and <code>top</code> properties
-to move the SVG element to <code>(box.x, box.y)</code>
-relative to the container to apply the offset.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>      svg
-        .style(<span class="hljs-string">'left'</span>, box.x + <span class="hljs-string">'px'</span>)
-        .style(<span class="hljs-string">'top'</span>, box.y + <span class="hljs-string">'px'</span>);
-    });</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-9">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-9">&#182;</a>
-              </div>
-              <p>Update the X axis transform when height changes.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    model.when(<span class="hljs-string">"height"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(height)</span> </span>{
-      xAxisG.attr(<span class="hljs-string">"transform"</span>, <span class="hljs-string">"translate(0,"</span> + height + <span class="hljs-string">")"</span>);
-    });</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-10">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-10">&#182;</a>
-              </div>
-              <p>Use an ordinal X scale.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    Reactivis.xOrdinalScale(model);</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-11">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-11">&#182;</a>
-              </div>
-              <p>Update the X axis based on the X scale.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    model.when([<span class="hljs-string">"xScale"</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(xScale)</span> </span>{
-      xAxis.scale(xScale);
-      xAxisG.call(xAxis);
-    });</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-12">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-12">&#182;</a>
-              </div>
-              <p>Update the Y axis based on the Y scale.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    model.when([<span class="hljs-string">"yScale"</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(yScale)</span> </span>{
-      yAxis.scale(yScale);
-      yAxisG.call(yAxis);
-    });</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-13">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-13">&#182;</a>
-              </div>
-              <p>Update Y axis label.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    model.when(<span class="hljs-string">"yAxisLabel"</span>, yAxisText.text, yAxisText);</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-14">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-14">&#182;</a>
-              </div>
               <p>Draw the bars.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    model.when([<span class="hljs-string">"data"</span>, <span class="hljs-string">"xAttribute"</span>, <span class="hljs-string">"yAttribute"</span>, <span class="hljs-string">"xScale"</span>, <span class="hljs-string">"yScale"</span>, <span class="hljs-string">"height"</span>],
-        <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(data, xAttribute, yAttribute, xScale, yScale, height)</span> </span>{
+            <div class="content"><div class='highlight'><pre>    model.when([<span class="hljs-string">"g"</span>, <span class="hljs-string">"data"</span>, <span class="hljs-string">"xAttribute"</span>, <span class="hljs-string">"yAttribute"</span>, <span class="hljs-string">"xScale"</span>, <span class="hljs-string">"yScale"</span>, <span class="hljs-string">"height"</span>],
+        <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(g, data, xAttribute, yAttribute, xScale, yScale, height)</span> </span>{
 
       <span class="hljs-keyword">var</span> bars = g.selectAll(<span class="hljs-string">".bar"</span>).data(data);
 

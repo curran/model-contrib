@@ -37,7 +37,6 @@ define(["d3", "model", "modelContrib/reactivis"], function (d3, Model, Reactivis
         },
         model = Model();
 
-
     model.set(defaults);
 
     // Use conventional margins.
@@ -50,43 +49,14 @@ define(["d3", "model", "modelContrib/reactivis"], function (d3, Model, Reactivis
     Reactivis.xAxis(model);
 
     // Use a Y linear scale with zero as the minimum for bar height.
-    Reactivis.yDomain(model, { zeroMin: true });
     Reactivis.yLinearScale(model);
+    Reactivis.yDomain(model, { zeroMin: true });
+
+    // Display a Y axis with linear tick marks.
+    Reactivis.yAxis(model);
 
     // Build up the visualization DOM from the container.
     Reactivis.svg(model);
-
-
-    var yAxis = d3.svg.axis().orient("left");
-    model.when("g", function (g) {
-      model.yAxisG = g.append("g").attr("class", "y axis");
-    });
-
-    model.when("yAxisG", function (yAxisG) {
-      model.yAxisText = yAxisG.append("text")
-        .attr("transform", "rotate(-90)")
-        .attr("y", 6)
-        .attr("dy", ".71em")
-        .style("text-anchor", "end");
-    });
-
-    // Adjust Y axis tick mark parameters.
-    // See https://github.com/mbostock/d3/wiki/Quantitative-Scales#linear_tickFormat
-    model.when(['yAxisNumTicks', 'yAxisTickFormat'], function (count, format) {
-      yAxis.ticks(count, format);
-    });
-
-
-    // Update the Y axis based on the Y scale.
-    model.when(["yAxisG", "yScale"], function (yAxisG, yScale) {
-      yAxis.scale(yScale);
-      yAxisG.call(yAxis);
-    });
-
-    // Update Y axis label.
-    model.when(["yAxisText", "yAxisLabel"], function (yAxisText, yAxisLabel) {
-      yAxisText.text(yAxisLabel);
-    });
 
     // Draw the bars.
     model.when(["g", "data", "xAttribute", "yAttribute", "xScale", "yScale", "height"],

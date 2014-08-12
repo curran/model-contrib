@@ -44,6 +44,8 @@ define(['d3', 'model'], function(d3, Model){
     });
   };
 
+  // # Domains and Scales
+
   // Computes the Y scale domain from the data.
   //
   // The optional `options` argument may contain `{ zeroMin: true }`
@@ -147,6 +149,40 @@ define(['d3', 'model'], function(d3, Model){
     model.when(["xAxisG", "xScale"], function (xAxisG, xScale) {
       xAxis.scale(xScale);
       xAxisG.call(xAxis);
+    });
+  };
+
+  Reactivis.yAxis = function (model) {
+    var yAxis = d3.svg.axis().orient("left");
+
+    model.when("g", function (g) {
+      model.yAxisG = g.append("g").attr("class", "y axis");
+    });
+
+    model.when("yAxisG", function (yAxisG) {
+      model.yAxisText = yAxisG.append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 6)
+        .attr("dy", ".71em")
+        .style("text-anchor", "end");
+    });
+
+    // Adjust Y axis tick mark parameters.
+    // See https://github.com/mbostock/d3/wiki/Quantitative-Scales#linear_tickFormat
+    model.when(['yAxisNumTicks', 'yAxisTickFormat'], function (count, format) {
+      yAxis.ticks(count, format);
+    });
+
+
+    // Update the Y axis based on the Y scale.
+    model.when(["yAxisG", "yScale"], function (yAxisG, yScale) {
+      yAxis.scale(yScale);
+      yAxisG.call(yAxis);
+    });
+
+    // Update Y axis label.
+    model.when(["yAxisText", "yAxisLabel"], function (yAxisText, yAxisLabel) {
+      yAxisText.text(yAxisLabel);
     });
   };
 
