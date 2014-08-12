@@ -14,38 +14,33 @@ require(["d3", "modelContrib/barChart", "modelContrib/scatterPlot"], function (d
     yAxisLabel: "Sepal Length (cm)"
   });
 
-  barChart.set({
-    xAttribute: "species",
-    yAttribute: "count",
-    yAxisLabel: "number of irises"
-  });
-
   // Compute the aggregated iris data in response to brushing
   // in the scatter plot, and pass it into the bar chart.
-  scatterPlot.when("selectedData", function (scatterData) {
-
-    // { species -> Number count }
-    var speciesCounts = {};
+  scatterPlot.when("selectedData", function (selectedData) {
 
     // Aggregate scatter plot data by counting 
     // the number of irises for each species.
-    scatterData.forEach(function (d) {
-      if(!speciesCounts[d.species]){
-        speciesCounts[d.species] = 0;
-      }
-      speciesCounts[d.species]++;
-    });
+    // See https://github.com/mbostock/d3/wiki/Arrays#d3_nest
+    barChart.data = d3.nest()
+    
+      // Group by species
+      .key(function (d) { return d.species; })
 
-    // Flatten the object containing species counts into an array.
-    // Update the bar chart with the aggregated data.
-    // Transform the count index into a set of entries in the conventional D3 format.
-    barChart.data = Object.keys(speciesCounts).map(function (species) {
-      return {
-        species: species,
-        count: speciesCounts[species]
-      };
-    });
+      // Compute the count of each species
+      .rollup(function(values) { return values.length; })
+
+      // Apply the nest operator to the selected data.
+      .entries(selectedData);
   });
+
+  // Configure the bar chart to use the structure output from
+  // the D3 nest operator in response to scatter plot selections.
+  barChart.set({
+    xAttribute: "key",
+    yAttribute: "values",
+    yAxisLabel: "number of irises"
+  });
+
 
   // Fetch the data and feed it into the scatterPlot.
   d3.tsv(tsvPath, type, function(error, data) {
