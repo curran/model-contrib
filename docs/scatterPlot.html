@@ -39,7 +39,7 @@
             </div>
             
             <div class="content"><div class='highlight'><pre>define([<span class="hljs-string">"d3"</span>, <span class="hljs-string">"model"</span>, <span class="hljs-string">"modelContrib/reactivis"</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(d3, Model, Reactivis)</span> </span>{
-  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ScatterPlot</span><span class="hljs-params">(container)</span></span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ScatterPlot</span><span class="hljs-params">(container)</span> </span>{
     <span class="hljs-keyword">var</span> defaults = {
           margin: {
             top: <span class="hljs-number">20</span>,
@@ -48,9 +48,13 @@
             left: <span class="hljs-number">40</span>
           },
           yAxisNumTicks: <span class="hljs-number">10</span>,
-          yAxisTickFormat: <span class="hljs-string">""</span>
+          yAxisTickFormat: <span class="hljs-string">""</span>,
           <span class="hljs-comment">/* TODO implement xAxisTickFormat*/</span>
-        },</pre></div></div>
+          container: container
+        },
+        model = Model();
+
+    model.set(defaults);</pre></div></div>
             
         </li>
         
@@ -61,27 +65,11 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-              <p>Use absolute positioning so that CSS can be used
-to position the div according to the model.</p>
+              <p>Build up the visualization DOM from the container.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        svg = d3.select(container).append(<span class="hljs-string">"svg"</span>).style(<span class="hljs-string">"position"</span>, <span class="hljs-string">"absolute"</span>),
-        g = svg.append(<span class="hljs-string">"g"</span>),
-        xAxis = d3.svg.axis().orient(<span class="hljs-string">"bottom"</span>),
-        yAxis = d3.svg.axis().orient(<span class="hljs-string">"left"</span>),
-        xAxisG = g.append(<span class="hljs-string">"g"</span>).attr(<span class="hljs-string">"class"</span>, <span class="hljs-string">"x axis"</span>),
-        yAxisG = g.append(<span class="hljs-string">"g"</span>).attr(<span class="hljs-string">"class"</span>, <span class="hljs-string">"y axis"</span>),
-        xAxisLabel = xAxisG.append(<span class="hljs-string">"text"</span>)
-          .attr(<span class="hljs-string">"class"</span>, <span class="hljs-string">"label"</span>)
-          .attr(<span class="hljs-string">"y"</span>, -<span class="hljs-number">6</span>)
-          .style(<span class="hljs-string">"text-anchor"</span>, <span class="hljs-string">"end"</span>),
-        yAxisLabel = yAxisG.append(<span class="hljs-string">"text"</span>)
-          .attr(<span class="hljs-string">"class"</span>, <span class="hljs-string">"label"</span>)
-          .attr(<span class="hljs-string">"transform"</span>, <span class="hljs-string">"rotate(-90)"</span>)
-          .attr(<span class="hljs-string">"y"</span>, <span class="hljs-number">6</span>)
-          .attr(<span class="hljs-string">"dy"</span>, <span class="hljs-string">".71em"</span>)
-          .style(<span class="hljs-string">"text-anchor"</span>, <span class="hljs-string">"end"</span>),</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    Reactivis.svg(model);</pre></div></div>
             
         </li>
         
@@ -92,23 +80,11 @@ to position the div according to the model.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
-              <p>Add the dots group before the brush group,
-so that mouse events go to the brush
-rather than to the dots, even when the mouse is
-on top of a dot.</p>
+              <p>Use conventional margins.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        dotsG = g.append(<span class="hljs-string">"g"</span>),
-        brushG = g.append(<span class="hljs-string">"g"</span>)
-          .attr(<span class="hljs-string">"class"</span>, <span class="hljs-string">"brush"</span>),
-        brush = d3.svg.brush()
-          .on(<span class="hljs-string">"brush"</span>, brushed),
-        dots,
-        quadtree,
-        model = Model();
-
-    model.set(defaults);</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    Reactivis.margin(model);</pre></div></div>
             
         </li>
         
@@ -119,14 +95,13 @@ on top of a dot.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
-              <p>Update the X axis based on the X scale.</p>
+              <p>Use an X linear scale with the data min as the minimum value.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    model.when([<span class="hljs-string">"xScale"</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(xScale)</span> </span>{
-      xAxis.scale(xScale);
-      xAxisG.call(xAxis);
-    });</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    Reactivis.xLinearScale(model);
+    Reactivis.xDomain(model);
+    Reactivis.xAxis(model);</pre></div></div>
             
         </li>
         
@@ -137,14 +112,13 @@ on top of a dot.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
-              <p>Update the Y axis based on the Y scale.</p>
+              <p>Use a Y linear scale with the data min as the minimum value.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    model.when([<span class="hljs-string">"yScale"</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(yScale)</span> </span>{
-      yAxis.scale(yScale);
-      yAxisG.call(yAxis);
-    });</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    Reactivis.yDomain(model);
+    Reactivis.yLinearScale(model);
+    Reactivis.yAxis(model);</pre></div></div>
             
         </li>
         
@@ -155,11 +129,13 @@ on top of a dot.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
-              <p>Use the conventional margins.</p>
+              <p>Add an SVG group to contain the scatter plot marks.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    Reactivis.margin(model);</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    model.when(<span class="hljs-string">"g"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(g)</span> </span>{
+      model.dotsG = g.append(<span class="hljs-string">"g"</span>);
+    });</pre></div></div>
             
         </li>
         
@@ -170,12 +146,12 @@ on top of a dot.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
-              <p>Use an X linear scale with the data min as the minimum value.</p>
+              <p>Add the dots group before the brush group,
+so that mouse events go to the brush
+rather than to the dots, even when the mouse is
+on top of a dot.</p>
 
             </div>
-            
-            <div class="content"><div class='highlight'><pre>    Reactivis.xDomain(model);
-    Reactivis.xLinearScale(model);</pre></div></div>
             
         </li>
         
@@ -186,23 +162,13 @@ on top of a dot.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
-              <p>Use a Y linear scale with the data min as the minimum value.</p>
+              <p>Add an SVG group for the brush.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    Reactivis.yDomain(model);
-    Reactivis.yLinearScale(model);
-
-    model.when(<span class="hljs-string">"margin"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(margin)</span> </span>{
-      g.attr(<span class="hljs-string">"transform"</span>, <span class="hljs-string">"translate("</span> + margin.left + <span class="hljs-string">","</span> + margin.top + <span class="hljs-string">")"</span>);
-    });
-
-    model.when(<span class="hljs-string">"xAxisLabel"</span>, xAxisLabel.text, xAxisLabel);
-    model.when(<span class="hljs-string">"yAxisLabel"</span>, yAxisLabel.text, yAxisLabel);
-
-    model.when(<span class="hljs-string">"box"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(box)</span> </span>{
-      svg.attr(<span class="hljs-string">"width"</span>, box.width)
-         .attr(<span class="hljs-string">"height"</span>, box.height);</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    model.when(<span class="hljs-string">"g"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(g)</span> </span>{
+      model.brushG = g.append(<span class="hljs-string">"g"</span>).attr(<span class="hljs-string">"class"</span>, <span class="hljs-string">"brush"</span>);
+    });</pre></div></div>
             
         </li>
         
@@ -213,31 +179,37 @@ on top of a dot.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-9">&#182;</a>
               </div>
-              <p>Set the CSS <code>left</code> and <code>top</code> properties
-to move the SVG element to <code>(box.x, box.y)</code>
-relative to the container div.</p>
+              <p>Set up brushing to define <code>brushedIntervals</code></p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      svg
-        .style(<span class="hljs-string">"left"</span>, box.x + <span class="hljs-string">"px"</span>)
-        .style(<span class="hljs-string">"top"</span>, box.y + <span class="hljs-string">"px"</span>);
+            <div class="content"><div class='highlight'><pre>    model.when([<span class="hljs-string">"xAttribute"</span>, <span class="hljs-string">"yAttribute"</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(xAttribute, yAttribute)</span> </span>{
+
+      <span class="hljs-keyword">var</span> brush = d3.svg.brush();
+
+      brush.on(<span class="hljs-string">"brush"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">var</span> e = brush.extent(),
+            xMin = e[<span class="hljs-number">0</span>][<span class="hljs-number">0</span>],
+            yMin = e[<span class="hljs-number">0</span>][<span class="hljs-number">1</span>],
+            xMax = e[<span class="hljs-number">1</span>][<span class="hljs-number">0</span>],
+            yMax = e[<span class="hljs-number">1</span>][<span class="hljs-number">1</span>],
+            brushedIntervals = {};
+        <span class="hljs-keyword">if</span>(!brush.empty()){
+          brushedIntervals[xAttribute] = [xMin, xMax];
+          brushedIntervals[yAttribute] = [yMin, yMax];
+        }
+        model.brushedIntervals = brushedIntervals;
+      });
+
+      model.brush = brush;
     });
 
-    model.when(<span class="hljs-string">"width"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(width)</span> </span>{
-      xAxisLabel.attr(<span class="hljs-string">"x"</span>, width);
+    model.when([<span class="hljs-string">"data"</span>, <span class="hljs-string">"xAttribute"</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(data, xAttribute)</span> </span>{
+      model.getX = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(d)</span> </span>{ <span class="hljs-keyword">return</span> d[xAttribute]; };
     });
 
-    model.when(<span class="hljs-string">"height"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(height)</span> </span>{
-      xAxisG.attr(<span class="hljs-string">"transform"</span>, <span class="hljs-string">"translate(0,"</span> + height + <span class="hljs-string">")"</span>);
-    });
-
-    model.when([<span class="hljs-string">"width"</span>, <span class="hljs-string">"height"</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(width, height)</span> </span>{
-      brush.x(d3.scale.identity().domain([<span class="hljs-number">0</span>, width]));
-      brush.y(d3.scale.identity().domain([<span class="hljs-number">0</span>, height]));
-      brushG
-        .call(brush)
-        .call(brush.event);
+    model.when([<span class="hljs-string">"data"</span>, <span class="hljs-string">"yAttribute"</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(data, yAttribute)</span> </span>{
+      model.getY = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(d)</span> </span>{ <span class="hljs-keyword">return</span> d[yAttribute]; };
     });</pre></div></div>
             
         </li>
@@ -249,12 +221,13 @@ relative to the container div.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-10">&#182;</a>
               </div>
-              <p>Draw the dots.</p>
+              <p>Create a quadtree index in data space.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    model.when([<span class="hljs-string">"data"</span>, <span class="hljs-string">"xAttribute"</span>, <span class="hljs-string">"yAttribute"</span>, <span class="hljs-string">"xScale"</span>, <span class="hljs-string">"yScale"</span>],
-        <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(data, xAttribute, yAttribute, xScale, yScale)</span> </span>{</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    model.when([<span class="hljs-string">"data"</span>, <span class="hljs-string">"getX"</span>, <span class="hljs-string">"getY"</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(data, getX, getY)</span> </span>{
+      model.quadtree = d3.geom.quadtree().x(getX).y(getY)(data);
+    });</pre></div></div>
             
         </li>
         
@@ -265,13 +238,12 @@ relative to the container div.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-11">&#182;</a>
               </div>
-              <p>Update the scales
-TODO generalize this by introducing a way to define the min value
-used as either the data min or a fixed value.</p>
+              <p>Compute <code>selectedData</code> when <code>brushedIntervals</code> changes, using a quadtree.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      xScale.domain(d3.extent(data, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(d)</span> </span>{ <span class="hljs-keyword">return</span> d[xAttribute]; })).nice();</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    model.when([<span class="hljs-string">"brushedIntervals"</span>, <span class="hljs-string">"quadtree"</span>, <span class="hljs-string">"xAttribute"</span>, <span class="hljs-string">"yAttribute"</span>, <span class="hljs-string">"data"</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(brushedIntervals, quadtree, xAttribute, yAttribute, data)</span> </span>{
+      <span class="hljs-keyword">var</span> selectedData;</pre></div></div>
             
         </li>
         
@@ -282,14 +254,11 @@ used as either the data min or a fixed value.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-12">&#182;</a>
               </div>
-              <p>Update the quadtree</p>
+              <p>If the brush is empty,</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      quadtree = d3.geom.quadtree()
-        .x(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(d)</span> </span>{ <span class="hljs-keyword">return</span> xScale(d[xAttribute]); })
-        .y(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(d)</span> </span>{ <span class="hljs-keyword">return</span> yScale(d[yAttribute]); })
-        (data);</pre></div></div>
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">if</span>(<span class="hljs-built_in">Object</span>.keys(brushedIntervals).length === <span class="hljs-number">0</span>){</pre></div></div>
             
         </li>
         
@@ -300,20 +269,12 @@ used as either the data min or a fixed value.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-13">&#182;</a>
               </div>
-              <p>Plot the data as dots</p>
+              <p>pass all the data as “selected”.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      dots = dotsG.selectAll(<span class="hljs-string">".dot"</span>).data(data);
-      dots.enter().append(<span class="hljs-string">"circle"</span>)
-        .attr(<span class="hljs-string">"class"</span>, <span class="hljs-string">"dot"</span>)
-        .attr(<span class="hljs-string">"r"</span>, <span class="hljs-number">3.5</span>);
-      dots
-        .attr(<span class="hljs-string">"cx"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(d)</span> </span>{ <span class="hljs-keyword">return</span> xScale(d[xAttribute]); })
-        .attr(<span class="hljs-string">"cy"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(d)</span> </span>{ <span class="hljs-keyword">return</span> yScale(d[yAttribute]); });
-      dots.exit().remove();
-    });
-    <span class="hljs-keyword">return</span> model;</pre></div></div>
+            <div class="content"><div class='highlight'><pre>        selectedData = data;
+      } <span class="hljs-keyword">else</span> {</pre></div></div>
             
         </li>
         
@@ -324,13 +285,14 @@ used as either the data min or a fixed value.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-14">&#182;</a>
               </div>
-              <p>Called whenever the user manipulates the D3 brush.</p>
+              <p>If the brush is selecting a region,</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">brushed</span><span class="hljs-params">()</span> </span>{
-      <span class="hljs-keyword">var</span> e = brush.extent(),
-          selectedData;</pre></div></div>
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">var</span> x0 = brushedIntervals[xAttribute][<span class="hljs-number">0</span>],
+            y0 = brushedIntervals[yAttribute][<span class="hljs-number">0</span>],
+            x3 = brushedIntervals[xAttribute][<span class="hljs-number">1</span>],
+            y3 = brushedIntervals[yAttribute][<span class="hljs-number">1</span>];</pre></div></div>
             
         </li>
         
@@ -341,11 +303,26 @@ used as either the data min or a fixed value.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-15">&#182;</a>
               </div>
-              <p>If the data has been rendered,</p>
+              <p>then query the quadtree for selected data elements.
+See <a href="http://bl.ocks.org/mbostock/6216724">http://bl.ocks.org/mbostock/6216724</a></p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">if</span>(dots) {</pre></div></div>
+            <div class="content"><div class='highlight'><pre>        selectedData = [];  
+        quadtree.visit(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(node, x1, y1, x2, y2)</span> </span>{
+          <span class="hljs-keyword">var</span> d = node.point, x, y;
+          <span class="hljs-keyword">if</span> (d) {
+            x = node.x;
+            y = node.y;
+            <span class="hljs-keyword">if</span>(x &gt;= x0 &amp;&amp; x &lt; x3 &amp;&amp; y &gt;= y0 &amp;&amp; y &lt; y3){
+              selectedData.push(d);
+            }
+          }
+          <span class="hljs-keyword">return</span> x1 &gt;= x3 || y1 &gt;= y3 || x2 &lt; x0 || y2 &lt; y0;
+        });
+      }
+      model.selectedData = selectedData;
+    });</pre></div></div>
             
         </li>
         
@@ -356,13 +333,11 @@ used as either the data min or a fixed value.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-16">&#182;</a>
               </div>
-              <p>Mark each dot as not selected.</p>
+              <p>Update the brush based on scales.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        dots.each(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(d)</span> </span>{
-          d.selected = <span class="hljs-literal">false</span>;
-        });</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    model.when([<span class="hljs-string">"brushG"</span>, <span class="hljs-string">"brush"</span>, <span class="hljs-string">"xScale"</span>, <span class="hljs-string">"yScale"</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(brushG, brush, xScale, yScale)</span> </span>{</pre></div></div>
             
         </li>
         
@@ -373,18 +348,12 @@ used as either the data min or a fixed value.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-17">&#182;</a>
               </div>
-              <p>Mark selected dots and compute selected data.</p>
+              <p>Update the scales within the brush.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        selectedData = search(e[<span class="hljs-number">0</span>][<span class="hljs-number">0</span>], e[<span class="hljs-number">0</span>][<span class="hljs-number">1</span>], e[<span class="hljs-number">1</span>][<span class="hljs-number">0</span>], e[<span class="hljs-number">1</span>][<span class="hljs-number">1</span>]);
-
-        dots.classed(<span class="hljs-string">"selected"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(d)</span> </span>{
-          <span class="hljs-keyword">return</span> d.selected;
-        });
-      }
-      model.selectedData = brush.empty() ? model.data : selectedData;
-    }</pre></div></div>
+            <div class="content"><div class='highlight'><pre>      brush.x(xScale);
+      brush.y(yScale);</pre></div></div>
             
         </li>
         
@@ -395,27 +364,122 @@ used as either the data min or a fixed value.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-18">&#182;</a>
               </div>
-              <p>Find the nodes within the specified rectangle.</p>
+              <p>Update the extent of the brush to use the new scales.
+This causes an existing brush to transform in pixel space
+to reflect the new scales (without this line, the brush stays static).</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">search</span><span class="hljs-params">(x0, y0, x3, y3)</span> </span>{
-      <span class="hljs-keyword">var</span> selectedData = [];
-      quadtree.visit(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(node, x1, y1, x2, y2)</span> </span>{
-        <span class="hljs-keyword">var</span> d = node.point, x, y;
-        <span class="hljs-keyword">if</span> (d) {
-          x = node.x;
-          y = node.y;
-          d.visited = <span class="hljs-literal">true</span>;
-          <span class="hljs-keyword">if</span>(x &gt;= x0 &amp;&amp; x &lt; x3 &amp;&amp; y &gt;= y0 &amp;&amp; y &lt; y3){
-            d.selected = <span class="hljs-literal">true</span>;
-            selectedData.push(d);
-          }
-        }
-        <span class="hljs-keyword">return</span> x1 &gt;= x3 || y1 &gt;= y3 || x2 &lt; x0 || y2 &lt; y0;
-      });
-      <span class="hljs-keyword">return</span> selectedData;
-    }
+            <div class="content"><div class='highlight'><pre>      brush.extent(brush.extent());</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              <p>Render the brush onto the brush group.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      brushG.call(brush);
+    });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
+              <p>Draw the dots.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    model.when([<span class="hljs-string">"dotsG"</span>, <span class="hljs-string">"data"</span>, <span class="hljs-string">"xAttribute"</span>, <span class="hljs-string">"yAttribute"</span>, <span class="hljs-string">"xScale"</span>, <span class="hljs-string">"yScale"</span>],
+        <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(dotsG, data, xAttribute, yAttribute, xScale, yScale)</span> </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
+              <p>TODO generalize computation of getX, getY</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">var</span> getX = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(d)</span> </span>{ <span class="hljs-keyword">return</span> d[xAttribute]; };
+      <span class="hljs-keyword">var</span> getY = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(d)</span> </span>{ <span class="hljs-keyword">return</span> d[yAttribute]; };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-22">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-22">&#182;</a>
+              </div>
+              <p>Update the quadtree</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      quadtree = d3.geom.quadtree().x(getX).y(getY)(data);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-23">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-23">&#182;</a>
+              </div>
+              <p>Plot the data as dots</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">var</span> dots = dotsG.selectAll(<span class="hljs-string">".dot"</span>).data(data);
+      dots.enter().append(<span class="hljs-string">"circle"</span>)
+        .attr(<span class="hljs-string">"class"</span>, <span class="hljs-string">"dot"</span>)
+        .attr(<span class="hljs-string">"r"</span>, <span class="hljs-number">3.5</span>);
+      dots
+        .attr(<span class="hljs-string">"cx"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(d)</span> </span>{ <span class="hljs-keyword">return</span> xScale(getX(d)); })
+        .attr(<span class="hljs-string">"cy"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(d)</span> </span>{ <span class="hljs-keyword">return</span> yScale(getY(d)); });
+      dots.exit().remove();
+    });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-24">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-24">&#182;</a>
+              </div>
+              <p>TODO deal with this
+Mark each dot as not selected.
+dots.each(function(d) {
+ d.selected = false;
+});
+dots.classed(“selected”, function (d) {
+ return d.selected;
+});</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+    <span class="hljs-keyword">return</span> model;
   };
 });</pre></div></div>
             

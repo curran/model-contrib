@@ -25,6 +25,14 @@
       ]
     },
     {
+      "name": "scatterZoom",
+      "files": [
+        "index.html",
+        "main.js",
+        "styles.css"
+      ]
+    },
+    {
       "name": "starter",
       "files": [
         "index.html"

@@ -1,0 +1,48 @@
+/* Make the visualization container fill the page. */
+#container {
+  position: fixed;
+  left: 0px;
+  right: 0px;
+  top: 0px;
+  bottom: 0px;
+}
+
+/* Begin bar chart CSS */
+
+.bar {
+  fill: black;
+}
+
+/* Begin scatter plot CSS */
+.dot {
+  fill: black;
+}
+
+/* The following CSS is for brushing,
+ * adapted from http://bl.ocks.org/mbostock/4343214 */
+
+.dot.selected {
+  fill: red;
+}
+
+.brush .extent {
+  stroke: gray;
+  fill-opacity: .125;
+  shape-rendering: crispEdges;
+}
+
+/* Begin CSS common to both visualizations. */
+.axis {
+  font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x.axis path {
+  display: none;
+}

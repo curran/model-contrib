@@ -46,6 +46,7 @@ many reusable data flow subgraphs:</p>
 <li><code>yDomain</code> the linear domain of the Y scale, an array consisting of two numeric values, the min and may of the Y linear scale</li>
 <li><code>xScale</code> the d3 scale for the X axis.</li>
 <li><code>yScale</code> the d3 scale for the Y axis.</li>
+<li>TODO complete this list</li>
 </ul>
 <p>By Curran Kelleher August 2014</p>
 
@@ -361,6 +362,13 @@ relative to the container to apply the offset.</p>
 
     model.when(<span class="hljs-string">"g"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(g)</span> </span>{
       model.xAxisG = g.append(<span class="hljs-string">"g"</span>).attr(<span class="hljs-string">"class"</span>, <span class="hljs-string">"x axis"</span>);
+    });
+
+    model.when(<span class="hljs-string">"xAxisG"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(xAxisG)</span> </span>{
+      model.xAxisText = xAxisG.append(<span class="hljs-string">"text"</span>)
+        .attr(<span class="hljs-string">"class"</span>, <span class="hljs-string">"label"</span>)
+        .attr(<span class="hljs-string">"y"</span>, -<span class="hljs-number">6</span>)
+        .style(<span class="hljs-string">"text-anchor"</span>, <span class="hljs-string">"end"</span>);
     });</pre></div></div>
             
         </li>

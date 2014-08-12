@@ -34,19 +34,7 @@
 <li>See also the <a href="http://curran.github.io/screencasts/reactiveDataVis/examples/viewer/index.html#/1">Example sequence</a> from the video</li>
 <li>Also demonstrated in the <a href="../#/barChart">model-contrib barChart example</a></li>
 </ul>
-<p>Usage:</p>
-<pre><code><span class="hljs-keyword">var</span> barChart = BarChart(<span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"container"</span>));
-barChart.set({
-  xAttribute: <span class="hljs-string">"id"</span>,
-  yAttribute: <span class="hljs-string">"quantity"</span>,
-  yAxisLabel: <span class="hljs-string">"Amount"</span>,
-  yAxisTickFormat: <span class="hljs-string">"%"</span>
-});
-barChart.data = [
-  {id: <span class="hljs-string">"A"</span>, quantity: <span class="hljs-number">2</span>},
-  {id: <span class="hljs-string">"A"</span>, quantity: <span class="hljs-number">2</span>}
-];
-</code></pre><p>By Curran Kelleher August 2014</p>
+<p>By Curran Kelleher August 2014</p>
 
             </div>
             
@@ -76,11 +64,11 @@ barChart.data = [
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-              <p>Use conventional margins.</p>
+              <p>build up the visualization dom from the container.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    Reactivis.margin(model);</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    Reactivis.svg(model);</pre></div></div>
             
         </li>
         
@@ -91,11 +79,11 @@ barChart.data = [
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
-              <p>Use an ordinal X scale for defining bars.</p>
+              <p>Use conventional margins.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    Reactivis.xOrdinalScale(model);</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    Reactivis.margin(model);</pre></div></div>
             
         </li>
         
@@ -106,11 +94,12 @@ barChart.data = [
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
-              <p>Display an X axis with bar names.</p>
+              <p>Use an ordinal X axis for defining bars.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    Reactivis.xAxis(model);</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    Reactivis.xOrdinalScale(model);
+    Reactivis.xAxis(model);</pre></div></div>
             
         </li>
         
@@ -121,12 +110,13 @@ barChart.data = [
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
-              <p>Use a Y linear scale with zero as the minimum for bar height.</p>
+              <p>Use a Y linear axis with zero as the minimum for bar height.</p>
 
             </div>
             
             <div class="content"><div class='highlight'><pre>    Reactivis.yLinearScale(model);
-    Reactivis.yDomain(model, { zeroMin: <span class="hljs-literal">true</span> });</pre></div></div>
+    Reactivis.yDomain(model, { zeroMin: <span class="hljs-literal">true</span> });
+    Reactivis.yAxis(model);</pre></div></div>
             
         </li>
         
@@ -136,36 +126,6 @@ barChart.data = [
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-6">&#182;</a>
-              </div>
-              <p>Display a Y axis with linear tick marks.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    Reactivis.yAxis(model);</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-7">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-7">&#182;</a>
-              </div>
-              <p>Build up the visualization DOM from the container.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    Reactivis.svg(model);</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-8">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
               <p>Draw the bars.</p>
 
