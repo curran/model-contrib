@@ -32,40 +32,42 @@ define(["d3", "model", "modelContrib/reactivis"], function (d3, Model, Reactivis
             left: 40
           },
           yAxisNumTicks: 10,
-          yAxisTickFormat: ""
+          yAxisTickFormat: "",
+          container: container
         },
-        xAxis = d3.svg.axis().orient("bottom"),
-        yAxis = d3.svg.axis().orient("left"),
-        svg = d3.select(container).append('svg')
-
-          // Use absolute positioning on the SVG element 
-          // so that CSS can be used to position the div later
-          // according to the model `box.x` and `box.y` properties.
-          .style('position', 'absolute'),
-
-        g = svg.append("g"),
-        xAxisG = g.append("g").attr("class", "x axis"),
-        yAxisG = g.append("g").attr("class", "y axis"),
-        yAxisText = yAxisG.append("text")
-          .attr("transform", "rotate(-90)")
-          .attr("y", 6)
-          .attr("dy", ".71em")
-          .style("text-anchor", "end"),
         model = Model();
+
 
     model.set(defaults);
 
+    // Use conventional margins.
     Reactivis.margin(model);
 
     // Use an ordinal X scale for defining bars.
     Reactivis.xOrdinalScale(model);
 
+    // Display an X axis with bar names.
+    Reactivis.xAxis(model);
+
     // Use a Y linear scale with zero as the minimum for bar height.
     Reactivis.yDomain(model, { zeroMin: true });
     Reactivis.yLinearScale(model);
 
-    model.when("margin", function (margin) {
-      g.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    // Build up the visualization DOM from the container.
+    Reactivis.svg(model);
+
+
+    var yAxis = d3.svg.axis().orient("left");
+    model.when("g", function (g) {
+      model.yAxisG = g.append("g").attr("class", "y axis");
+    });
+
+    model.when("yAxisG", function (yAxisG) {
+      model.yAxisText = yAxisG.append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 6)
+        .attr("dy", ".71em")
+        .style("text-anchor", "end");
     });
 
     // Adjust Y axis tick mark parameters.
@@ -74,46 +76,21 @@ define(["d3", "model", "modelContrib/reactivis"], function (d3, Model, Reactivis
       yAxis.ticks(count, format);
     });
 
-    // Respond to changes in size and offset.
-    model.when("box", function (box) {
-
-      // Resize the svg element that contains the visualization.
-      svg.attr("width", box.width).attr("height", box.height);
-
-      // Set the CSS `left` and `top` properties
-      // to move the SVG element to `(box.x, box.y)`
-      // relative to the container to apply the offset.
-      svg
-        .style('left', box.x + 'px')
-        .style('top', box.y + 'px');
-    });
-
-    // Update the X axis transform when height changes.
-    model.when("height", function (height) {
-      xAxisG.attr("transform", "translate(0," + height + ")");
-    });
-
-    // Use an ordinal X scale.
-    Reactivis.xOrdinalScale(model);
-
-    // Update the X axis based on the X scale.
-    model.when(["xScale"], function (xScale) {
-      xAxis.scale(xScale);
-      xAxisG.call(xAxis);
-    });
 
     // Update the Y axis based on the Y scale.
-    model.when(["yScale"], function (yScale) {
+    model.when(["yAxisG", "yScale"], function (yAxisG, yScale) {
       yAxis.scale(yScale);
       yAxisG.call(yAxis);
     });
 
     // Update Y axis label.
-    model.when("yAxisLabel", yAxisText.text, yAxisText);
+    model.when(["yAxisText", "yAxisLabel"], function (yAxisText, yAxisLabel) {
+      yAxisText.text(yAxisLabel);
+    });
 
     // Draw the bars.
-    model.when(["data", "xAttribute", "yAttribute", "xScale", "yScale", "height"],
-        function (data, xAttribute, yAttribute, xScale, yScale, height) {
+    model.when(["g", "data", "xAttribute", "yAttribute", "xScale", "yScale", "height"],
+        function (g, data, xAttribute, yAttribute, xScale, yScale, height) {
 
       var bars = g.selectAll(".bar").data(data);
 

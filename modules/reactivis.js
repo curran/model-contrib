@@ -24,6 +24,8 @@ define(['d3', 'model'], function(d3, Model){
   // Encapsulates [D3 Conventional Margins](http://bl.ocks.org/mbostock/3019563).
   // Computes `width` and `height` from `box` and `margin`.
   Reactivis.margin = function (model) {
+
+    // Compute the inner box from the outer box and margin.
     model.when(["box", "margin"], function (box, margin) {
       model.width = box.width - margin.left - margin.right;
       model.height = box.height - margin.top - margin.bottom;
@@ -84,6 +86,67 @@ define(['d3', 'model'], function(d3, Model){
         // TODO make 0.1 into a model property
         .rangeRoundBands([0, width], 0.1)
         .domain(data.map(getX));
+    });
+  };
+
+  // # Visualization DOM
+  //
+  // Reactivis provides reusable DOM related components that
+  // store D3 selections of DOM elements on the model.
+  
+  Reactivis.svg = function (model) {
+
+    // Create `svg` from `container`.
+    model.when("container", function (container) {
+      model.svg = d3.select(container).append('svg')
+        // Use absolute positioning on the SVG element 
+        // so that CSS can be used to position the div later
+        // according to the model `box.x` and `box.y` properties.
+        .style('position', 'absolute');
+    });
+
+    // Update the svg with based on `box`, an object with
+    // (x, y, width, height) representing the outer visualization box.
+    model.when(["svg", "box"], function (svg, box) {
+
+      // Resize the svg element that contains the visualization.
+      svg.attr("width", box.width).attr("height", box.height);
+
+      // Set the CSS `left` and `top` properties
+      // to move the SVG element to `(box.x, box.y)`
+      // relative to the container to apply the offset.
+      svg
+        .style('left', box.x + 'px')
+        .style('top', box.y + 'px');
+    });
+
+    // Create `g` from `svg`.
+    model.when("svg", function (svg) {
+      model.g = svg.append("g");
+    });
+
+    // Transform the visualization SVG container `g` based on the margin.
+    model.when(["g", "margin"], function (g, margin) {
+      g.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    });
+  };
+
+  Reactivis.xAxis = function (model) {
+    var xAxis = d3.svg.axis().orient("bottom");
+
+    model.when("g", function (g) {
+      model.xAxisG = g.append("g").attr("class", "x axis");
+    });
+
+    // Update the X axis transform when height changes.
+    model.when(["xAxisG", "height"], function (xAxisG, height) {
+      xAxisG.attr("transform", "translate(0," + height + ")");
+    });
+
+    // Update the X axis based on the X scale.
+    model.when(["xAxisG", "xScale"], function (xAxisG, xScale) {
+      xAxis.scale(xScale);
+      xAxisG.call(xAxis);
     });
   };
 
