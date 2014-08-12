@@ -26,3 +26,10 @@ body {
 .dot {
   stroke: #000;
 }
+
+.brush .extent {
+  stroke: gray;
+  fill-opacity: .125;
+  shape-rendering: crispEdges;
+}
+
