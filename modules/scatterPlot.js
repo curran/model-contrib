@@ -22,17 +22,6 @@ define(["d3", "model", "modelContrib/reactivis"], function (d3, Model, Reactivis
         },
         model = Model();
 
-    model.when("g", function (g) {
-      model.dotsG = g.append("g");
-
-      // Add the dots group before the brush group,
-      // so that mouse events go to the brush
-      // rather than to the dots, even when the mouse is
-      // on top of a dot.
-      model.brushG = g.append("g")
-        .attr("class", "brush");
-    });
-
     model.set(defaults);
 
     // Build up the visualization DOM from the container.
@@ -51,15 +40,22 @@ define(["d3", "model", "modelContrib/reactivis"], function (d3, Model, Reactivis
     Reactivis.yLinearScale(model);
     Reactivis.yAxis(model);
 
+    model.when("g", function (g) {
+      model.dotsG = g.append("g");
+
+      // Add the dots group before the brush group,
+      // so that mouse events go to the brush
+      // rather than to the dots, even when the mouse is
+      // on top of a dot.
+      model.brushG = g.append("g").attr("class", "brush");
+    });
+
     // Set up brushing
     model.when(["data", "xAttribute", "yAttribute", "xScale", "yScale"], function (data, xAttribute, yAttribute, xScale, yScale) {
 
       // TODO generalize computation of getX, getY
       var getX = function (d) { return d[xAttribute]; };
       var getY = function (d) { return d[yAttribute]; };
-
-      // Create a quadtree index in the data space.
-      var quadtree = d3.geom.quadtree().x(getX).y(getY)(data);
 
       var brush = d3.svg.brush();
 
@@ -68,17 +64,43 @@ define(["d3", "model", "modelContrib/reactivis"], function (d3, Model, Reactivis
             xMin = e[0][0],
             yMin = e[0][1],
             xMax = e[1][0],
-            yMax = e[1][1];
-        if(brush.empty()){
-          model.selectedData = data;
-        } else {
-          model.selectedData = search(xMin, yMin, xMax, yMax);
+            yMax = e[1][1],
+            brushedIntervals = {};
+        if(!brush.empty()){
+          brushedIntervals[xAttribute] = [xMin, xMax];
+          brushedIntervals[yAttribute] = [yMin, yMax];
         }
+        model.brushedIntervals = brushedIntervals;
       });
 
-      // Find the nodes within the specified rectangle.
-      function search(x0, y0, x3, y3) {
-        var selectedData = [];
+      model.brush = brush;
+    });
+
+    model.when(["data", "xAttribute"], function (data, xAttribute) {
+      model.getX = function (d) { return d[xAttribute]; };
+    });
+
+    model.when(["data", "yAttribute"], function (data, yAttribute) {
+      model.getY = function (d) { return d[yAttribute]; };
+    });
+
+    model.when(["data", "getX", "getY"], function (data, getX, getY) {
+
+      // Create a quadtree index in the data space.
+      model.quadtree = d3.geom.quadtree().x(getX).y(getY)(data);
+    });
+
+    // Search the quadtree to compute `selectedData` when the `brushedIntervals` change.
+    model.when(["brushedIntervals", "quadtree", "xAttribute", "yAttribute", "data"], function (brushedIntervals, quadtree, xAttribute, yAttribute, data) {
+      var selectedData;
+      if(Object.keys(brushedIntervals).length === 0){
+        selectedData = data;
+      } else {
+        var x0 = brushedIntervals[xAttribute][0],
+            y0 = brushedIntervals[yAttribute][0],
+            x3 = brushedIntervals[xAttribute][1],
+            y3 = brushedIntervals[yAttribute][1];
+        selectedData = [];  
         quadtree.visit(function(node, x1, y1, x2, y2) {
           var d = node.point, x, y;
           if (d) {
@@ -90,12 +112,9 @@ define(["d3", "model", "modelContrib/reactivis"], function (d3, Model, Reactivis
           }
           return x1 >= x3 || y1 >= y3 || x2 < x0 || y2 < y0;
         });
-        return selectedData;
       }
-
-      model.brush = brush;
+      model.selectedData = selectedData;
     });
-
 
     model.when(["brushG", "brush", "xScale", "yScale"], function (brushG, brush, xScale, yScale) {
       brush.x(xScale);
