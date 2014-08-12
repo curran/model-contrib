@@ -40,7 +40,7 @@ define(['d3', 'model'], function(d3, Model){
       var getX = function (d) { return d[xAttribute]; };
       model.xDomain = domain(data, options, getX);
     });
-  }
+  };
 
   // Computes the Y scale domain from the data.
   //
@@ -54,7 +54,7 @@ define(['d3', 'model'], function(d3, Model){
       var getY = function (d) { return d[yAttribute]; };
       model.yDomain = domain(data, options, getY);
     });
-  }
+  };
   
   // Creates a Y linear scale.
   // Updates the Y scale based on data, Y attribute and height.
@@ -70,7 +70,7 @@ define(['d3', 'model'], function(d3, Model){
   Reactivis.xLinearScale = function (model) {
     var scale = d3.scale.linear();
     model.when(["data", "xDomain", "width"], function (data, xDomain, width) {
-      model.xScale = scale.domain(xDomain).range([0, width])
+      model.xScale = scale.domain(xDomain).range([0, width]);
     });
   };
 
