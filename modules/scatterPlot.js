@@ -40,22 +40,23 @@ define(["d3", "model", "modelContrib/reactivis"], function (d3, Model, Reactivis
     Reactivis.yLinearScale(model);
     Reactivis.yAxis(model);
 
+    // Add an SVG group to contain the scatter plot marks.
     model.when("g", function (g) {
       model.dotsG = g.append("g");
+    });
 
-      // Add the dots group before the brush group,
-      // so that mouse events go to the brush
-      // rather than to the dots, even when the mouse is
-      // on top of a dot.
+    // Add the dots group before the brush group,
+    // so that mouse events go to the brush
+    // rather than to the dots, even when the mouse is
+    // on top of a dot.
+    
+    // Add an SVG group for the brush.
+    model.when("g", function (g) {
       model.brushG = g.append("g").attr("class", "brush");
     });
 
-    // Set up brushing
-    model.when(["data", "xAttribute", "yAttribute", "xScale", "yScale"], function (data, xAttribute, yAttribute, xScale, yScale) {
-
-      // TODO generalize computation of getX, getY
-      var getX = function (d) { return d[xAttribute]; };
-      var getY = function (d) { return d[yAttribute]; };
+    // Set up brushing to define `brushedIntervals`
+    model.when(["xAttribute", "yAttribute"], function (xAttribute, yAttribute) {
 
       var brush = d3.svg.brush();
 
@@ -84,22 +85,29 @@ define(["d3", "model", "modelContrib/reactivis"], function (d3, Model, Reactivis
       model.getY = function (d) { return d[yAttribute]; };
     });
 
+    // Create a quadtree index in data space.
     model.when(["data", "getX", "getY"], function (data, getX, getY) {
-
-      // Create a quadtree index in the data space.
       model.quadtree = d3.geom.quadtree().x(getX).y(getY)(data);
     });
 
-    // Search the quadtree to compute `selectedData` when the `brushedIntervals` change.
+    // Compute `selectedData` when `brushedIntervals` changes, using a quadtree.
     model.when(["brushedIntervals", "quadtree", "xAttribute", "yAttribute", "data"], function (brushedIntervals, quadtree, xAttribute, yAttribute, data) {
       var selectedData;
+
+      // If the brush is empty,
       if(Object.keys(brushedIntervals).length === 0){
+
+        // pass all the data as "selected".
         selectedData = data;
       } else {
+        // If the brush is selecting a region,
         var x0 = brushedIntervals[xAttribute][0],
             y0 = brushedIntervals[yAttribute][0],
             x3 = brushedIntervals[xAttribute][1],
             y3 = brushedIntervals[yAttribute][1];
+
+        // then query the quadtree for selected data elements.
+        // See http://bl.ocks.org/mbostock/6216724
         selectedData = [];  
         quadtree.visit(function(node, x1, y1, x2, y2) {
           var d = node.point, x, y;
@@ -116,12 +124,20 @@ define(["d3", "model", "modelContrib/reactivis"], function (d3, Model, Reactivis
       model.selectedData = selectedData;
     });
 
+    // Update the brush based on scales.
     model.when(["brushG", "brush", "xScale", "yScale"], function (brushG, brush, xScale, yScale) {
+
+      // Update the scales within the brush.
       brush.x(xScale);
       brush.y(yScale);
-      brushG
-        .call(brush)
-        .call(brush.event);
+
+      // Update the extent of the brush to use the new scales.
+      // This causes an existing brush to transform in pixel space
+      // to reflect the new scales (without this line, the brush stays static).
+      brush.extent(brush.extent());
+
+      // Render the brush onto the brush group.
+      brushG.call(brush);
     });
 
     // Draw the dots.
