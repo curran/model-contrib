@@ -7,7 +7,7 @@
 //
 // By Curran Kelleher August 2014
 define(["d3", "model", "modelContrib/reactivis"], function (d3, Model, Reactivis) {
-  return function ScatterPlot(container){
+  return function ScatterPlot(container) {
     var defaults = {
           margin: {
             top: 20,
@@ -16,169 +16,126 @@ define(["d3", "model", "modelContrib/reactivis"], function (d3, Model, Reactivis
             left: 40
           },
           yAxisNumTicks: 10,
-          yAxisTickFormat: ""
+          yAxisTickFormat: "",
           /* TODO implement xAxisTickFormat*/
+          container: container
         },
-
-        // Use absolute positioning so that CSS can be used
-        // to position the div according to the model.
-        svg = d3.select(container).append("svg").style("position", "absolute"),
-        g = svg.append("g"),
-        xAxis = d3.svg.axis().orient("bottom"),
-        yAxis = d3.svg.axis().orient("left"),
-        xAxisG = g.append("g").attr("class", "x axis"),
-        yAxisG = g.append("g").attr("class", "y axis"),
-        xAxisLabel = xAxisG.append("text")
-          .attr("class", "label")
-          .attr("y", -6)
-          .style("text-anchor", "end"),
-        yAxisLabel = yAxisG.append("text")
-          .attr("class", "label")
-          .attr("transform", "rotate(-90)")
-          .attr("y", 6)
-          .attr("dy", ".71em")
-          .style("text-anchor", "end"),
-
-        // Add the dots group before the brush group,
-        // so that mouse events go to the brush
-        // rather than to the dots, even when the mouse is
-        // on top of a dot.
-        dotsG = g.append("g"),
-        brushG = g.append("g")
-          .attr("class", "brush"),
-        brush = d3.svg.brush()
-          .on("brush", brushed),
-        dots,
-        quadtree,
         model = Model();
+
+    model.when("g", function (g) {
+      model.dotsG = g.append("g");
+
+      // Add the dots group before the brush group,
+      // so that mouse events go to the brush
+      // rather than to the dots, even when the mouse is
+      // on top of a dot.
+      model.brushG = g.append("g")
+        .attr("class", "brush");
+    });
 
     model.set(defaults);
 
-    // Update the X axis based on the X scale.
-    model.when(["xScale"], function (xScale) {
-      xAxis.scale(xScale);
-      xAxisG.call(xAxis);
-    });
+    // Build up the visualization DOM from the container.
+    Reactivis.svg(model);
 
-    // Update the Y axis based on the Y scale.
-    model.when(["yScale"], function (yScale) {
-      yAxis.scale(yScale);
-      yAxisG.call(yAxis);
-    });
-
-    // Use the conventional margins.
+    // Use conventional margins.
     Reactivis.margin(model);
 
     // Use an X linear scale with the data min as the minimum value.
-    Reactivis.xDomain(model);
     Reactivis.xLinearScale(model);
+    Reactivis.xDomain(model);
+    Reactivis.xAxis(model);
 
     // Use a Y linear scale with the data min as the minimum value.
     Reactivis.yDomain(model);
     Reactivis.yLinearScale(model);
+    Reactivis.yAxis(model);
 
-    model.when("margin", function (margin) {
-      g.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    // Set up brushing
+    model.when(["data", "xAttribute", "yAttribute", "xScale", "yScale"], function (data, xAttribute, yAttribute, xScale, yScale) {
+
+      // TODO generalize computation of getX, getY
+      var getX = function (d) { return d[xAttribute]; };
+      var getY = function (d) { return d[yAttribute]; };
+
+      // Create a quadtree index in the data space.
+      var quadtree = d3.geom.quadtree().x(getX).y(getY)(data);
+
+      var brush = d3.svg.brush();
+
+      brush.on("brush", function () {
+        var e = brush.extent(),
+            xMin = e[0][0],
+            yMin = e[0][1],
+            xMax = e[1][0],
+            yMax = e[1][1];
+        if(brush.empty()){
+          model.selectedData = data;
+        } else {
+          model.selectedData = search(xMin, yMin, xMax, yMax);
+        }
+      });
+
+      // Find the nodes within the specified rectangle.
+      function search(x0, y0, x3, y3) {
+        var selectedData = [];
+        quadtree.visit(function(node, x1, y1, x2, y2) {
+          var d = node.point, x, y;
+          if (d) {
+            x = node.x;
+            y = node.y;
+            if(x >= x0 && x < x3 && y >= y0 && y < y3){
+              selectedData.push(d);
+            }
+          }
+          return x1 >= x3 || y1 >= y3 || x2 < x0 || y2 < y0;
+        });
+        return selectedData;
+      }
+
+      model.brush = brush;
     });
 
-    model.when("xAxisLabel", xAxisLabel.text, xAxisLabel);
-    model.when("yAxisLabel", yAxisLabel.text, yAxisLabel);
 
-    model.when("box", function (box) {
-      svg.attr("width", box.width)
-         .attr("height", box.height);
-
-      // Set the CSS `left` and `top` properties
-      // to move the SVG element to `(box.x, box.y)`
-      // relative to the container div.
-      svg
-        .style("left", box.x + "px")
-        .style("top", box.y + "px");
-    });
-
-    model.when("width", function (width) {
-      xAxisLabel.attr("x", width);
-    });
-
-    model.when("height", function (height) {
-      xAxisG.attr("transform", "translate(0," + height + ")");
-    });
-
-    model.when(["width", "height"], function (width, height) {
-      brush.x(d3.scale.identity().domain([0, width]));
-      brush.y(d3.scale.identity().domain([0, height]));
+    model.when(["brushG", "brush", "xScale", "yScale"], function (brushG, brush, xScale, yScale) {
+      brush.x(xScale);
+      brush.y(yScale);
       brushG
         .call(brush)
         .call(brush.event);
     });
 
     // Draw the dots.
-    model.when(["data", "xAttribute", "yAttribute", "xScale", "yScale"],
-        function (data, xAttribute, yAttribute, xScale, yScale) {
+    model.when(["dotsG", "data", "xAttribute", "yAttribute", "xScale", "yScale"],
+        function (dotsG, data, xAttribute, yAttribute, xScale, yScale) {
 
-      // Update the scales
-      // TODO generalize this by introducing a way to define the min value
-      // used as either the data min or a fixed value.
-      xScale.domain(d3.extent(data, function(d) { return d[xAttribute]; })).nice();
+      // TODO generalize computation of getX, getY
+      var getX = function (d) { return d[xAttribute]; };
+      var getY = function (d) { return d[yAttribute]; };
 
       // Update the quadtree
-      quadtree = d3.geom.quadtree()
-        .x(function(d) { return xScale(d[xAttribute]); })
-        .y(function(d) { return yScale(d[yAttribute]); })
-        (data);
+      quadtree = d3.geom.quadtree().x(getX).y(getY)(data);
 
       // Plot the data as dots
-      dots = dotsG.selectAll(".dot").data(data);
+      var dots = dotsG.selectAll(".dot").data(data);
       dots.enter().append("circle")
         .attr("class", "dot")
         .attr("r", 3.5);
       dots
-        .attr("cx", function(d) { return xScale(d[xAttribute]); })
-        .attr("cy", function(d) { return yScale(d[yAttribute]); });
+        .attr("cx", function(d) { return xScale(getX(d)); })
+        .attr("cy", function(d) { return yScale(getY(d)); });
       dots.exit().remove();
     });
+
+    // TODO deal with this
+    // Mark each dot as not selected.
+    //dots.each(function(d) {
+    //  d.selected = false;
+    //});
+    //dots.classed("selected", function (d) {
+    //  return d.selected;
+    //});
+
     return model;
-
-    // Called whenever the user manipulates the D3 brush.
-    function brushed() {
-      var e = brush.extent(),
-          selectedData;
-
-      // If the data has been rendered,
-      if(dots) {
-
-        // Mark each dot as not selected.
-        dots.each(function(d) {
-          d.selected = false;
-        });
-
-        // Mark selected dots and compute selected data.
-        selectedData = search(e[0][0], e[0][1], e[1][0], e[1][1]);
-
-        dots.classed("selected", function (d) {
-          return d.selected;
-        });
-      }
-      model.selectedData = brush.empty() ? model.data : selectedData;
-    }
-
-    // Find the nodes within the specified rectangle.
-    function search(x0, y0, x3, y3) {
-      var selectedData = [];
-      quadtree.visit(function(node, x1, y1, x2, y2) {
-        var d = node.point, x, y;
-        if (d) {
-          x = node.x;
-          y = node.y;
-          d.visited = true;
-          if(x >= x0 && x < x3 && y >= y0 && y < y3){
-            d.selected = true;
-            selectedData.push(d);
-          }
-        }
-        return x1 >= x3 || y1 >= y3 || x2 < x0 || y2 < y0;
-      });
-      return selectedData;
-    }
   };
 });

@@ -16,6 +16,7 @@
 //  * `yDomain` the linear domain of the Y scale, an array consisting of two numeric values, the min and may of the Y linear scale
 //  * `xScale` the d3 scale for the X axis.
 //  * `yScale` the d3 scale for the Y axis.
+//  * TODO complete this list
 //
 // By Curran Kelleher August 2014
 define(['d3', 'model'], function(d3, Model){
@@ -138,6 +139,13 @@ define(['d3', 'model'], function(d3, Model){
 
     model.when("g", function (g) {
       model.xAxisG = g.append("g").attr("class", "x axis");
+    });
+
+    model.when("xAxisG", function (xAxisG) {
+      model.xAxisText = xAxisG.append("text")
+        .attr("class", "label")
+        .attr("y", -6)
+        .style("text-anchor", "end");
     });
 
     // Update the X axis transform when height changes.

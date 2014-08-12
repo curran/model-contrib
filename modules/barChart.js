@@ -5,22 +5,6 @@
 //  * See also the [Example sequence](http://curran.github.io/screencasts/reactiveDataVis/examples/viewer/index.html#/1) from the video
 //  * Also demonstrated in the [model-contrib barChart example](../#/barChart)
 //
-// Usage:
-//
-// ```
-// var barChart = BarChart(document.getElementById("container"));
-// barChart.set({
-//   xAttribute: "id",
-//   yAttribute: "quantity",
-//   yAxisLabel: "Amount",
-//   yAxisTickFormat: "%"
-// });
-// barChart.data = [
-//   {id: "A", quantity: 2},
-//   {id: "A", quantity: 2}
-// ];
-// ```
-//
 // By Curran Kelleher August 2014
 define(["d3", "model", "modelContrib/reactivis"], function (d3, Model, Reactivis) {
   return function BarChart (container) {
@@ -39,24 +23,20 @@ define(["d3", "model", "modelContrib/reactivis"], function (d3, Model, Reactivis
 
     model.set(defaults);
 
+    // build up the visualization dom from the container.
+    Reactivis.svg(model);
+
     // Use conventional margins.
     Reactivis.margin(model);
 
-    // Use an ordinal X scale for defining bars.
+    // Use an ordinal X axis for defining bars.
     Reactivis.xOrdinalScale(model);
-
-    // Display an X axis with bar names.
     Reactivis.xAxis(model);
 
-    // Use a Y linear scale with zero as the minimum for bar height.
+    // Use a Y linear axis with zero as the minimum for bar height.
     Reactivis.yLinearScale(model);
     Reactivis.yDomain(model, { zeroMin: true });
-
-    // Display a Y axis with linear tick marks.
     Reactivis.yAxis(model);
-
-    // Build up the visualization DOM from the container.
-    Reactivis.svg(model);
 
     // Draw the bars.
     model.when(["g", "data", "xAttribute", "yAttribute", "xScale", "yScale", "height"],
