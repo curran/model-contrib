@@ -3,22 +3,53 @@
   <head>
     <meta charset="utf-8">
     <title>Starter Example</title>
+
+    <!-- Use RequireJS as an AMD module loader. See also http://requirejs.org/docs/whyamd.html -->
     <script src="../../bower_components/requirejs/require.js"></script>
-    <script src="../requireJSConfig.js"></script>
+
+    <!-- Configure Require.js module paths. See docs at http://requirejs.org/docs/api.html#config-paths -->
     <script>
-    require(["d3", "model"], function (d3, Model) {
-      var container = d3.select("#container").style("font-size", "10em"),
-          model = Model();
-
-      model.when("message", function (message) {
-        container.text(message);
+      require.config({
+        paths: {
+          d3: '../../bower_components/d3/d3.min',
+          model: '../../bower_components/model/dist/model'
+        }
       });
+    </script>
 
-      model.message = "Hello World!";
-    });
+    <!--
+      Alternatively, you can use the common RequireJS configuration used by
+      many examples by including the following:
+
+      <script src="../requireJSConfig.js"></script>
+    -->
+
+    <!-- Our main program is defined here. -->
+    <script>
+      // Require D3 and Model.js libraries as AMD modules.
+      require(["d3", "model"], function (d3, Model) {
+
+        // Grab the "message" DOM element, and 
+        var messageDiv = d3.select("#message")
+        
+              // increase the text size using inline CSS.
+              .style("font-size", "10em"),
+
+            // create an empty Model.js model.
+            model = Model();
+
+        // Update the text of the "message" element
+        // based on `model.message`.
+        model.when("message", function (message) {
+          messageDiv.text(message);
+        });
+
+        // Initialize the message.
+        model.message = "Hello World!";
+      });
     </script>
   </head>
   <body>
-    <div id="container"></div>
+    <div id="message"></div>
   </body>
 </html>
