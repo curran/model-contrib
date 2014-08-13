@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Starter Example</title>
+
+    <!-- Use RequireJS as an AMD module loader. See also http://requirejs.org/docs/whyamd.html -->
+    <script src="../../bower_components/requirejs/require.js"></script>
+
+    <!-- Configure Require.js module paths. See docs at http://requirejs.org/docs/api.html#config-paths -->
+    <script>
+      require.config({
+        paths: {
+          d3: "../../bower_components/d3/d3.min",
+          lodash: "../../bower_components/lodash/dist/lodash",
+          model: "../../bower_components/model/dist/model",
+          sql: "../../bower_components/sql.js/js/sql"
+        },
+        shim: {
+          sql: {
+            exports: "SQL"
+          }
+        }
+      });
+    </script>
+
+    <script>
+      require(["d3", "lodash", "model", "sql"], function (d3, _, Model, SQL) {
+
+        // Create a database
+        // Draws from https://github.com/lovasoa/sql.js/blob/master/test/test_statement.js
+        var db = new SQL.Database();
+
+        var data = [
+          { a: 0, b: 'hello' },
+          { a: 1, b: 'world' }
+        ]
+
+        var sql = insert(data);
+
+        function insert(data){
+          var stmts = [ "CREATE TABLE hello (a int, b char);" ];
+          data.forEach( function (d) {
+            var strBuilder = [];
+            var columns = ["a", "b"];
+
+            strBuilder.push("INSERT INTO hello VALUES (");
+            strBuilder.push(columns.map(function (column) {
+              return "'" + d[column] + "'";
+            }).join(","));
+            strBuilder.push(");");
+//            "INSERT INTO hello VALUES (0, 'hello');",
+//            "INSERT INTO hello VALUES (1, 'world');"
+            var sql = strBuilder.join("");
+            console.log(sql);
+            stmts.push(sql);
+          });
+          return stmts.join('');
+        }
+
+        db.run(sql);
+
+        var result = db.exec("SELECT * FROM hello"),
+            data = transformResult(result);
+
+        function transformResult(result){
+          var table = result[0],
+              columns = table.columns;
+          return table.values.map(function (values) {
+            return _.zipObject(columns, values);
+//            var entry = {};
+//            values.forEach(function(d, i){
+//              entry[columns[i]] = d;
+//            });
+//            return entry;
+          });
+        }
+
+
+        console.log(data);
+
+        // Grab the "message" DOM element, and 
+        var messageDiv = d3.select("#message")
+        
+              // increase the text size using inline CSS.
+              .style("font-size", "10em"),
+
+            // create an empty Model.js model.
+            model = Model();
+
+        // Update the text of the "message" element
+        // based on `model.message`.
+        model.when("message", function (message) {
+          messageDiv.text(message);
+        });
+
+        // Initialize the message.
+        model.message = "Hello World!";
+      });
+    </script>
+  </head>
+  <body>
+    <div id="message"></div>
+  </body>
+</html>
