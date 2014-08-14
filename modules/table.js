@@ -7,8 +7,8 @@
 //
 //  * `data` an array of data elements
 //  * `columns` an array of column descriptor objects, each having
-//    * `property` the data element property to access, and
-//    * `title` the string to display in the table as the column header.
+//    * `name` the data element property to access, and
+//    * `label` the string to display in the table as the column header.
 //
 // By Curran Kelleher August 2014
 define(['d3', 'model'], function (d3, Model) {
@@ -39,7 +39,7 @@ define(['d3', 'model'], function (d3, Model) {
       // Populate the table header
       titles = thead.selectAll('th').data(columns);
       titles.enter().append('th');
-      titles.text(function (d) { return d.title; });
+      titles.text(function (d) { return d.label; });
       titles.exit().remove();
 
       // Populate the table rows
@@ -50,7 +50,7 @@ define(['d3', 'model'], function (d3, Model) {
       // Set the values for each table cell
       td = tr.selectAll('td').data(function (row) {
         return columns.map(function (column) {
-          return row[column.property];
+          return row[column.name];
         });
       });
       td.enter().append('td');

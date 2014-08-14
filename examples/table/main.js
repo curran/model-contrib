@@ -11,12 +11,11 @@ require(["d3", "modelContrib/table"], function (d3, Table) {
       data: data,
       columns: Object.keys(data[0]).map(function (key) {
         return {
-          title: capitalize(key),
-          property: key
+          label: capitalize(key),
+          name: key
         };
       })
     });
-
 
     // Reset data each second
     setInterval(function () {
@@ -53,8 +52,8 @@ require(["d3", "modelContrib/table"], function (d3, Table) {
       data: randomSample,
       columns: randomKeys.map(function (key) {
         return {
-          title: capitalize(key),
-          property: key
+          label: capitalize(key),
+          name: key
         };
       })
     });
