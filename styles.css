@@ -25,6 +25,12 @@ p, li {
 /* Make the title large and move it down a little so it is more vertically centered. */
 .page-title {
   font-size: 4em;
+  display: inline-block;
+  margin-bottom: 0px;
+}
+
+.side-title {
+  display: inline;
 }
 
 /**** Begin styles for the details view only. ****/
@@ -50,7 +56,7 @@ p, li {
 /* Size the iFrame that contains the running example. */
 .exampleFrame {
   width: 100%;
-  height: 400px;
+  height: 500px;
   border: 1px lightgray solid; 
   margin-bottom: 10px;
 }
