@@ -101,11 +101,12 @@ define(['d3', 'model'], function(d3, Model){
 
     // Create `svg` from `container`.
     model.when("container", function (container) {
-      model.svg = d3.select(container).append('svg')
+      model.svg = d3.select(container).append('svg');
+
         // Use absolute positioning on the SVG element 
         // so that CSS can be used to position the div later
         // according to the model `box.x` and `box.y` properties.
-        .style('position', 'absolute');
+        //.style('position', 'absolute');
     });
 
     // Update the svg with based on `box`, an object with
@@ -118,9 +119,9 @@ define(['d3', 'model'], function(d3, Model){
       // Set the CSS `left` and `top` properties
       // to move the SVG element to `(box.x, box.y)`
       // relative to the container to apply the offset.
-      svg
-        .style('left', box.x + 'px')
-        .style('top', box.y + 'px');
+      //svg
+      //  .style('left', box.x + 'px')
+      //  .style('top', box.y + 'px');
     });
 
     // Create `g` from `svg`.

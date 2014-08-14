@@ -1,10 +1,13 @@
 require(["d3", "modelContrib/barChart", "modelContrib/scatterPlot", "modelContrib/table", "crossfilter", "lodash"], function (d3, BarChart, ScatterPlot, Table, Crossfilter, _) {
-  var container = document.getElementById("container"),
-      tableContainer = document.getElementById("table"),
-      barChart = BarChart(container),
-      scatterPlot = ScatterPlot(container);
-      table = Table(tableContainer);
-      tsvPath = "../../data/iris.tsv";
+  var barChart = BarChart(document.querySelector("#barChart")),
+      scatterPlot = ScatterPlot(document.querySelector("#scatterPlot")),
+      table = Table(document.querySelector("#table")),
+      tsvPath = "../../data/iris.tsv",
+   
+      // Each visualization has this height,
+      // and the width is computed by CSS.
+      visHeight = 500;
+  
 
   scatterPlot.set({
     xAttribute: "sepalWidth",
@@ -28,13 +31,20 @@ require(["d3", "modelContrib/barChart", "modelContrib/scatterPlot", "modelContri
     { "label": "Species", "name": "species" }
   ];
 
+  // Initialize crossfilter when the data and configuration is ready.
   scatterPlot.when(["data", "xAttribute", "yAttribute"], function (data, xAttribute, yAttribute) {
     var crossfilter = Crossfilter(data),
         speciesDimension = crossfilter.dimension(function (d) { return d.species; }),
         attributes = [xAttribute, yAttribute];
 
     // Create crossfilter dimensions for each attribute that may be brushed.
+    // In the case of a scatter plot there are only two dimensions,
+    // but for a parallel coordinates plot there may be many dimensions necessary.
     scatterPlot.dimensions = _.zipObject(attributes, attributes.map(function (attribute) {
+
+      // In scatterPlot.dimensions,
+      // keys are attribute names,
+      // values are corresponding crossfilter dimension objects.
       return crossfilter.dimension(function (d) {
         return d[attribute];
       });
@@ -76,24 +86,19 @@ require(["d3", "modelContrib/barChart", "modelContrib/scatterPlot", "modelContri
     scatterPlot.data = data;
   });
 
-  // Set the visualization boxes.
-  function computeBoxes(){
-
-    // Put the scatter plot on the left.
-    scatterPlot.box = {
+  function setBox(model, height){
+    model.box = {
       x: 0,
       y: 0,
-      width: container.clientWidth / 2,
-      height: container.clientHeight
+      width: model.container.clientWidth,
+      height: height
     };
+  }
 
-    // Put the bar chart on the right.
-    barChart.box = {
-      x: container.clientWidth / 2,
-      y: 0,
-      width: container.clientWidth / 2,
-      height: container.clientHeight
-    };
+  // Set the visualization boxes.
+  function computeBoxes(){
+    setBox(scatterPlot, visHeight);
+    setBox(barChart, visHeight);
   }
 
   // once to initialize `model.box`, and

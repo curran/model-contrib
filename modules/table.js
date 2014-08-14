@@ -11,7 +11,7 @@
 //    * `label` the string to display in the table as the column header.
 //
 // By Curran Kelleher August 2014
-define(['d3', 'model'], function (d3, Model) {
+define(['d3', 'model', 'lodash'], function (d3, Model, _) {
   return function Table(container) {
     var model = Model(),
         div = d3.select(container)
@@ -27,10 +27,13 @@ define(['d3', 'model'], function (d3, Model) {
 
         // Append table header and table body
         thead = table.append('thead').append('tr'),
-        tbody = table.append('tbody');
+        tbody = table.append('tbody'),
+
+        // Re-render the table at most once every 100 ms.
+        throttleWait = 100;
 
     // When the data changes, update the table
-    model.when(['data', 'columns'], function (data, columns) {
+    model.when(['data', 'columns'], _.throttle(function (data, columns) {
       var titles, tr, td;
 
       // Populate the table header
@@ -53,7 +56,7 @@ define(['d3', 'model'], function (d3, Model) {
       td.enter().append('td');
       td.exit().remove();
       td.text( function (d) { return d; });
-    });
+    }, throttleWait));
 
     return model;
   };
