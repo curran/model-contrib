@@ -17,10 +17,7 @@ define(['d3', 'model'], function (d3, Model) {
         div = d3.select(container)
 
           // Append the container div
-          .append('div')
-
-          // Make the container div scrollable
-          .style('overflow-y', 'auto'),
+          .append('div'),
 
         // Append the HTML table to the container div
         table = div.append('table')

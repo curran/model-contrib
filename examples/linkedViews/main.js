@@ -1,9 +1,9 @@
-// An example use of the barChart and scatterPlot modules
-// to assemble linked views.
-require(["d3", "modelContrib/barChart", "modelContrib/scatterPlot", "crossfilter", "lodash"], function (d3, BarChart, ScatterPlot, Crossfilter, _) {
+require(["d3", "modelContrib/barChart", "modelContrib/scatterPlot", "modelContrib/table", "crossfilter", "lodash"], function (d3, BarChart, ScatterPlot, Table, Crossfilter, _) {
   var container = document.getElementById("container"),
+      tableContainer = document.getElementById("table"),
       barChart = BarChart(container),
       scatterPlot = ScatterPlot(container);
+      table = Table(tableContainer);
       tsvPath = "../../data/iris.tsv";
 
   scatterPlot.set({
@@ -20,36 +20,49 @@ require(["d3", "modelContrib/barChart", "modelContrib/scatterPlot", "crossfilter
     yAxisLabel: "number of irises"
   });
 
+  table.columns = [
+    { "label": "Sepal length", "name": "sepalLength" },
+    { "label": "Sepal width", "name": "sepalWidth" },
+    { "label": "Petal length", "name": "petalLength" },
+    { "label": "Petal width", "name": "petalWidth" },
+    { "label": "Species", "name": "species" }
+  ];
+
   scatterPlot.when(["data", "xAttribute", "yAttribute"], function (data, xAttribute, yAttribute) {
     var crossfilter = Crossfilter(data),
         speciesDimension = crossfilter.dimension(function (d) { return d.species; }),
-        dimensions = {};
+        attributes = [xAttribute, yAttribute];
 
-    dimensions[xAttribute] = crossfilter.dimension(function (d) { return d[xAttribute]; });
-    dimensions[yAttribute] = crossfilter.dimension(function (d) { return d[yAttribute]; });
-    scatterPlot.dimensions = dimensions;
+    // Create crossfilter dimensions for each attribute that may be brushed.
+    scatterPlot.dimensions = _.zipObject(attributes, attributes.map(function (attribute) {
+      return crossfilter.dimension(function (d) {
+        return d[attribute];
+      });
+    }));
 
-    scatterPlot.speciesGroup = speciesDimension.group(function (d) { return d; });
+    scatterPlot.speciesGroup = speciesDimension.group();
+    scatterPlot.speciesDimension = speciesDimension;
   });
 
   // Compute the aggregated iris data in response to brushing
   // in the scatter plot, and pass it into the bar chart.
-  scatterPlot.when(["brushedIntervals", "dimensions", "speciesGroup"], function (brushedIntervals, dimensions, speciesGroup) {
+  scatterPlot.when(["brushedIntervals", "dimensions", "speciesDimension", "speciesGroup"], function (brushedIntervals, dimensions, speciesDimension, speciesGroup) {
 
-    // Filter based on the brushed intervals.
-    var attributes = Object.keys(dimensions);
-    if(_.isEmpty(brushedIntervals)){
-      attributes.forEach(function (attribute) {
-        dimensions[attribute].filter(null);
-      });
-    } else {
-      attributes.forEach(function (attribute) {
-        dimensions[attribute].filterRange(brushedIntervals[attribute]);
-      })
-    }
+    // Apply filters based on the brushed intervals.
+    Object.keys(dimensions).forEach(function (attribute) {
+      var interval = brushedIntervals[attribute],
+          dimension = dimensions[attribute];
+      if(interval){
+        dimension.filterRange(interval);
+      } else {
+        dimension.filterAll();
+      }
+    });
 
     // Set the bars to be the filtered set aggregated by species count.
     barChart.data = speciesGroup.all();
+
+    table.data = speciesDimension.top(Infinity);
   });
 
   // Fetch the data and feed it into the scatterPlot.
