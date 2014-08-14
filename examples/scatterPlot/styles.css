@@ -12,8 +12,8 @@
  * D3 scatter plot example found at
  * http://bl.ocks.org/mbostock/3887118 */
 
-body {
-  font: 10px sans-serif;
+.axis {
+  font: 14px sans-serif;
 }
 
 .axis path,

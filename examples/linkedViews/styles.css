@@ -33,7 +33,7 @@
 
 /* Begin CSS common to both visualizations. */
 .axis {
-  font: 10px sans-serif;
+  font: 14px sans-serif;
 }
 
 .axis path,
@@ -41,8 +41,4 @@
   fill: none;
   stroke: #000;
   shape-rendering: crispEdges;
-}
-
-.x.axis path {
-  display: none;
 }

@@ -153,10 +153,20 @@ define(['d3', 'model'], function(d3, Model){
       xAxisG.attr("transform", "translate(0," + height + ")");
     });
 
+    // Update the X axis label position when width changes.
+    model.when(["xAxisText", "width"], function (xAxisText, width) {
+      xAxisText.attr("x", width);
+    });
+
     // Update the X axis based on the X scale.
     model.when(["xAxisG", "xScale"], function (xAxisG, xScale) {
       xAxis.scale(xScale);
       xAxisG.call(xAxis);
+    });
+
+    // Update X axis label.
+    model.when(["xAxisText", "xAxisLabel"], function (xAxisText, xAxisLabel) {
+      xAxisText.text(xAxisLabel);
     });
   };
 
