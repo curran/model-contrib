@@ -195,8 +195,13 @@ define(['d3', 'model'], function(d3, Model){
 
     // Update the Y axis based on the Y scale.
     model.when(["yAxisG", "yScale"], function (yAxisG, yScale) {
+
+      // TODO mote transitionDuration into the model.
+      var transitionDuration = 100;
       yAxis.scale(yScale);
-      yAxisG.call(yAxis);
+      yAxisG
+        .transition().duration(transitionDuration)
+        .call(yAxis);
     });
 
     // Update Y axis label.

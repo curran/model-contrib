@@ -19,7 +19,9 @@ define(["d3", "model", "modelContrib/reactivis"], function (d3, Model, Reactivis
           yAxisTickFormat: "",
           container: container
         },
-        model = Model();
+        model = Model(),
+
+        transitionDuration = 100;
 
     model.set(defaults);
 
@@ -40,19 +42,21 @@ define(["d3", "model", "modelContrib/reactivis"], function (d3, Model, Reactivis
 
     // Draw the bars.
     model.when(["g", "data", "xAttribute", "yAttribute", "xScale", "yScale", "height"],
-        function (g, data, xAttribute, yAttribute, xScale, yScale, height) {
+        _.throttle(function (g, data, xAttribute, yAttribute, xScale, yScale, height) {
 
       var bars = g.selectAll(".bar").data(data);
 
       bars.enter().append("rect").attr("class", "bar");
 
-      bars.attr("x", function(d) { return xScale(d[xAttribute]); })
+      bars
+        .transition().duration(transitionDuration)
+        .attr("x", function(d) { return xScale(d[xAttribute]); })
         .attr("width", xScale.rangeBand())
         .attr("y", function(d) { return yScale(d[yAttribute]); })
         .attr("height", function(d) { return height - yScale(d[yAttribute]); });
 
       bars.exit().remove();
-    });
+    }), transitionDuration);
 
     return model;
   };
