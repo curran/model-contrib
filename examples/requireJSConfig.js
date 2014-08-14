@@ -4,11 +4,11 @@ require.config({
     model: '../../bower_components/model/dist/model',
     modelContrib: '../../modules/',
     lodash: "../../bower_components/lodash/dist/lodash",
+    crossfilter: "../../bower_components/crossfilter/crossfilter",
     sql: "../../bower_components/sql.js/js/sql"
   },
   shim: {
-    sql: {
-      exports: "SQL"
-    }
+    crossfilter: { exports: "crossfilter" },
+    sql: { exports: "SQL" }
   }
 });

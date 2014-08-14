@@ -18,7 +18,8 @@ define(["d3", "model", "modelContrib/reactivis"], function (d3, Model, Reactivis
           yAxisNumTicks: 10,
           yAxisTickFormat: "",
           /* TODO implement xAxisTickFormat*/
-          container: container
+          container: container,
+          brushedIntervals: {}
         },
         model = Model();
 
