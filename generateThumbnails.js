@@ -39,7 +39,7 @@ function generateThumbnail(example, callback){
     gm(path)
 
       // The thumbnail dimensions in pixels
-      .resize(320, 180)
+      .resize(960 / 4, 480 / 4)
 
       // Overwrite the full size image with its thumbnail.
       // Change path here to keep full size images.

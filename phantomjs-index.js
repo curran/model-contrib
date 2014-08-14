@@ -11,7 +11,10 @@ var page = require('webpage').create(),
     waitTime = 500;
 
 // The dimensions in pixels of the page to render.
-page.viewportSize = { width: 960, height: 540 };
+page.viewportSize = {
+  width: 960,
+  height: 480
+};
 
 // The maximum height is specified here.
 // Without this line, the rendered pages will go down vertically
