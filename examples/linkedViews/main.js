@@ -24,7 +24,19 @@ require(["d3", "modelContrib/barChart", "modelContrib/scatterPlot"], function (d
 
   // Compute the aggregated iris data in response to brushing
   // in the scatter plot, and pass it into the bar chart.
-  scatterPlot.when("selectedData", function (selectedData) {
+  scatterPlot.when(["data", "brushedIntervals"], function (data, brushedIntervals) {
+
+    var selectedData = data.filter(function (d) {
+      var include = true;
+      Object.keys(brushedIntervals).forEach(function (attribute) {
+        var min = brushedIntervals[attribute][0],
+            max = brushedIntervals[attribute][1];
+        if(d[attribute] < min || d[attribute] > max){
+          include = false;
+        }
+      });
+      return include;
+    });
 
     // Aggregate scatter plot data by counting 
     // the number of irises for each species.

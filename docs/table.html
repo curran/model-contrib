@@ -36,8 +36,8 @@
 <ul>
 <li><code>data</code> an array of data elements</li>
 <li><code>columns</code> an array of column descriptor objects, each having<ul>
-<li><code>property</code> the data element property to access, and</li>
-<li><code>title</code> the string to display in the table as the column header.</li>
+<li><code>name</code> the data element property to access, and</li>
+<li><code>label</code> the string to display in the table as the column header.</li>
 </ul>
 </li>
 </ul>
@@ -48,7 +48,7 @@
             <div class="content"><div class='highlight'><pre>define([<span class="hljs-string">'d3'</span>, <span class="hljs-string">'model'</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(d3, Model)</span> </span>{
   <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Table</span><span class="hljs-params">(container)</span> </span>{
     <span class="hljs-keyword">var</span> model = Model(),
-        table = d3.select(container)</pre></div></div>
+        div = d3.select(container)</pre></div></div>
             
         </li>
         
@@ -59,11 +59,11 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-              <p>Make the container scrollable</p>
+              <p>Append the container div</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>          .style(<span class="hljs-string">'overflow-y'</span>, <span class="hljs-string">'auto'</span>)</pre></div></div>
+            <div class="content"><div class='highlight'><pre>          .append(<span class="hljs-string">'div'</span>)</pre></div></div>
             
         </li>
         
@@ -74,11 +74,11 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
-              <p>Append the HTML table</p>
+              <p>Make the container div scrollable</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>          .append(<span class="hljs-string">'table'</span>)</pre></div></div>
+            <div class="content"><div class='highlight'><pre>          .style(<span class="hljs-string">'overflow-y'</span>, <span class="hljs-string">'auto'</span>),</pre></div></div>
             
         </li>
         
@@ -89,11 +89,11 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
-              <p>Use Bootstrap ‘table’ class</p>
+              <p>Append the HTML table to the container div</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>          .attr(<span class="hljs-string">'class'</span>, <span class="hljs-string">'table'</span>),</pre></div></div>
+            <div class="content"><div class='highlight'><pre>        table = div.append(<span class="hljs-string">'table'</span>)</pre></div></div>
             
         </li>
         
@@ -103,6 +103,21 @@
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>Use Bootstrap ‘table’ class</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>          .attr(<span class="hljs-string">'class'</span>, <span class="hljs-string">'table'</span>),</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
               <p>Append table header and table body</p>
 
@@ -114,11 +129,11 @@
         </li>
         
         
-        <li id="section-6">
+        <li id="section-7">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-6">&#182;</a>
+                <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
               <p>When the data changes, update the table</p>
 
@@ -130,11 +145,11 @@
         </li>
         
         
-        <li id="section-7">
+        <li id="section-8">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-7">&#182;</a>
+                <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
               <p>Populate the table header</p>
 
@@ -142,17 +157,17 @@
             
             <div class="content"><div class='highlight'><pre>      titles = thead.selectAll(<span class="hljs-string">'th'</span>).data(columns);
       titles.enter().append(<span class="hljs-string">'th'</span>);
-      titles.text(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(d)</span> </span>{ <span class="hljs-keyword">return</span> d.title; });
+      titles.text(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(d)</span> </span>{ <span class="hljs-keyword">return</span> d.label; });
       titles.exit().remove();</pre></div></div>
             
         </li>
         
         
-        <li id="section-8">
+        <li id="section-9">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-8">&#182;</a>
+                <a class="pilcrow" href="#section-9">&#182;</a>
               </div>
               <p>Populate the table rows</p>
 
@@ -165,11 +180,11 @@
         </li>
         
         
-        <li id="section-9">
+        <li id="section-10">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-9">&#182;</a>
+                <a class="pilcrow" href="#section-10">&#182;</a>
               </div>
               <p>Set the values for each table cell</p>
 
@@ -177,7 +192,7 @@
             
             <div class="content"><div class='highlight'><pre>      td = tr.selectAll(<span class="hljs-string">'td'</span>).data(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(row)</span> </span>{
         <span class="hljs-keyword">return</span> columns.map(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(column)</span> </span>{
-          <span class="hljs-keyword">return</span> row[column.property];
+          <span class="hljs-keyword">return</span> row[column.name];
         });
       });
       td.enter().append(<span class="hljs-string">'td'</span>);

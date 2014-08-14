@@ -85,45 +85,6 @@ define(["d3", "model", "modelContrib/reactivis"], function (d3, Model, Reactivis
       model.getY = function (d) { return d[yAttribute]; };
     });
 
-    // Create a quadtree index in data space.
-    model.when(["data", "getX", "getY"], function (data, getX, getY) {
-      model.quadtree = d3.geom.quadtree().x(getX).y(getY)(data);
-    });
-
-    // Compute `selectedData` when `brushedIntervals` changes, using a quadtree.
-    model.when(["brushedIntervals", "quadtree", "xAttribute", "yAttribute", "data"], function (brushedIntervals, quadtree, xAttribute, yAttribute, data) {
-      var selectedData;
-
-      // If the brush is empty,
-      if(Object.keys(brushedIntervals).length === 0){
-
-        // pass all the data as "selected".
-        selectedData = data;
-      } else {
-        // If the brush is selecting a region,
-        var x0 = brushedIntervals[xAttribute][0],
-            y0 = brushedIntervals[yAttribute][0],
-            x3 = brushedIntervals[xAttribute][1],
-            y3 = brushedIntervals[yAttribute][1];
-
-        // then query the quadtree for selected data elements.
-        // See http://bl.ocks.org/mbostock/6216724
-        selectedData = [];  
-        quadtree.visit(function(node, x1, y1, x2, y2) {
-          var d = node.point, x, y;
-          if (d) {
-            x = node.x;
-            y = node.y;
-            if(x >= x0 && x < x3 && y >= y0 && y < y3){
-              selectedData.push(d);
-            }
-          }
-          return x1 >= x3 || y1 >= y3 || x2 < x0 || y2 < y0;
-        });
-      }
-      model.selectedData = selectedData;
-    });
-
     // Update the brush based on scales.
     model.when(["brushG", "brush", "xScale", "yScale"], function (brushG, brush, xScale, yScale) {
 
@@ -147,9 +108,6 @@ define(["d3", "model", "modelContrib/reactivis"], function (d3, Model, Reactivis
       // TODO generalize computation of getX, getY
       var getX = function (d) { return d[xAttribute]; };
       var getY = function (d) { return d[yAttribute]; };
-
-      // Update the quadtree
-      quadtree = d3.geom.quadtree().x(getX).y(getY)(data);
 
       // Plot the data as dots
       var dots = dotsG.selectAll(".dot").data(data);
