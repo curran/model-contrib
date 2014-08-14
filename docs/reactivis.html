@@ -251,7 +251,7 @@ store D3 selections of DOM elements on the model.</p>
             </div>
             
             <div class="content"><div class='highlight'><pre>    model.when(<span class="hljs-string">"container"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(container)</span> </span>{
-      model.svg = d3.select(container).append(<span class="hljs-string">'svg'</span>)</pre></div></div>
+      model.svg = d3.select(container).append(<span class="hljs-string">'svg'</span>);</pre></div></div>
             
         </li>
         
@@ -264,12 +264,12 @@ store D3 selections of DOM elements on the model.</p>
               </div>
               <p>Use absolute positioning on the SVG element 
 so that CSS can be used to position the div later
-according to the model <code>box.x</code> and <code>box.y</code> properties.</p>
+according to the model <code>box.x</code> and <code>box.y</code> properties.
+.style(‘position’, ‘absolute’);</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        .style(<span class="hljs-string">'position'</span>, <span class="hljs-string">'absolute'</span>);
-    });</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    });</pre></div></div>
             
         </li>
         
@@ -313,14 +313,14 @@ according to the model <code>box.x</code> and <code>box.y</code> properties.</p>
               </div>
               <p>Set the CSS <code>left</code> and <code>top</code> properties
 to move the SVG element to <code>(box.x, box.y)</code>
-relative to the container to apply the offset.</p>
+relative to the container to apply the offset.
+svg
+ .style(‘left’, box.x + ‘px’)
+ .style(‘top’, box.y + ‘px’);</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      svg
-        .style(<span class="hljs-string">'left'</span>, box.x + <span class="hljs-string">'px'</span>)
-        .style(<span class="hljs-string">'top'</span>, box.y + <span class="hljs-string">'px'</span>);
-    });</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    });</pre></div></div>
             
         </li>
         
@@ -397,6 +397,23 @@ relative to the container to apply the offset.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-19">&#182;</a>
               </div>
+              <p>Update the X axis label position when width changes.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    model.when([<span class="hljs-string">"xAxisText"</span>, <span class="hljs-string">"width"</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(xAxisText, width)</span> </span>{
+      xAxisText.attr(<span class="hljs-string">"x"</span>, width);
+    });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
               <p>Update the X axis based on the X scale.</p>
 
             </div>
@@ -404,6 +421,23 @@ relative to the container to apply the offset.</p>
             <div class="content"><div class='highlight'><pre>    model.when([<span class="hljs-string">"xAxisG"</span>, <span class="hljs-string">"xScale"</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(xAxisG, xScale)</span> </span>{
       xAxis.scale(xScale);
       xAxisG.call(xAxis);
+    });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
+              <p>Update X axis label.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    model.when([<span class="hljs-string">"xAxisText"</span>, <span class="hljs-string">"xAxisLabel"</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(xAxisText, xAxisLabel)</span> </span>{
+      xAxisText.text(xAxisLabel);
     });
   };
 
@@ -425,11 +459,11 @@ relative to the container to apply the offset.</p>
         </li>
         
         
-        <li id="section-20">
+        <li id="section-22">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-20">&#182;</a>
+                <a class="pilcrow" href="#section-22">&#182;</a>
               </div>
               <p>Adjust Y axis tick mark parameters.
 See <a href="https://github.com/mbostock/d3/wiki/Quantitative-Scales#linear_tickFormat">https://github.com/mbostock/d3/wiki/Quantitative-Scales#linear_tickFormat</a></p>
@@ -443,29 +477,46 @@ See <a href="https://github.com/mbostock/d3/wiki/Quantitative-Scales#linear_tick
         </li>
         
         
-        <li id="section-21">
+        <li id="section-23">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-21">&#182;</a>
+                <a class="pilcrow" href="#section-23">&#182;</a>
               </div>
               <p>Update the Y axis based on the Y scale.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    model.when([<span class="hljs-string">"yAxisG"</span>, <span class="hljs-string">"yScale"</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(yAxisG, yScale)</span> </span>{
+            <div class="content"><div class='highlight'><pre>    model.when([<span class="hljs-string">"yAxisG"</span>, <span class="hljs-string">"yScale"</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(yAxisG, yScale)</span> </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-24">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-24">&#182;</a>
+              </div>
+              <p>TODO mote transitionDuration into the model.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">var</span> transitionDuration = <span class="hljs-number">100</span>;
       yAxis.scale(yScale);
-      yAxisG.call(yAxis);
+      yAxisG
+        .transition().duration(transitionDuration)
+        .call(yAxis);
     });</pre></div></div>
             
         </li>
         
         
-        <li id="section-22">
+        <li id="section-25">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-22">&#182;</a>
+                <a class="pilcrow" href="#section-25">&#182;</a>
               </div>
               <p>Update Y axis label.</p>
 

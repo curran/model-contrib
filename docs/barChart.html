@@ -38,7 +38,7 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>define([<span class="hljs-string">"d3"</span>, <span class="hljs-string">"model"</span>, <span class="hljs-string">"modelContrib/reactivis"</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(d3, Model, Reactivis)</span> </span>{
+            <div class="content"><div class='highlight'><pre>define([<span class="hljs-string">"d3"</span>, <span class="hljs-string">"lodash"</span>, <span class="hljs-string">"model"</span>, <span class="hljs-string">"modelContrib/reactivis"</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(d3, _, Model, Reactivis)</span> </span>{
   <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">BarChart</span> <span class="hljs-params">(container)</span> </span>{
     <span class="hljs-keyword">var</span> defaults = {
           margin: {
@@ -51,7 +51,9 @@
           yAxisTickFormat: <span class="hljs-string">""</span>,
           container: container
         },
-        model = Model();
+        model = Model(),
+
+        transitionDuration = <span class="hljs-number">100</span>;
 
     model.set(defaults);</pre></div></div>
             
@@ -132,19 +134,21 @@
             </div>
             
             <div class="content"><div class='highlight'><pre>    model.when([<span class="hljs-string">"g"</span>, <span class="hljs-string">"data"</span>, <span class="hljs-string">"xAttribute"</span>, <span class="hljs-string">"yAttribute"</span>, <span class="hljs-string">"xScale"</span>, <span class="hljs-string">"yScale"</span>, <span class="hljs-string">"height"</span>],
-        <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(g, data, xAttribute, yAttribute, xScale, yScale, height)</span> </span>{
+        _.throttle(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(g, data, xAttribute, yAttribute, xScale, yScale, height)</span> </span>{
 
       <span class="hljs-keyword">var</span> bars = g.selectAll(<span class="hljs-string">".bar"</span>).data(data);
 
       bars.enter().append(<span class="hljs-string">"rect"</span>).attr(<span class="hljs-string">"class"</span>, <span class="hljs-string">"bar"</span>);
 
-      bars.attr(<span class="hljs-string">"x"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(d)</span> </span>{ <span class="hljs-keyword">return</span> xScale(d[xAttribute]); })
+      bars
+        .transition().duration(transitionDuration)
+        .attr(<span class="hljs-string">"x"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(d)</span> </span>{ <span class="hljs-keyword">return</span> xScale(d[xAttribute]); })
         .attr(<span class="hljs-string">"width"</span>, xScale.rangeBand())
         .attr(<span class="hljs-string">"y"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(d)</span> </span>{ <span class="hljs-keyword">return</span> yScale(d[yAttribute]); })
         .attr(<span class="hljs-string">"height"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(d)</span> </span>{ <span class="hljs-keyword">return</span> height - yScale(d[yAttribute]); });
 
       bars.exit().remove();
-    });
+    }), transitionDuration);
 
     <span class="hljs-keyword">return</span> model;
   };

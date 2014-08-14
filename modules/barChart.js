@@ -6,7 +6,7 @@
 //  * Also demonstrated in the [model-contrib barChart example](../#/barChart)
 //
 // By Curran Kelleher August 2014
-define(["d3", "model", "modelContrib/reactivis"], function (d3, Model, Reactivis) {
+define(["d3", "lodash", "model", "modelContrib/reactivis"], function (d3, _, Model, Reactivis) {
   return function BarChart (container) {
     var defaults = {
           margin: {

@@ -45,7 +45,7 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>define([<span class="hljs-string">'d3'</span>, <span class="hljs-string">'model'</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(d3, Model)</span> </span>{
+            <div class="content"><div class='highlight'><pre>define([<span class="hljs-string">'d3'</span>, <span class="hljs-string">'model'</span>, <span class="hljs-string">'lodash'</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(d3, Model, _)</span> </span>{
   <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Table</span><span class="hljs-params">(container)</span> </span>{
     <span class="hljs-keyword">var</span> model = Model(),
         div = d3.select(container)</pre></div></div>
@@ -63,7 +63,7 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>          .append(<span class="hljs-string">'div'</span>)</pre></div></div>
+            <div class="content"><div class='highlight'><pre>          .append(<span class="hljs-string">'div'</span>),</pre></div></div>
             
         </li>
         
@@ -74,11 +74,11 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
-              <p>Make the container div scrollable</p>
+              <p>Append the HTML table to the container div</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>          .style(<span class="hljs-string">'overflow-y'</span>, <span class="hljs-string">'auto'</span>),</pre></div></div>
+            <div class="content"><div class='highlight'><pre>        table = div.append(<span class="hljs-string">'table'</span>)</pre></div></div>
             
         </li>
         
@@ -89,11 +89,11 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
-              <p>Append the HTML table to the container div</p>
+              <p>Use Bootstrap ‘table’ class</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        table = div.append(<span class="hljs-string">'table'</span>)</pre></div></div>
+            <div class="content"><div class='highlight'><pre>          .attr(<span class="hljs-string">'class'</span>, <span class="hljs-string">'table'</span>),</pre></div></div>
             
         </li>
         
@@ -104,11 +104,12 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
-              <p>Use Bootstrap ‘table’ class</p>
+              <p>Append table header and table body</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>          .attr(<span class="hljs-string">'class'</span>, <span class="hljs-string">'table'</span>),</pre></div></div>
+            <div class="content"><div class='highlight'><pre>        thead = table.append(<span class="hljs-string">'thead'</span>).append(<span class="hljs-string">'tr'</span>),
+        tbody = table.append(<span class="hljs-string">'tbody'</span>),</pre></div></div>
             
         </li>
         
@@ -119,12 +120,11 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
-              <p>Append table header and table body</p>
+              <p>Re-render the table at most once every 100 ms.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        thead = table.append(<span class="hljs-string">'thead'</span>).append(<span class="hljs-string">'tr'</span>),
-        tbody = table.append(<span class="hljs-string">'tbody'</span>);</pre></div></div>
+            <div class="content"><div class='highlight'><pre>        throttleWait = <span class="hljs-number">100</span>;</pre></div></div>
             
         </li>
         
@@ -139,7 +139,7 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    model.when([<span class="hljs-string">'data'</span>, <span class="hljs-string">'columns'</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(data, columns)</span> </span>{
+            <div class="content"><div class='highlight'><pre>    model.when([<span class="hljs-string">'data'</span>, <span class="hljs-string">'columns'</span>], _.throttle(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(data, columns)</span> </span>{
       <span class="hljs-keyword">var</span> titles, tr, td;</pre></div></div>
             
         </li>
@@ -198,7 +198,7 @@
       td.enter().append(<span class="hljs-string">'td'</span>);
       td.exit().remove();
       td.text( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(d)</span> </span>{ <span class="hljs-keyword">return</span> d; });
-    });
+    }, throttleWait));
 
     <span class="hljs-keyword">return</span> model;
   };

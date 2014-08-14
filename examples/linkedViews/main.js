@@ -6,7 +6,7 @@ require(["d3", "modelContrib/barChart", "modelContrib/scatterPlot", "modelContri
    
       // Each visualization has this height,
       // and the width is computed by CSS.
-      visHeight = 500;
+      visHeight = 350;
   
 
   scatterPlot.set({
