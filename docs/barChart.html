@@ -40,22 +40,7 @@
             
             <div class="content"><div class='highlight'><pre>define([<span class="hljs-string">"d3"</span>, <span class="hljs-string">"lodash"</span>, <span class="hljs-string">"model"</span>, <span class="hljs-string">"modelContrib/reactivis"</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(d3, _, Model, Reactivis)</span> </span>{
   <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">BarChart</span> <span class="hljs-params">(container)</span> </span>{
-    <span class="hljs-keyword">var</span> defaults = {
-          margin: {
-            top: <span class="hljs-number">20</span>,
-            right: <span class="hljs-number">20</span>,
-            bottom: <span class="hljs-number">30</span>,
-            left: <span class="hljs-number">40</span>
-          },
-          yAxisNumTicks: <span class="hljs-number">10</span>,
-          yAxisTickFormat: <span class="hljs-string">""</span>,
-          container: container
-        },
-        model = Model(),
-
-        transitionDuration = <span class="hljs-number">100</span>;
-
-    model.set(defaults);</pre></div></div>
+    <span class="hljs-keyword">var</span> defaults = {</pre></div></div>
             
         </li>
         
@@ -66,11 +51,16 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-              <p>build up the visualization dom from the container.</p>
+              <p>TODO move these into defaults set by Reactivis</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    Reactivis.svg(model);</pre></div></div>
+            <div class="content"><div class='highlight'><pre>          yAxisNumTicks: <span class="hljs-number">10</span>,
+          yAxisTickFormat: <span class="hljs-string">""</span>,
+
+          container: container
+        },
+        model = Model(),</pre></div></div>
             
         </li>
         
@@ -81,11 +71,13 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
-              <p>Use conventional margins.</p>
+              <p>TODO move this into reactivis defaults (default should be 0)</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    Reactivis.margin(model);</pre></div></div>
+            <div class="content"><div class='highlight'><pre>        transitionDuration = <span class="hljs-number">100</span>;
+
+    model.set(defaults);</pre></div></div>
             
         </li>
         
@@ -95,6 +87,36 @@
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>build up the visualization dom from the container.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    Reactivis.svg(model);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>Use conventional margins.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    Reactivis.margin(model);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
               <p>Use an ordinal X axis for defining bars.</p>
 
@@ -106,11 +128,11 @@
         </li>
         
         
-        <li id="section-5">
+        <li id="section-7">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-5">&#182;</a>
+                <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
               <p>Use a Y linear axis with zero as the minimum for bar height.</p>
 
@@ -123,11 +145,11 @@
         </li>
         
         
-        <li id="section-6">
+        <li id="section-8">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-6">&#182;</a>
+                <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
               <p>Draw the bars.</p>
 
