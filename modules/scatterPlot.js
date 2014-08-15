@@ -9,12 +9,6 @@
 define(["d3", "model", "modelContrib/reactivis"], function (d3, Model, Reactivis) {
   return function ScatterPlot(container) {
     var defaults = {
-          margin: {
-            top: 20,
-            right: 20,
-            bottom: 30,
-            left: 40
-          },
           yAxisNumTicks: 10,
           yAxisTickFormat: "",
           /* TODO implement xAxisTickFormat*/
@@ -23,12 +17,12 @@ define(["d3", "model", "modelContrib/reactivis"], function (d3, Model, Reactivis
         },
         model = Model();
 
-    model.set(defaults);
 
     // Build up the visualization DOM from the container.
     Reactivis.svg(model);
 
     // Use conventional margins.
+    // This call also sets up a default margin.
     Reactivis.margin(model);
 
     // Use an X linear scale with the data min as the minimum value.
@@ -40,6 +34,10 @@ define(["d3", "model", "modelContrib/reactivis"], function (d3, Model, Reactivis
     Reactivis.yDomain(model);
     Reactivis.yLinearScale(model);
     Reactivis.yAxis(model);
+
+    // Set the defaults provide by the constructor invoker,
+    // overriding model values previously set by Reactivis methods (e.g. `margin`)
+    model.set(defaults);
 
     // Add an SVG group to contain the scatter plot marks.
     model.when("g", function (g) {

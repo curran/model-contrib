@@ -9,18 +9,16 @@
 define(["d3", "lodash", "model", "modelContrib/reactivis"], function (d3, _, Model, Reactivis) {
   return function BarChart (container) {
     var defaults = {
-          margin: {
-            top: 20,
-            right: 20,
-            bottom: 30,
-            left: 40
-          },
+
+          // TODO move these into defaults set by Reactivis
           yAxisNumTicks: 10,
           yAxisTickFormat: "",
+
           container: container
         },
         model = Model(),
 
+        // TODO move this into reactivis defaults (default should be 0)
         transitionDuration = 100;
 
     model.set(defaults);

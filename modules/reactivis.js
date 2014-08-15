@@ -26,6 +26,15 @@ define(['d3', 'model'], function(d3, Model){
   // Computes `width` and `height` from `box` and `margin`.
   Reactivis.margin = function (model) {
 
+    // Set the default margin.
+    // Optimized for use with X and Y axes (e.g. scatterPlot).
+    model.margin = {
+      top: 20,
+      right: 20,
+      bottom: 30,
+      left: 50
+    };
+
     // Compute the inner box from the outer box and margin.
     model.when(["box", "margin"], function (box, margin) {
       model.width = box.width - margin.left - margin.right;
@@ -33,29 +42,37 @@ define(['d3', 'model'], function(d3, Model){
     });
   };
 
+  // Helper function for xDomain and yDomain
+  // Deals with whether the domain should be based
+  // on the data minimum (as in a scatter plot),
+  // or should start at 0 (as in a bar chart).
   function domain(data, options, get) {
     var zeroMin = options ? options.zeroMin : false;
     return zeroMin ? [ 0, d3.max(data, get) ] : d3.extent(data, get);
   }
 
-  Reactivis.xDomain = function (model, options) {
-    model.when(["data", "xAttribute"], function (data, xAttribute) {
-      var getX = function (d) { return d[xAttribute]; };
-      model.xDomain = domain(data, options, getX);
-    });
-  };
-
   // # Domains and Scales
 
-  // Computes the Y scale domain from the data.
+  // * `xDomain` and `yDomain` computes the scale domain from the data.
   //
   // The optional `options` argument may contain `{ zeroMin: true }`
   // to specify that zero should be the minimum of the scale domain.
   // 
   // With no options specified, the default scale domain is the extent of 
   // the data values corresponding data field.
+
+  Reactivis.xDomain = function (model, options) {
+    model.when(["data", "xAttribute"], function (data, xAttribute) {
+
+      // TODO generalize getX
+      var getX = function (d) { return d[xAttribute]; };
+      model.xDomain = domain(data, options, getX);
+    });
+  };
   Reactivis.yDomain = function (model, options) {
     model.when(["data", "yAttribute"], function (data, yAttribute) {
+
+      // TODO generalize getY
       var getY = function (d) { return d[yAttribute]; };
       model.yDomain = domain(data, options, getY);
     });
@@ -178,12 +195,20 @@ define(['d3', 'model'], function(d3, Model){
       model.yAxisG = g.append("g").attr("class", "y axis");
     });
 
-    model.when("yAxisG", function (yAxisG) {
+    model.when(["yAxisG", "height"], function (yAxisG, height) {
       model.yAxisText = yAxisG.append("text")
         .attr("transform", "rotate(-90)")
-        .attr("y", 6)
-        .attr("dy", ".71em")
-        .style("text-anchor", "end");
+        .attr("y", 0)
+        .attr("x", -height / 2)
+
+        // This controls how far the axis text is away from the Y axis.
+        .attr("dy", "-2.4em")
+        .style("text-anchor", "middle");
+    });
+
+    // Update Y axis label.
+    model.when(["yAxisText", "yAxisLabel"], function (yAxisText, yAxisLabel) {
+      yAxisText.text(yAxisLabel);
     });
 
     // Adjust Y axis tick mark parameters.
@@ -196,17 +221,12 @@ define(['d3', 'model'], function(d3, Model){
     // Update the Y axis based on the Y scale.
     model.when(["yAxisG", "yScale"], function (yAxisG, yScale) {
 
-      // TODO mote transitionDuration into the model.
+      // TODO move transitionDuration into the model.
       var transitionDuration = 100;
       yAxis.scale(yScale);
       yAxisG
         .transition().duration(transitionDuration)
         .call(yAxis);
-    });
-
-    // Update Y axis label.
-    model.when(["yAxisText", "yAxisLabel"], function (yAxisText, yAxisLabel) {
-      yAxisText.text(yAxisLabel);
     });
   };
 

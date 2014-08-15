@@ -20,7 +20,8 @@ require(["d3", "modelContrib/barChart", "modelContrib/scatterPlot", "modelContri
   barChart.set({
     xAttribute: "key",
     yAttribute: "value",
-    yAxisLabel: "number of irises"
+    xAxisLabel: "Species",
+    yAxisLabel: "Count of Irises"
   });
 
   table.columns = [
