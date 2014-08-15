@@ -1,4 +1,5 @@
 require(["d3", "modelContrib/barChart", "modelContrib/scatterPlot", "modelContrib/table", "crossfilter", "lodash"], function (d3, BarChart, ScatterPlot, Table, Crossfilter, _) {
+
   var barChart = BarChart(document.querySelector("#barChart")),
       scatterPlot = ScatterPlot(document.querySelector("#scatterPlot")),
       table = Table(document.querySelector("#table")),
@@ -34,30 +35,38 @@ require(["d3", "modelContrib/barChart", "modelContrib/scatterPlot", "modelContri
 
   // Initialize crossfilter when the data and configuration is ready.
   scatterPlot.when(["data", "xAttribute", "yAttribute"], function (data, xAttribute, yAttribute) {
+
+    // Initialize Crossfilter with the scatterPlot data.
     var crossfilter = Crossfilter(data),
-        speciesDimension = crossfilter.dimension(function (d) { return d.species; }),
-        attributes = [xAttribute, yAttribute];
+    
+        // These attribute names will be used to create crossfilter dimensions.
+        dimensionAttributes = [xAttribute, yAttribute, "species"],
 
-    // Create crossfilter dimensions for each attribute that may be brushed.
-    // In the case of a scatter plot there are only two dimensions,
-    // but for a parallel coordinates plot there may be many dimensions necessary.
-    scatterPlot.dimensions = _.zipObject(attributes, attributes.map(function (attribute) {
+        // Create crossfilter dimensions for each attribute that may be brushed.
+        // In the case of a scatter plot there are only two dimensions,
+        // but for a parallel coordinates plot there may be many dimensions necessary.
+        dimensionsArray = dimensionAttributes.map(function (attribute) {
+          return crossfilter.dimension(function (d) {
+            return d[attribute];
+          });
+        }),
 
-      // In scatterPlot.dimensions,
-      // keys are attribute names,
-      // values are corresponding crossfilter dimension objects.
-      return crossfilter.dimension(function (d) {
-        return d[attribute];
-      });
-    }));
+        // In dimensions, keys are attribute names, values are crossfilter dimension objects.
+        dimensions = _.zipObject(dimensionAttributes, dimensionsArray),
 
-    scatterPlot.speciesGroup = speciesDimension.group();
-    scatterPlot.speciesDimension = speciesDimension;
+        groupAttributes = ["species"];
+        groupsArray = groupAttributes.map(function (attribute) {
+          return dimensions[attribute].group();
+        }),
+        groups = _.zipObject(groupAttributes, groupsArray);
+
+    scatterPlot.dimensions = dimensions;
+    scatterPlot.groups = groups;
   });
 
   // Compute the aggregated iris data in response to brushing
   // in the scatter plot, and pass it into the bar chart.
-  scatterPlot.when(["brushedIntervals", "dimensions", "speciesDimension", "speciesGroup"], function (brushedIntervals, dimensions, speciesDimension, speciesGroup) {
+  scatterPlot.when(["brushedIntervals", "dimensions", "groups"], function (brushedIntervals, dimensions, groups) {
 
     // Apply filters based on the brushed intervals.
     Object.keys(dimensions).forEach(function (attribute) {
@@ -70,10 +79,12 @@ require(["d3", "modelContrib/barChart", "modelContrib/scatterPlot", "modelContri
       }
     });
 
-    // Set the bars to be the filtered set aggregated by species count.
-    barChart.data = speciesGroup.all();
+    // Pass the full set of filtered entries into the table, ordered by species.
+    table.data = dimensions.species.top(Infinity);
 
-    table.data = speciesDimension.top(Infinity);
+    // Set the bar chart data to be the filtered set aggregated by species count.
+    barChart.data = groups.species.all();
+
   });
 
   // Fetch the data and feed it into the scatterPlot.
