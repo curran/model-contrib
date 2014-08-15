@@ -7,7 +7,8 @@
 }
 
 .axis {
-  font: 10px sans-serif;
+  /* TODO move this into inline CSS defined by a Model property. */
+  font: 18px sans-serif;
 }
 
 .axis path,

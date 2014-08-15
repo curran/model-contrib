@@ -32,8 +32,14 @@
 }
 
 /* Begin CSS common to both visualizations. */
-.axis {
-  font: 14px sans-serif;
+.axis .tick text {
+  /* TODO move this into inline CSS defined by a Model property. */
+  font: 12pt sans-serif;
+}
+
+.axis text {
+  /* TODO move this into inline CSS defined by a Model property. */
+  font: 16pt sans-serif;
 }
 
 .axis path,

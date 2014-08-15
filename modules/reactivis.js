@@ -31,8 +31,8 @@ define(['d3', 'model'], function(d3, Model){
     model.margin = {
       top: 20,
       right: 20,
-      bottom: 30,
-      left: 50
+      bottom: 50,
+      left: 55
     };
 
     // Compute the inner box from the outer box and margin.
@@ -161,19 +161,20 @@ define(['d3', 'model'], function(d3, Model){
 
     model.when("xAxisG", function (xAxisG) {
       model.xAxisText = xAxisG.append("text")
-        .attr("class", "label")
-        .attr("y", -6)
-        .style("text-anchor", "end");
+        // This controls how far the axis text is away from the Y axis.
+        // TODO make this a model property
+        .attr("dy", "2.0em")
+        .style("text-anchor", "middle");
+    });
+
+    // Update the X axis label position when width changes.
+    model.when(["xAxisText", "width"], function (xAxisText, width) {
+      xAxisText.attr("x", width / 2);
     });
 
     // Update the X axis transform when height changes.
     model.when(["xAxisG", "height"], function (xAxisG, height) {
       xAxisG.attr("transform", "translate(0," + height + ")");
-    });
-
-    // Update the X axis label position when width changes.
-    model.when(["xAxisText", "width"], function (xAxisText, width) {
-      xAxisText.attr("x", width);
     });
 
     // Update the X axis based on the X scale.
@@ -202,7 +203,8 @@ define(['d3', 'model'], function(d3, Model){
         .attr("x", -height / 2)
 
         // This controls how far the axis text is away from the Y axis.
-        .attr("dy", "-2.4em")
+        // TODO make this a model property
+        .attr("dy", "-1.8em")
         .style("text-anchor", "middle");
     });
 

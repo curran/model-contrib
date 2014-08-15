@@ -29,10 +29,10 @@ require(["d3", "modelContrib/scatterPlot"], function (d3, ScatterPlot) {
 
   });
 
-  //// Change the X axis label every 600 ms.
-  //setInterval(function () {
-  //  scatterPlot.xAxisLabel = randomString();
-  //}, 600);
+  // Change the X axis label every 600 ms.
+  setInterval(function () {
+    scatterPlot.xAxisLabel = randomString();
+  }, 600);
 
   // Change the Y axis label every 800 ms.
   setInterval(function () {

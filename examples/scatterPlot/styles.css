@@ -13,7 +13,8 @@
  * http://bl.ocks.org/mbostock/3887118 */
 
 .axis {
-  font: 14px sans-serif;
+  /* TODO move this into inline CSS defined by a Model property. */
+  font: 18px sans-serif;
 }
 
 .axis path,
