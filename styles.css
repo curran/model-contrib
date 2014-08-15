@@ -10,7 +10,7 @@ body {
 }
 
 p, li {
-  font-size: 1.5em;
+  font-size: 1.2em;
 }
 
 /* Center the title part of the page. */
@@ -42,7 +42,7 @@ p, li {
 .CodeMirror {
   border: 1px solid #eee;
   height: auto;
-  font-size: 1.3em;
+  font-size: 1.2em;
 }
 .CodeMirror-scroll {
   height: auto;
