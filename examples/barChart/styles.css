@@ -1,9 +1,5 @@
 .bar {
-  fill: steelblue;
-}
-
-.bar:hover {
-  fill: brown;
+  fill: black;
 }
 
 .axis .tick text {
@@ -29,9 +25,8 @@
 /* Make the visualization container fill the page. */
 #container {
   position: fixed;
-  left: 20px;
-  right: 20px;
-  top: 20px;
-  bottom: 20px;
-  background-color: lightgray;
+  left: 0px;
+  right: 0px;
+  top: 0px;
+  bottom: 0px;
 }

@@ -6,6 +6,7 @@ require(["d3", "modelContrib/barChart"], function (d3, BarChart) {
 
   barChart.set({
     xAttribute: "letter",
+    xAxisLabel: "Letter",
     yAttribute: "frequency",
     yAxisLabel: "Frequency",
     yAxisTickFormat: "%"

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>lineChart.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>lineChart.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <p>A reusable line chart module.</p>
+<ul>
+<li>Draws from the <a href="http://bl.ocks.org/mbostock/3883245">D3 line chart example</a></li>
+</ul>
+<p>By Curran Kelleher August 2014</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>define([<span class="hljs-string">"d3"</span>, <span class="hljs-string">"model"</span>, <span class="hljs-string">"modelContrib/reactivis"</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(d3, Model, Reactivis)</span> </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">LineChart</span><span class="hljs-params">(container)</span> </span>{
+    <span class="hljs-keyword">var</span> defaults = {
+          yAxisNumTicks: <span class="hljs-number">10</span>,
+          yAxisTickFormat: <span class="hljs-string">""</span>,
+          <span class="hljs-comment">/* TODO implement xAxisTickFormat*/</span>
+          container: container
+        },
+        model = Model();</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>Build up the visualization DOM from the container.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    Reactivis.svg(model);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>Use conventional margins.
+This call also sets up a default margin.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    Reactivis.margin(model);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>Use an X time scale with the data min as the minimum value.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    Reactivis.xTimeScale(model);
+    Reactivis.xDomain(model);
+    Reactivis.xAxis(model);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>Use a Y linear scale with the data min as the minimum value.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    Reactivis.yDomain(model);
+    Reactivis.yLinearScale(model);
+    Reactivis.yAxis(model);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>Set the defaults provide by the constructor invoker,
+overriding model values previously set by Reactivis methods (e.g. <code>margin</code>)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    model.set(defaults);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>Add an SVG group to contain the line.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    model.when(<span class="hljs-string">"g"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(g)</span> </span>{
+      model.lineG = g.append(<span class="hljs-string">"g"</span>);
+    });
+
+    model.when(<span class="hljs-string">"lineG"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(lineG)</span> </span>{
+      model.linePath = lineG.append(<span class="hljs-string">'path'</span>).attr(<span class="hljs-string">'class'</span>, <span class="hljs-string">'line'</span>);
+    });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>Draw the line.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    model.when([<span class="hljs-string">"linePath"</span>, <span class="hljs-string">"data"</span>, <span class="hljs-string">"xAttribute"</span>, <span class="hljs-string">"yAttribute"</span>, <span class="hljs-string">"xScale"</span>, <span class="hljs-string">"yScale"</span>],
+        <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(linePath, data, xAttribute, yAttribute, xScale, yScale)</span> </span>{
+
+      <span class="hljs-keyword">var</span> line = d3.svg.line()
+        .x(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(d)</span> </span>{ <span class="hljs-keyword">return</span> xScale(d[xAttribute]); })
+        .y(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(d)</span> </span>{ <span class="hljs-keyword">return</span> yScale(d[yAttribute]); });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>Plot the data as a line</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      linePath.attr(<span class="hljs-string">'d'</span>, line(data));
+    });
+
+    <span class="hljs-keyword">return</span> model;
+  };
+});</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>
