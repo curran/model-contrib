@@ -295,6 +295,27 @@ Updates the X scale based on data, X attribute and width.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-14">&#182;</a>
               </div>
+              <p>Creates an X time scale.
+Updates the X scale based on data, X attribute and width.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  Reactivis.xTimeScale = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(model)</span> </span>{
+    <span class="hljs-keyword">var</span> scale = d3.time.scale();
+    model.when([<span class="hljs-string">"data"</span>, <span class="hljs-string">"xDomain"</span>, <span class="hljs-string">"width"</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(data, xDomain, width)</span> </span>{
+      model.xScale = scale.domain(xDomain).range([<span class="hljs-number">0</span>, width]);
+    });
+  };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
               <h1 id="visualization-dom">Visualization DOM</h1>
 <p>Reactivis provides reusable DOM related components that
 store D3 selections of DOM elements on the model.</p>
@@ -307,11 +328,11 @@ store D3 selections of DOM elements on the model.</p>
         </li>
         
         
-        <li id="section-15">
+        <li id="section-16">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-15">&#182;</a>
+                <a class="pilcrow" href="#section-16">&#182;</a>
               </div>
               <p>Create <code>svg</code> from <code>container</code>.</p>
 
@@ -323,11 +344,11 @@ store D3 selections of DOM elements on the model.</p>
         </li>
         
         
-        <li id="section-16">
+        <li id="section-17">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-16">&#182;</a>
+                <a class="pilcrow" href="#section-17">&#182;</a>
               </div>
               <p>Use absolute positioning on the SVG element 
 so that CSS can be used to position the div later
@@ -341,11 +362,11 @@ according to the model <code>box.x</code> and <code>box.y</code> properties.
         </li>
         
         
-        <li id="section-17">
+        <li id="section-18">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-17">&#182;</a>
+                <a class="pilcrow" href="#section-18">&#182;</a>
               </div>
               <p>Update the svg with based on <code>box</code>, an object with
 (x, y, width, height) representing the outer visualization box.</p>
@@ -357,11 +378,11 @@ according to the model <code>box.x</code> and <code>box.y</code> properties.
         </li>
         
         
-        <li id="section-18">
+        <li id="section-19">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-18">&#182;</a>
+                <a class="pilcrow" href="#section-19">&#182;</a>
               </div>
               <p>Resize the svg element that contains the visualization.</p>
 
@@ -372,11 +393,11 @@ according to the model <code>box.x</code> and <code>box.y</code> properties.
         </li>
         
         
-        <li id="section-19">
+        <li id="section-20">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-19">&#182;</a>
+                <a class="pilcrow" href="#section-20">&#182;</a>
               </div>
               <p>Set the CSS <code>left</code> and <code>top</code> properties
 to move the SVG element to <code>(box.x, box.y)</code>
@@ -392,11 +413,11 @@ svg
         </li>
         
         
-        <li id="section-20">
+        <li id="section-21">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-20">&#182;</a>
+                <a class="pilcrow" href="#section-21">&#182;</a>
               </div>
               <p>Create <code>g</code> from <code>svg</code>.</p>
 
@@ -409,11 +430,11 @@ svg
         </li>
         
         
-        <li id="section-21">
+        <li id="section-22">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-21">&#182;</a>
+                <a class="pilcrow" href="#section-22">&#182;</a>
               </div>
               <p>Transform the visualization SVG container <code>g</code> based on the margin.</p>
 
@@ -437,11 +458,11 @@ svg
         </li>
         
         
-        <li id="section-22">
+        <li id="section-23">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-22">&#182;</a>
+                <a class="pilcrow" href="#section-23">&#182;</a>
               </div>
               <p>This controls how far the axis text is away from the Y axis.
 TODO make this a model property</p>
@@ -455,11 +476,11 @@ TODO make this a model property</p>
         </li>
         
         
-        <li id="section-23">
+        <li id="section-24">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-23">&#182;</a>
+                <a class="pilcrow" href="#section-24">&#182;</a>
               </div>
               <p>Update the X axis label position when width changes.</p>
 
@@ -472,11 +493,11 @@ TODO make this a model property</p>
         </li>
         
         
-        <li id="section-24">
+        <li id="section-25">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-24">&#182;</a>
+                <a class="pilcrow" href="#section-25">&#182;</a>
               </div>
               <p>Update the X axis transform when height changes.</p>
 
@@ -489,11 +510,11 @@ TODO make this a model property</p>
         </li>
         
         
-        <li id="section-25">
+        <li id="section-26">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-25">&#182;</a>
+                <a class="pilcrow" href="#section-26">&#182;</a>
               </div>
               <p>Update the X axis based on the X scale.</p>
 
@@ -507,11 +528,11 @@ TODO make this a model property</p>
         </li>
         
         
-        <li id="section-26">
+        <li id="section-27">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-26">&#182;</a>
+                <a class="pilcrow" href="#section-27">&#182;</a>
               </div>
               <p>Update X axis label.</p>
 
@@ -538,11 +559,11 @@ TODO make this a model property</p>
         </li>
         
         
-        <li id="section-27">
+        <li id="section-28">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-27">&#182;</a>
+                <a class="pilcrow" href="#section-28">&#182;</a>
               </div>
               <p>This controls how far the axis text is away from the Y axis.
 TODO make this a model property</p>
@@ -556,11 +577,11 @@ TODO make this a model property</p>
         </li>
         
         
-        <li id="section-28">
+        <li id="section-29">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-28">&#182;</a>
+                <a class="pilcrow" href="#section-29">&#182;</a>
               </div>
               <p>Update Y axis label.</p>
 
@@ -573,11 +594,11 @@ TODO make this a model property</p>
         </li>
         
         
-        <li id="section-29">
+        <li id="section-30">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-29">&#182;</a>
+                <a class="pilcrow" href="#section-30">&#182;</a>
               </div>
               <p>Adjust Y axis tick mark parameters.
 See <a href="https://github.com/mbostock/d3/wiki/Quantitative-Scales#linear_tickFormat">https://github.com/mbostock/d3/wiki/Quantitative-Scales#linear_tickFormat</a></p>
@@ -591,11 +612,11 @@ See <a href="https://github.com/mbostock/d3/wiki/Quantitative-Scales#linear_tick
         </li>
         
         
-        <li id="section-30">
+        <li id="section-31">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-30">&#182;</a>
+                <a class="pilcrow" href="#section-31">&#182;</a>
               </div>
               <p>Update the Y axis based on the Y scale.</p>
 
@@ -606,11 +627,11 @@ See <a href="https://github.com/mbostock/d3/wiki/Quantitative-Scales#linear_tick
         </li>
         
         
-        <li id="section-31">
+        <li id="section-32">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-31">&#182;</a>
+                <a class="pilcrow" href="#section-32">&#182;</a>
               </div>
               <p>TODO move transitionDuration into the model.</p>
 

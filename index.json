@@ -9,6 +9,14 @@
       ]
     },
     {
+      "name": "lineChart",
+      "files": [
+        "index.html",
+        "main.js",
+        "styles.css"
+      ]
+    },
+    {
       "name": "linkedViews",
       "files": [
         "index.html",
@@ -57,6 +65,9 @@
   "modules": [
     {
       "name": "barChart"
+    },
+    {
+      "name": "lineChart"
     },
     {
       "name": "reactivis"
