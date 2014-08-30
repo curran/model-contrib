@@ -17,7 +17,6 @@ define(["d3", "model", "modelContrib/reactivis"], function (d3, Model, Reactivis
         },
         model = Model();
 
-
     // Build up the visualization DOM from the container.
     Reactivis.svg(model);
 
@@ -57,23 +56,24 @@ define(["d3", "model", "modelContrib/reactivis"], function (d3, Model, Reactivis
     // Set up brushing to define `brushedIntervals`
     model.when(["xAttribute", "yAttribute"], function (xAttribute, yAttribute) {
 
-      var brush = d3.svg.brush();
+      var brushedIntervals = {};
 
-      brush.on("brush", function () {
-        var e = brush.extent(),
+      model.brush = d3.svg.brush().on("brush", function () {
+        var e = model.brush.extent(),
             xMin = e[0][0],
             yMin = e[0][1],
             xMax = e[1][0],
-            yMax = e[1][1],
-            brushedIntervals = {};
-        if(!brush.empty()){
+            yMax = e[1][1];
+        if(!model.brush.empty()){
           brushedIntervals[xAttribute] = [xMin, xMax];
           brushedIntervals[yAttribute] = [yMin, yMax];
+        } else {
+          delete brushedIntervals[xAttribute];
+          delete brushedIntervals[yAttribute];
         }
         model.brushedIntervals = brushedIntervals;
       });
 
-      model.brush = brush;
     });
 
     model.when(["data", "xAttribute"], function (data, xAttribute) {
