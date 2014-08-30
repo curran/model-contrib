@@ -1,0 +1,34 @@
+/* Make the visualization container fill the page. */
+#container {
+  position: fixed;
+  left: 0px;
+  right: 0px;
+  top: 0px;
+  bottom: 0px;
+}
+/* Style the visualization.
+ * Draws from http://bl.ocks.org/mbostock/3887118
+ */
+
+.axis .tick text {
+  /* TODO move this into inline CSS defined by a Model property xAxisTickTextSize. */
+  font: 12pt sans-serif;
+}
+
+.axis text {
+  /* TODO move this into inline CSS defined by a Model property xAxisTextSize. */
+  font: 16pt sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.line {
+  fill: none;
+  stroke: black;
+  stroke-width: 1.5px;
+}

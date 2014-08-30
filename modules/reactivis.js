@@ -109,6 +109,15 @@ define(['d3', 'model'], function(d3, Model){
     });
   };
 
+  // Creates an X time scale.
+  // Updates the X scale based on data, X attribute and width.
+  Reactivis.xTimeScale = function (model) {
+    var scale = d3.time.scale();
+    model.when(["data", "xDomain", "width"], function (data, xDomain, width) {
+      model.xScale = scale.domain(xDomain).range([0, width]);
+    });
+  };
+
   // # Visualization DOM
   //
   // Reactivis provides reusable DOM related components that
