@@ -13,6 +13,8 @@ define(["d3", "model", "modelContrib/reactivis"], function (d3, Model, Reactivis
           yAxisTickFormat: "",
           /* TODO implement xAxisTickFormat*/
           container: container,
+
+          /* TODO move brushing into its own reactivis function */
           brushedIntervals: {}
         },
         model = Model();
@@ -53,8 +55,8 @@ define(["d3", "model", "modelContrib/reactivis"], function (d3, Model, Reactivis
       model.brushG = g.append("g").attr("class", "brush");
     });
 
-    // Set up brushing to define `brushedIntervals`
-    model.when(["xAttribute", "yAttribute"], function (xAttribute, yAttribute) {
+    // Set up brushing interactions to define `brushedIntervals` on the model.
+    model.when(["xAttribute", "yAttribute", "xScale", "yScale"], function (xAttribute, yAttribute, xScale, yScale) {
 
       var brushedIntervals = {};
 
@@ -64,6 +66,19 @@ define(["d3", "model", "modelContrib/reactivis"], function (d3, Model, Reactivis
             yMin = e[0][1],
             xMax = e[1][0],
             yMax = e[1][1];
+
+        // Account for the edge case where the brush is at the 
+        // X or Y max. Adding a small value ensures that all points
+        // are included when crossfilter's filterRange is used,
+        // because filterRange provides an exclusive range, not inclusive.
+        // See https://github.com/square/crossfilter/wiki/API-Reference#dimension_filterRange
+        if(xMax === xScale.domain()[1]){
+          xMax += 0.01;
+        }
+        if(yMax === yScale.domain()[1]){
+          yMax += 0.01;
+        }
+
         if(!model.brush.empty()){
           brushedIntervals[xAttribute] = [xMin, xMax];
           brushedIntervals[yAttribute] = [yMin, yMax];
@@ -76,6 +91,7 @@ define(["d3", "model", "modelContrib/reactivis"], function (d3, Model, Reactivis
 
     });
 
+    // TODO move this into reactivis.
     model.when(["data", "xAttribute"], function (data, xAttribute) {
       model.getX = function (d) { return d[xAttribute]; };
     });

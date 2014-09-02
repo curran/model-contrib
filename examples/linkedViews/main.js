@@ -51,7 +51,7 @@ require(["d3", "modelContrib/barChart", "modelContrib/scatterPlot", "modelContri
           });
         }),
 
-        // In dimensions, keys are attribute names, values are crossfilter dimension objects.
+        // Keys are attribute names, values are crossfilter dimension objects.
         dimensions = _.zipObject(dimensionAttributes, dimensionsArray),
 
         groupAttributes = ["species"];
