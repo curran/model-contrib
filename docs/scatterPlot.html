@@ -45,6 +45,8 @@
           yAxisTickFormat: <span class="hljs-string">""</span>,
           <span class="hljs-comment">/* TODO implement xAxisTickFormat*/</span>
           container: container,
+
+          <span class="hljs-comment">/* TODO move brushing into its own reactivis function */</span>
           brushedIntervals: {}
         },
         model = Model();</pre></div></div>
@@ -189,38 +191,20 @@ on top of a dot.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-10">&#182;</a>
               </div>
-              <p>Set up brushing to define <code>brushedIntervals</code></p>
+              <p>Set up brushing interactions to define <code>brushedIntervals</code> on the model.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    model.when([<span class="hljs-string">"xAttribute"</span>, <span class="hljs-string">"yAttribute"</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(xAttribute, yAttribute)</span> </span>{
+            <div class="content"><div class='highlight'><pre>    model.when([<span class="hljs-string">"xAttribute"</span>, <span class="hljs-string">"yAttribute"</span>, <span class="hljs-string">"xScale"</span>, <span class="hljs-string">"yScale"</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(xAttribute, yAttribute, xScale, yScale)</span> </span>{
 
-      <span class="hljs-keyword">var</span> brush = d3.svg.brush();
+      <span class="hljs-keyword">var</span> brushedIntervals = {};
 
-      brush.on(<span class="hljs-string">"brush"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
-        <span class="hljs-keyword">var</span> e = brush.extent(),
+      model.brush = d3.svg.brush().on(<span class="hljs-string">"brush"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">var</span> e = model.brush.extent(),
             xMin = e[<span class="hljs-number">0</span>][<span class="hljs-number">0</span>],
             yMin = e[<span class="hljs-number">0</span>][<span class="hljs-number">1</span>],
             xMax = e[<span class="hljs-number">1</span>][<span class="hljs-number">0</span>],
-            yMax = e[<span class="hljs-number">1</span>][<span class="hljs-number">1</span>],
-            brushedIntervals = {};
-        <span class="hljs-keyword">if</span>(!brush.empty()){
-          brushedIntervals[xAttribute] = [xMin, xMax];
-          brushedIntervals[yAttribute] = [yMin, yMax];
-        }
-        model.brushedIntervals = brushedIntervals;
-      });
-
-      model.brush = brush;
-    });
-
-    model.when([<span class="hljs-string">"data"</span>, <span class="hljs-string">"xAttribute"</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(data, xAttribute)</span> </span>{
-      model.getX = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(d)</span> </span>{ <span class="hljs-keyword">return</span> d[xAttribute]; };
-    });
-
-    model.when([<span class="hljs-string">"data"</span>, <span class="hljs-string">"yAttribute"</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(data, yAttribute)</span> </span>{
-      model.getY = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(d)</span> </span>{ <span class="hljs-keyword">return</span> d[yAttribute]; };
-    });</pre></div></div>
+            yMax = e[<span class="hljs-number">1</span>][<span class="hljs-number">1</span>];</pre></div></div>
             
         </li>
         
@@ -231,11 +215,32 @@ on top of a dot.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-11">&#182;</a>
               </div>
-              <p>Update the brush based on scales.</p>
+              <p>Account for the edge case where the brush is at the 
+X or Y max. Adding a small value ensures that all points
+are included when crossfilter’s filterRange is used,
+because filterRange provides an exclusive range, not inclusive.
+See <a href="https://github.com/square/crossfilter/wiki/API-Reference#dimension_filterRange">https://github.com/square/crossfilter/wiki/API-Reference#dimension_filterRange</a></p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    model.when([<span class="hljs-string">"brushG"</span>, <span class="hljs-string">"brush"</span>, <span class="hljs-string">"xScale"</span>, <span class="hljs-string">"yScale"</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(brushG, brush, xScale, yScale)</span> </span>{</pre></div></div>
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">if</span>(xMax === xScale.domain()[<span class="hljs-number">1</span>]){
+          xMax += <span class="hljs-number">0.01</span>;
+        }
+        <span class="hljs-keyword">if</span>(yMax === yScale.domain()[<span class="hljs-number">1</span>]){
+          yMax += <span class="hljs-number">0.01</span>;
+        }
+
+        <span class="hljs-keyword">if</span>(!model.brush.empty()){
+          brushedIntervals[xAttribute] = [xMin, xMax];
+          brushedIntervals[yAttribute] = [yMin, yMax];
+        } <span class="hljs-keyword">else</span> {
+          <span class="hljs-keyword">delete</span> brushedIntervals[xAttribute];
+          <span class="hljs-keyword">delete</span> brushedIntervals[yAttribute];
+        }
+        model.brushedIntervals = brushedIntervals;
+      });
+
+    });</pre></div></div>
             
         </li>
         
@@ -245,6 +250,42 @@ on top of a dot.</p>
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>TODO move this into reactivis.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    model.when([<span class="hljs-string">"data"</span>, <span class="hljs-string">"xAttribute"</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(data, xAttribute)</span> </span>{
+      model.getX = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(d)</span> </span>{ <span class="hljs-keyword">return</span> d[xAttribute]; };
+    });
+
+    model.when([<span class="hljs-string">"data"</span>, <span class="hljs-string">"yAttribute"</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(data, yAttribute)</span> </span>{
+      model.getY = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(d)</span> </span>{ <span class="hljs-keyword">return</span> d[yAttribute]; };
+    });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>Update the brush based on scales.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    model.when([<span class="hljs-string">"brushG"</span>, <span class="hljs-string">"brush"</span>, <span class="hljs-string">"xScale"</span>, <span class="hljs-string">"yScale"</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(brushG, brush, xScale, yScale)</span> </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
               </div>
               <p>Update the scales within the brush.</p>
 
@@ -256,11 +297,11 @@ on top of a dot.</p>
         </li>
         
         
-        <li id="section-13">
+        <li id="section-15">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-13">&#182;</a>
+                <a class="pilcrow" href="#section-15">&#182;</a>
               </div>
               <p>Update the extent of the brush to use the new scales.
 This causes an existing brush to transform in pixel space
@@ -273,11 +314,11 @@ to reflect the new scales (without this line, the brush stays static).</p>
         </li>
         
         
-        <li id="section-14">
+        <li id="section-16">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-14">&#182;</a>
+                <a class="pilcrow" href="#section-16">&#182;</a>
               </div>
               <p>Render the brush onto the brush group.</p>
 
@@ -289,11 +330,11 @@ to reflect the new scales (without this line, the brush stays static).</p>
         </li>
         
         
-        <li id="section-15">
+        <li id="section-17">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-15">&#182;</a>
+                <a class="pilcrow" href="#section-17">&#182;</a>
               </div>
               <p>Draw the dots.</p>
 
@@ -305,11 +346,11 @@ to reflect the new scales (without this line, the brush stays static).</p>
         </li>
         
         
-        <li id="section-16">
+        <li id="section-18">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-16">&#182;</a>
+                <a class="pilcrow" href="#section-18">&#182;</a>
               </div>
               <p>TODO generalize computation of getX, getY</p>
 
@@ -321,11 +362,11 @@ to reflect the new scales (without this line, the brush stays static).</p>
         </li>
         
         
-        <li id="section-17">
+        <li id="section-19">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-17">&#182;</a>
+                <a class="pilcrow" href="#section-19">&#182;</a>
               </div>
               <p>Plot the data as dots</p>
 
@@ -344,11 +385,11 @@ to reflect the new scales (without this line, the brush stays static).</p>
         </li>
         
         
-        <li id="section-18">
+        <li id="section-20">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-18">&#182;</a>
+                <a class="pilcrow" href="#section-20">&#182;</a>
               </div>
               <p>TODO deal with this
 Mark each dot as not selected.

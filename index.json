@@ -9,6 +9,14 @@
       ]
     },
     {
+      "name": "boxes",
+      "files": [
+        "index.html",
+        "main.js",
+        "styles.css"
+      ]
+    },
+    {
       "name": "lineChart",
       "files": [
         "index.html",
@@ -67,7 +75,16 @@
       "name": "barChart"
     },
     {
+      "name": "boxes"
+    },
+    {
+      "name": "dummyVis"
+    },
+    {
       "name": "lineChart"
+    },
+    {
+      "name": "overseer"
     },
     {
       "name": "reactivis"
