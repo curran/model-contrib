@@ -18,13 +18,7 @@ define(["d3", "model", "lodash"], function (d3, Model, _) {
         // See https://developer.mozilla.org/en-US/docs/Web/API/document.createElementNS
         el = document.createElementNS("http://www.w3.org/2000/svg", "svg"),
 
-        svg = d3.select(el)
-
-          // TODO move this into boxes.js
-          // Use CSS `position: absolute;`
-          // so setting `left` and `top` later will
-          // position the SVG relative to the overseer div.
-          .style("position", "absolute"),
+        svg = d3.select(el),
 
         // Add a rect to the SVG,
         // which will be filled with the background color.
@@ -91,20 +85,8 @@ define(["d3", "model", "lodash"], function (d3, Model, _) {
     // When the size of the visualization is set
     // by the overseer layout engine,
     model.when("box", function (box) {
-      // Set the CSS `left` and `top` properties
-      // to move the SVG to `(box.x, box.y)`
-      // relative to the overseer div.
-      svg
-        .style("left", box.x + "px")
-        .style("top", box.y + "px")
 
-        // Set the `width` and `height` attributes
-        // to the size computed by the overseer layout engine
-        // on the SVG element 
-        .attr("width", box.width)
-        .attr("height", box.height);
-
-      // and of the background rect.
+      // set the size of the background rect.
       rect
         .attr("width", box.width)
         .attr("height", box.height);
@@ -136,16 +118,6 @@ define(["d3", "model", "lodash"], function (d3, Model, _) {
         .call(lineDrag);
     });
 
-    // Return the Backbone model representing the
-    // configuration of the visualizations.
-    //
-    // Properties on this model will be set
-    // by the `overseerScaffold` module
-    // based on configuration options.
-    //
-    // This model will also be available to other
-    // components on the overseer, like the `links`
-    // module or other visualization.
     return model;
   };
 });

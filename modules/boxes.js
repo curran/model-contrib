@@ -49,6 +49,14 @@ define(["model", "lodash"], function (Model, _) {
         // For each element, get its model.
         overseer.getModel(layoutElement.name, function (model) {
 
+          // Set the position and size of the layout element.
+          d3.select(model.el)
+            .style("position", "absolute")
+            .style("left", layoutElement.box.x + "px")
+            .style("top", layoutElement.box.y + "px")
+            .attr("width", layoutElement.box.width)
+            .attr("height", layoutElement.box.height);
+
           // Add the model element as a child of the container.
           container.appendChild(model.el);
 
