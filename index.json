@@ -49,14 +49,6 @@
       ]
     },
     {
-      "name": "sql",
-      "files": [
-        "index.html",
-        "main.js",
-        "sqlTransform.js"
-      ]
-    },
-    {
       "name": "starter",
       "files": [
         "index.html"
