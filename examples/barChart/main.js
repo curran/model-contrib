@@ -1,9 +1,11 @@
 // An example use of the barChart module.
+// Curran Kelleher August 2014
 require(["d3", "modelContrib/barChart"], function (d3, BarChart) {
   var container = document.getElementById("container"),
       barChart = BarChart(container),
       tsvPath = "../../data/letterByFrequency.tsv";
 
+  // Set axis properties.
   barChart.set({
     xAttribute: "letter",
     xAxisLabel: "Letter",
@@ -12,7 +14,10 @@ require(["d3", "modelContrib/barChart"], function (d3, BarChart) {
     yAxisTickFormat: "%"
   });
 
+  // Load the Tab Separated Value (TSV) data file.
   d3.tsv(tsvPath, type, function(error, data) {
+
+    // Initialize the bar chart with the full data.
     barChart.data = data;
 
     // Periodically set random data

@@ -1,17 +1,27 @@
+/*
+ * CSS for the bar chart example.
+ *
+ * Curran Kelleher August 2014
+ */
+
+/* Make bars black. */
 .bar {
   fill: black;
 }
 
+/* Style the axis tick mark text. */
 .axis .tick text {
   /* TODO move this into inline CSS defined by a Model property xAxisTickTextSize. */
   font: 12pt sans-serif;
 }
 
+/* Style the axis label text. */
 .axis text {
   /* TODO move this into inline CSS defined by a Model property xAxisTextSize. */
   font: 16pt sans-serif;
 }
 
+/* Style the lines of the axes. */
 .axis path,
 .axis line {
   fill: none;
@@ -19,9 +29,11 @@
   shape-rendering: crispEdges;
 }
 
+/* Hide the line of the X axis. */
 .x.axis path {
   display: none;
 }
+
 /* Make the visualization container fill the page. */
 #container {
   position: fixed;
