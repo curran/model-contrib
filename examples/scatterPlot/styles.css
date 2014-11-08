@@ -1,3 +1,6 @@
+/* CSS for the scatter plot example.
+ * By Curran Kelleher August 2014 */
+
 /* Make the visualization container fill the page. */
 #container {
   position: fixed;
@@ -6,21 +9,25 @@
   top: 0px;
   bottom: 0px;
 }
+
 /* Style the visualization.
  * This CSS is copied verbatim from the
  * D3 scatter plot example found at
  * http://bl.ocks.org/mbostock/3887118 */
 
+/* Style tick mark label text. */
 .axis .tick text {
   /* TODO move this into inline CSS defined by a Model property xAxisTickTextSize. */
   font: 12pt sans-serif;
 }
 
+/* Style the text label for axes. */
 .axis text {
   /* TODO move this into inline CSS defined by a Model property xAxisTextSize. */
   font: 16pt sans-serif;
 }
 
+/* Style the axis lines. */
 .axis path,
 .axis line {
   fill: none;
@@ -28,13 +35,14 @@
   shape-rendering: crispEdges;
 }
 
+/* Make scatter plot dots black. */
 .dot {
   stroke: #000;
 }
 
+/* Style the brush region. */
 .brush .extent {
   stroke: gray;
   fill-opacity: .125;
   shape-rendering: crispEdges;
 }
-
