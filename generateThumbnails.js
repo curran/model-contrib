@@ -7,6 +7,7 @@ var path = require('path'),
     fs = require('fs'),
     childProcess = require('child_process'),
     phantomjs = require('phantomjs'),
+    async = require('async'),
     gm = require('gm'),
     binPath = phantomjs.path,
 
@@ -19,9 +20,10 @@ fs.readFile('index.json', 'utf8', function (err, data) {
 
   // Generate a thumbnail image for each example.
   var examples = JSON.parse(data).examples;
-  examples.forEach(function (example) {
+  async.eachSeries(examples, function (example, callback) {
     generateThumbnail(example.name, function () {
       console.log('Generated thumbnail for ' + example.name);
+      callback();
     });
   });
 });

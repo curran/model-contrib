@@ -7,7 +7,11 @@
 //
 // By Curran Kelleher August 2014
 define(["d3", "lodash", "model", "modelContrib/reactivis"], function (d3, _, Model, Reactivis) {
+
+  // The module constructor accepts a `container` argument,
+  // which is an empty DOM element such as a div.
   return function BarChart (container) {
+
     var defaults = {
 
           // TODO move these into defaults set by Reactivis
@@ -21,6 +25,7 @@ define(["d3", "lodash", "model", "modelContrib/reactivis"], function (d3, _, Mod
         // TODO move this into reactivis defaults (default should be 0)
         transitionDuration = 100;
 
+    // Set defaults on the model.
     model.set(defaults);
 
     // build up the visualization dom from the container.

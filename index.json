@@ -60,6 +60,19 @@
         "index.html",
         "main.js"
       ]
+    },
+    {
+      "name": "timelineChoropleth",
+      "files": [
+        "index.html",
+        "choropleth.js",
+        "lineChart.js",
+        "main.js",
+        "countries.json",
+        "styles.css",
+        "un_locations.csv",
+        "un_population.csv"
+      ]
     }
   ],
   "modules": [
