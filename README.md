@@ -1,3 +1,5 @@
+This whole project is deprecated, and has been replaced by [Chiasm](https://github.com/curran/chiasm). This repo is still here because it contains some nice examples that have not yet been ported to [bl.ocks](bl.ocks.org/curran), and a cool example viewer. -- Curran March 2015
+
 model-contrib
 =============
 

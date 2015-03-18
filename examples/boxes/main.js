@@ -7,41 +7,11 @@ require(["modelContrib/overseer"], function (Overseer) {
       "layout": {
         "orientation": "vertical",
         "children": [
-          {
-            "orientation": "horizontal",
-            "children": [
-              { "name": "a" },
-              {
-                "size": 2,
-                "orientation": "vertical",
-                "children": [
-                  { "name": "c" },
-                  {
-                    "size": 2,
-                    "orientation": "horizontal",
-                    "children": [
-                      { "name": "e" },
-                      {
-                        "orientation": "vertical",
-                        "children": [
-                          { "name": "f" },
-                          { "name": "g" },
-                          { "name": "h" },
-                          { "name": "i" }
-                        ]
-                      }
-                    ]
-                  },
-                  { "name": "d" }
-                ]
-              },
-              { "name": "b" }
-            ]
-          }
+          { "name": "a" }
         ]
       }
     },
-    "a": { "module": "dummyVis", "text": "a", "color": "rgb(237,72,174)" },
+    "a": { "module": "dummyVis", "text": "Hello", "color": "lightgray" },
     "b": { "module": "dummyVis", "text": "b", "color": "rgb(147,123,191)" },
     "c": { "module": "dummyVis", "text": "c", "color": "rgb(19,231,214)", lineWidth: 150 },
     "d": { "module": "dummyVis", "text": "d", "color": "rgb(0,255,63)"  , lineWidth: 150 },
