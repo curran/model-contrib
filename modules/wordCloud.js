@@ -6,7 +6,7 @@
 //  * Also demonstrated in the [model-contrib wordCloud example](../#/wordCloud)
 //
 // By Curran Kelleher August 2014
-define(["d3", "lodash", "model", "modelContrib/reactivis"], function (d3, _, Model, Reactivis) {
+define(["d3", "d3_cloud", "lodash", "model", "modelContrib/reactivis"], function (d3, _, Model, Reactivis) {
 
   // The module constructor accepts a `container` argument,
   // which is an empty DOM element such as a div.
