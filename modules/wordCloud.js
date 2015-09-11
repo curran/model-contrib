@@ -6,24 +6,24 @@
 //  * Also demonstrated in the [model-contrib wordCloud example](../#/wordCloud)
 //
 // By Curran Kelleher August 2014
-define(["d3", "d3_cloud", "lodash", "model", "modelContrib/reactivis"], function (d3, _, Model, Reactivis) {
+define(["d3", "d3_cloud", "lodash", "model", "modelContrib/reactivis"], function(d3, cloud, _, Model, Reactivis) {
 
   // The module constructor accepts a `container` argument,
   // which is an empty DOM element such as a div.
-  return function WordCloud (container) {
+  return function WordCloud(container) {
 
     var defaults = {
 
-          // TODO move these into defaults set by Reactivis
-          yAxisNumTicks: 10,
-          yAxisTickFormat: "",
+        // TODO move these into defaults set by Reactivis
+        yAxisNumTicks: 10,
+        yAxisTickFormat: "",
 
-          container: container
-        },
-        model = Model(),
+        container: container
+      },
+      model = Model(),
 
-        // TODO move this into reactivis defaults (default should be 0)
-        transitionDuration = 100;
+      // TODO move this into reactivis defaults (default should be 0)
+      transitionDuration = 100;
 
     // Set defaults on the model.
     model.set(defaults);
@@ -40,26 +40,34 @@ define(["d3", "d3_cloud", "lodash", "model", "modelContrib/reactivis"], function
 
     // Use a Y linear axis with zero as the minimum for bar height.
     Reactivis.yLinearScale(model);
-    Reactivis.yDomain(model, { zeroMin: true });
+    Reactivis.yDomain(model, {
+      zeroMin: true
+    });
     Reactivis.yAxis(model);
 
     // Draw the bars.
     model.when(["g", "data", "xAttribute", "yAttribute", "xScale", "yScale", "height"],
-        _.throttle(function (g, data, xAttribute, yAttribute, xScale, yScale, height) {
+      _.throttle(function(g, data, xAttribute, yAttribute, xScale, yScale, height) {
 
-      var bars = g.selectAll(".bar").data(data);
+        var bars = g.selectAll(".bar").data(data);
 
-      bars.enter().append("rect").attr("class", "bar");
+        bars.enter().append("rect").attr("class", "bar");
 
-      bars
-        .transition().duration(transitionDuration)
-        .attr("x", function(d) { return xScale(d[xAttribute]); })
-        .attr("width", xScale.rangeBand())
-        .attr("y", function(d) { return yScale(d[yAttribute]); })
-        .attr("height", function(d) { return height - yScale(d[yAttribute]); });
+        bars
+          .transition().duration(transitionDuration)
+          .attr("x", function(d) {
+            return xScale(d[xAttribute]);
+          })
+          .attr("width", xScale.rangeBand())
+          .attr("y", function(d) {
+            return yScale(d[yAttribute]);
+          })
+          .attr("height", function(d) {
+            return height - yScale(d[yAttribute]);
+          });
 
-      bars.exit().remove();
-    }), transitionDuration);
+        bars.exit().remove();
+      }), transitionDuration);
 
     return model;
   };

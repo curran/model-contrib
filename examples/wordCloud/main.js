@@ -1,9 +1,9 @@
 // An example use of the wordCloud module.
 // Curran Kelleher August 2014
-require(["d3", "modelContrib/wordCloud"], function (d3, BarChart) {
+require(["d3", "modelContrib/wordCloud"], function(d3, BarChart) {
   var container = document.getElementById("container"),
-      wordCloud = BarChart(container),
-      tsvPath = "../../data/letterByFrequency.tsv";
+    wordCloud = BarChart(container),
+    tsvPath = "../../data/letterByFrequency.tsv";
 
   // Set axis properties.
   wordCloud.set({
@@ -22,13 +22,15 @@ require(["d3", "modelContrib/wordCloud"], function (d3, BarChart) {
 
     // Periodically set random data
     // to demonstrate that the bars respond to data.
-    setInterval(function () {
-      wordCloud.data = data.filter(function(){ return Math.random() < 0.5 });
+    setInterval(function() {
+      wordCloud.data = data.filter(function() {
+        return Math.random() < 0.5
+      });
     }, 1000);
 
     // Periodically update the label
     // to show it is dynamic.
-    setInterval(function () {
+    setInterval(function() {
       var i = Math.floor(Math.random() * 3);
       wordCloud.yAxisLabel = ["A", "B", "C"][i];
     }, 1500);
@@ -45,7 +47,7 @@ require(["d3", "modelContrib/wordCloud"], function (d3, BarChart) {
 
   // Set the bar chart size
   // based on the size of its container,
-  function computeBox(){
+  function computeBox() {
     wordCloud.box = {
       width: container.clientWidth,
       height: container.clientHeight
