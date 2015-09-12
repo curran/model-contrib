@@ -1,39 +1,34 @@
 // An example use of the wordCloud module.
 // Curran Kelleher August 2014
-require(["d3", "modelContrib/wordCloud"], function(d3, BarChart) {
+require(["d3", "modelContrib/wordCloud"], function(d3, WordCloud) {
   var container = document.getElementById("container"),
-    wordCloud = BarChart(container),
-    tsvPath = "../../data/letterByFrequency.tsv";
+    wordCloud = WordCloud(container),
+    csvPath = "../../data/cars.csv";
 
-  // Set axis properties.
+  // Set cloud properties.
   wordCloud.set({
-    xAttribute: "letter",
-    xAxisLabel: "Letter",
-    yAttribute: "frequency",
-    yAxisLabel: "Frequency",
-    yAxisTickFormat: "%"
+    font: "Impact"
   });
 
   // Load the Tab Separated Value (TSV) data file.
-  d3.tsv(tsvPath, type, function(error, data) {
+  d3.csv(csvPath, type, function(error, cars) {
 
-    // Initialize the bar chart with the full data.
-    wordCloud.data = data;
+    // Only interested in showing car names
+    cars = cars.map(function(car) {
+      return car.name;
+    });
+
+    // Initialize the word cloud with the full data.
+    wordCloud.text = cars.join(" ");
 
     // Periodically set random data
     // to demonstrate that the bars respond to data.
     setInterval(function() {
-      wordCloud.data = data.filter(function() {
+      wordCloud.text = cars.filter(function() {
         return Math.random() < 0.5
-      });
+      }).join(" ");
     }, 1000);
 
-    // Periodically update the label
-    // to show it is dynamic.
-    setInterval(function() {
-      var i = Math.floor(Math.random() * 3);
-      wordCloud.yAxisLabel = ["A", "B", "C"][i];
-    }, 1500);
   });
 
   // Runs for each row of the input data
@@ -45,7 +40,7 @@ require(["d3", "modelContrib/wordCloud"], function(d3, BarChart) {
     return d;
   }
 
-  // Set the bar chart size
+  // Set the word cloud size
   // based on the size of its container,
   function computeBox() {
     wordCloud.box = {
