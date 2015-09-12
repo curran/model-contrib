@@ -73,6 +73,13 @@
         "un_locations.csv",
         "un_population.csv"
       ]
+    },
+    {
+      "name": "wordCloud",
+      "files": [
+        "index.html",
+        "main.js"
+      ]
     }
   ],
   "modules": [
@@ -99,6 +106,9 @@
     },
     {
       "name": "table"
+    },
+    {
+      "name": "wordCloud"
     }
   ]
 }

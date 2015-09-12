@@ -1,16 +1,13 @@
-// A reusable bar chart module.
+// A reusable word cloud module.
 //
-//  * Draws from the [D3 bar chart example](http://bl.ocks.org/mbostock/3885304).
-//  * Development steps shown in this [Model.js YouTube Video](http://youtu.be/TpZqVAtQs94?t=12m27s)
-//  * See also the [Example sequence](http://curran.github.io/screencasts/reactiveDataVis/examples/viewer/index.html#/1) from the video
-//  * Also demonstrated in the [model-contrib wordCloud example](../#/wordCloud)
+//  * Draws from the [D3 cloud node example](https://github.com/iLanguage/d3-cloud/blob/master/examples/node.js) by [grahamscott](https://github.com/grahamscott).
 //
-// By Curran Kelleher August 2014
+// By cesine September 2015
 define(["d3", "d3_cloud", "lodash", "model", "modelContrib/reactivis"], function(d3, cloud, _, Model, Reactivis) {
 
 
   // Remove punctation and count repeated words. 
-  // Kinda works on languages that have spaces
+  // Kinda works on language orthographies that have spaces
   var getRoughWordCountsFromAText = function(text) {
     var frequencyMap = {
       tokens: 0,
@@ -52,7 +49,6 @@ define(["d3", "d3_cloud", "lodash", "model", "modelContrib/reactivis"], function
 
     var defaults = {
 
-        // TODO move these into defaults set by Reactivis
         yAxisNumTicks: 10,
         yAxisTickFormat: "",
 
@@ -75,6 +71,7 @@ define(["d3", "d3_cloud", "lodash", "model", "modelContrib/reactivis"], function
     // Use conventional margins.
     Reactivis.margin(model);
 
+    // Re-calculate the word frequencies if the text changes
     model.when(["text"], _.throttle(function(text) {
       model.data = getRoughWordCountsFromAText(text.replace(/[0-9]/g, ''));
       model.size = model.data.tokenCount;
@@ -82,7 +79,7 @@ define(["d3", "d3_cloud", "lodash", "model", "modelContrib/reactivis"], function
       console.log(" Data is now" + model.size, model.data);
     }), transitionDuration);
 
-    // Draw the bars.
+    // Draw the cloud.
     model.when(["g", "data", "width", "height"],
       _.throttle(function(g, data, width, height) {
 

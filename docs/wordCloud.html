@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>wordCloud.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>wordCloud.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <p>A reusable word cloud module.</p>
+<ul>
+<li>Draws from the <a href="https://github.com/iLanguage/d3-cloud/blob/master/examples/node.js">D3 cloud node example</a> by <a href="https://github.com/grahamscott">grahamscott</a>.</li>
+</ul>
+<p>By cesine September 2015</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>define([<span class="hljs-string">"d3"</span>, <span class="hljs-string">"d3_cloud"</span>, <span class="hljs-string">"lodash"</span>, <span class="hljs-string">"model"</span>, <span class="hljs-string">"modelContrib/reactivis"</span>], <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">d3, cloud, _, Model, Reactivis</span>) </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>Remove punctation and count repeated words. 
+Kinda works on language orthographies that have spaces</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">var</span> getRoughWordCountsFromAText = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">text</span>) </span>{
+    <span class="hljs-keyword">var</span> frequencyMap = {
+      tokens: <span class="hljs-number">0</span>,
+      types: <span class="hljs-number">0</span>
+    };
+    text
+      .replace(<span class="hljs-regexp">/[!\.,:;\?&amp;+_-]/g</span>, <span class="hljs-string">' '</span>)
+      .split(<span class="hljs-regexp">/[ \t\n]+/</span>)
+      .map(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">word</span>) </span>{
+        <span class="hljs-keyword">if</span> (!word || word.length &lt; <span class="hljs-number">3</span>) {
+          <span class="hljs-keyword">return</span>;
+        }
+        <span class="hljs-keyword">if</span> (frequencyMap[word]) {
+          frequencyMap[word].count++;
+        } <span class="hljs-keyword">else</span> {
+          frequencyMap[word] = {
+            text: word,
+            count: <span class="hljs-number">1</span>
+          };
+          frequencyMap.types++;
+        }
+        frequencyMap.tokens++;
+      });
+
+    <span class="hljs-keyword">var</span> wordsArray = [];
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> word <span class="hljs-keyword">in</span> frequencyMap) {
+      <span class="hljs-keyword">if</span> (frequencyMap.hasOwnProperty(word) &amp;&amp; word !== <span class="hljs-string">"tokens"</span> &amp;&amp; word !== <span class="hljs-string">"types"</span>) {
+        frequencyMap[word].importance = frequencyMap[word].count / frequencyMap.types;
+        wordsArray.push(frequencyMap[word]);
+      }
+    }
+    wordsArray.tokenCount = frequencyMap.tokens;
+    <span class="hljs-keyword">return</span> wordsArray;
+  };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>The module constructor accepts a <code>container</code> argument,
+which is an empty DOM element such as a div.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">WordCloud</span>(<span class="hljs-params">container</span>) </span>{
+
+    <span class="hljs-keyword">var</span> defaults = {
+
+        yAxisNumTicks: <span class="hljs-number">10</span>,
+        yAxisTickFormat: <span class="hljs-string">""</span>,
+
+        container: container,
+        font: <span class="hljs-string">"Impact"</span>,
+        wordPadding: <span class="hljs-number">2</span>,
+        colors: d3.scale.category20()
+      },
+      model = Model(),</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>TODO move this into reactivis defaults (default should be 0)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      transitionDuration = <span class="hljs-number">100</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>Set defaults on the model.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    model.set(defaults);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>build up the visualization dom from the container.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    Reactivis.svg(model);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>Use conventional margins.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    Reactivis.margin(model);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>Re-calculate the word frequencies if the text changes</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    model.when([<span class="hljs-string">"text"</span>], _.throttle(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">text</span>) </span>{
+      model.data = getRoughWordCountsFromAText(text.replace(<span class="hljs-regexp">/[0-9]/g</span>, <span class="hljs-string">''</span>));
+      model.size = model.data.tokenCount;
+      <span class="hljs-keyword">delete</span> model.data.tokenCount;
+      <span class="hljs-built_in">console</span>.log(<span class="hljs-string">" Data is now"</span> + model.size, model.data);
+    }), transitionDuration);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>Draw the cloud.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    model.when([<span class="hljs-string">"g"</span>, <span class="hljs-string">"data"</span>, <span class="hljs-string">"width"</span>, <span class="hljs-string">"height"</span>],
+      _.throttle(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">g, data, width, height</span>) </span>{
+
+        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"Drawing "</span>, model.size);
+        model.container.innerHTML = <span class="hljs-string">""</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>Ask d3-cloud to make an cloud object for us</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">var</span> myCloud = d3.layout.cloud();</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>Configure our cloud with d3 chaining</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        myCloud
+          .size([width, height])
+          .words(model.data)
+          .padding(model.wordPadding)
+          .rotate(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+            <span class="hljs-keyword">return</span> ~~(<span class="hljs-built_in">Math</span>.random() * <span class="hljs-number">2</span>) * <span class="hljs-number">90</span>;
+          })
+          .font(model.font)
+          .fontSize(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">word</span>) </span>{
+            <span class="hljs-keyword">return</span> <span class="hljs-built_in">Math</span>.max(<span class="hljs-number">10</span>, word.importance * width);
+          })
+          .on(<span class="hljs-string">"end"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">words</span>) </span>{
+            myDrawFunction(words, model.container);
+          });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>Declare our own draw function which will be called on the “end” event </p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        myDrawFunction = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">words, element</span>) </span>{
+          <span class="hljs-keyword">var</span> svg = d3.select(element).append(<span class="hljs-string">"svg"</span>);
+          svg.attr(<span class="hljs-string">"width"</span>, width)
+            .attr(<span class="hljs-string">"height"</span>, height)
+            .append(<span class="hljs-string">"g"</span>)
+            .attr(<span class="hljs-string">"transform"</span>, <span class="hljs-string">"translate("</span> + width / <span class="hljs-number">2</span> + <span class="hljs-string">","</span> + height / <span class="hljs-number">2</span> + <span class="hljs-string">")"</span>)
+            .selectAll(<span class="hljs-string">"text"</span>)
+            .data(words)
+            .enter().append(<span class="hljs-string">"text"</span>)
+            .style(<span class="hljs-string">"font-size"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">word</span>) </span>{
+              <span class="hljs-keyword">return</span> <span class="hljs-built_in">Math</span>.max(<span class="hljs-number">10</span>, word.importance * width) + <span class="hljs-string">"px"</span>;
+            })
+            .style(<span class="hljs-string">"font-family"</span>, model.font)
+            .style(<span class="hljs-string">"fill"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">word, i</span>) </span>{
+              <span class="hljs-keyword">return</span> model.colors(i);
+            })
+            .attr(<span class="hljs-string">"text-anchor"</span>, <span class="hljs-string">"middle"</span>)
+            .attr(<span class="hljs-string">"transform"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">word</span>) </span>{
+              <span class="hljs-keyword">return</span> <span class="hljs-string">"translate("</span> + [word.x, word.y] + <span class="hljs-string">")rotate("</span> + word.rotate + <span class="hljs-string">")"</span>;
+            })
+            .text(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">word</span>) </span>{
+              <span class="hljs-keyword">return</span> word.text;
+            });
+        };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>Run the render when you’re ready</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        myCloud.start();
+
+      }), transitionDuration);
+
+    <span class="hljs-keyword">return</span> model;
+  };
+});</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>
