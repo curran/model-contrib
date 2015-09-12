@@ -56,7 +56,10 @@ define(["d3", "d3_cloud", "lodash", "model", "modelContrib/reactivis"], function
         yAxisNumTicks: 10,
         yAxisTickFormat: "",
 
-        container: container
+        container: container,
+        font: "Impact",
+        wordPadding: 2,
+        colors: d3.scale.category20()
       },
       model = Model(),
 
@@ -80,27 +83,61 @@ define(["d3", "d3_cloud", "lodash", "model", "modelContrib/reactivis"], function
     }), transitionDuration);
 
     // Draw the bars.
-    model.when(["g", "data", "xAttribute", "yAttribute", "xScale", "yScale", "height"],
-      _.throttle(function(g, data, xAttribute, yAttribute, xScale, yScale, height) {
+    model.when(["g", "data", "width", "height"],
+      _.throttle(function(g, data, width, height) {
 
-        var bars = g.selectAll(".bar").data(data);
+        console.log("Drawing ", model.size);
+        model.container.innerHTML = "";
 
-        bars.enter().append("rect").attr("class", "bar");
+        // Ask d3-cloud to make an cloud object for us
+        var myCloud = d3.layout.cloud();
 
-        bars
-          .transition().duration(transitionDuration)
-          .attr("x", function(d) {
-            return xScale(d[xAttribute]);
+        // Configure our cloud with d3 chaining
+        myCloud
+          .size([width, height])
+          .words(model.data)
+          .padding(model.wordPadding)
+          .rotate(function() {
+            return ~~(Math.random() * 2) * 90;
           })
-          .attr("width", xScale.rangeBand())
-          .attr("y", function(d) {
-            return yScale(d[yAttribute]);
+          .font(model.font)
+          .fontSize(function(word) {
+            return Math.max(10, word.importance * width);
           })
-          .attr("height", function(d) {
-            return height - yScale(d[yAttribute]);
+          .on("end", function(words) {
+            myDrawFunction(words, model.container);
           });
 
-        bars.exit().remove();
+
+        // Declare our own draw function which will be called on the "end" event 
+        myDrawFunction = function(words, element) {
+          var svg = d3.select(element).append("svg");
+          svg.attr("width", width)
+            .attr("height", height)
+            .append("g")
+            .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
+            .selectAll("text")
+            .data(words)
+            .enter().append("text")
+            .style("font-size", function(word) {
+              return Math.max(10, word.importance * width) + "px";
+            })
+            .style("font-family", model.font)
+            .style("fill", function(word, i) {
+              return model.colors(i);
+            })
+            .attr("text-anchor", "middle")
+            .attr("transform", function(word) {
+              return "translate(" + [word.x, word.y] + ")rotate(" + word.rotate + ")";
+            })
+            .text(function(word) {
+              return word.text;
+            });
+        };
+
+        // Run the render when you're ready
+        myCloud.start();
+
       }), transitionDuration);
 
     return model;
